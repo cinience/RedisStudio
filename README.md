@@ -2,7 +2,7 @@ RedisStudio
 ===========
 # 地址
 -
-  [github]（https://github.com/cinience/RedisStudio）
+  [github] https://github.com/cinience/RedisStudio
   
 # 介绍
 - 
