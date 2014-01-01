@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+
+  <HorizontalLayout>
+    <!-- 水平布局可拉伸-->
+      <HorizontalLayout width="300" minwidth="200" maxwidth="600" inset="1,1,1,1" sepwidth="6" sepimm="true" bordersize="0">
+        <TreeView name="InfoTreeView" name="redisdata_treeview" childpadding="4" multipleitem="true" inset="4,0,3,0" bordersize="0" bordercolor="#FF2B2B2B" itemtextcolor="#00000000" itemhottextcolor="#00000000" selitemtextcolor="#00000000" itemhotbkcolor="#FFF0F0F0" itemselectedbkcolor="#FFFCFCFC" vscrollbar="true" hscrollbar="true" >
+         <TreeNode text="DB-$" name="redisdata_treenode" visible="false" inset="0,0,0,0" height="30" bkimage="treeview_header.png" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;5,0,0,0&quot;" folderattr="padding=&quot;0,10,0,0&quot; width=&quot;10&quot; height=&quot;10&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">       
+        </TreeNode>
+      </TreeView>
+      </HorizontalLayout>
+     <HorizontalLayout width="2" inset="0,1,0,1">
+      <Container bkimage="vertical_border.bmp" />
+     </HorizontalLayout>
+     <!-- 右部水平布局-->
+     <HorizontalLayout > 
+      <!-- 右部内部垂直布局-->
+     <VerticalLayout>
+        <!-- Text Edit 水平布局-->
+       <HorizontalLayout height="20">
+        <Text   text="{c #386382}键名:{/c}" float="false" pos="0,0,0,0" width="200" height="20" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+        <Edit   name="redisdata_key" text="" font="3" readonly="true" textpadding="10,0,8,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+       </HorizontalLayout>
+       <HorizontalLayout height="2">
+         <Container bkimage="horizontal_border.bmp" />
+      </HorizontalLayout>
+        <HorizontalLayout height="20">
+        <Text   text="{c #386382}类型:{/c}" float="false" pos="0,0,0,0" width="200" height="20" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+        <Edit   name="redisdata_type"  text="" font="3" readonly="true" textpadding="10,0,8,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+      </HorizontalLayout>
+       <HorizontalLayout height="2">
+         <Container bkimage="horizontal_border.bmp" />
+      </HorizontalLayout>
+       <HorizontalLayout height="20">
+        <Text   text="{c #386382}数量:{/c}" float="false" pos="0,0,0,0" width="200" height="20" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+        <Edit   name="redisdata_size"  text="" font="3" readonly="true" textpadding="10,0,8,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+      </HorizontalLayout>
+      <HorizontalLayout height="2">
+         <Container bkimage="horizontal_border.bmp" />
+      </HorizontalLayout>
+
+      <HorizontalLayout>
+         <List name="redisdata_value" bkcolor="#FFFFFFFF" inset="1,1,1,1" itemshowhtml="true" vscrollbar="true" hscrollbar="false" headerbkimage="file='list_header_bg.png'" itemalign="center" itembkcolor="#FFF0F0F0" itemaltbk="true" hscrollbar="false" menu="true">
+              <ListHeader height="20" menu="true">
+              <ListHeaderItem text="值列" font="1" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+             </ListHeader>
+        </List>
+      </HorizontalLayout>
+       <HorizontalLayout height="2">
+         <Container bkimage="horizontal_border.bmp" />
+      </HorizontalLayout>
+      <HorizontalLayout height="20" name="redisdata_page" visible="false">
+       <HorizontalLayout>
+       </HorizontalLayout>
+       <HorizontalLayout width="248" >
+       <Button text="{u}{a}首页{/a}{/u}" name="redisdata_pagefrist" width="52" height="21" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="center" />
+       <Button text="{u}{a}上一页{/a}{/u}" name="redisdata_pagelast" width="52" height="21" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" showhtml="true" align="center" />
+       <Edit   text="0" name="redisdata_curpage" font="3" width="40" align="center" readonly="true" textpadding="0,0,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+       <Button text="{u}{a}下一页{/a}{/u}" name="redisdata_pagenext" width="52" height="21" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="center" />
+       <Button text="{u}{a}尾页{/a}{/u}" name="redisdata_pagefinal" width="52" height="21" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="center" />
+       </HorizontalLayout>
+       <HorizontalLayout>
+       </HorizontalLayout>
+      </HorizontalLayout>
+      <HorizontalLayout height="2">
+         <Container bkimage="horizontal_border.bmp" />
+      </HorizontalLayout>
+      
+       <!-- 让空间靠右的方法 ,水平布局,内部2个水平布局，第二个布局限定宽度就可以自动靠右了-->
+       <HorizontalLayout height="20" >
+       
+       <HorizontalLayout>
+       </HorizontalLayout>
+       <HorizontalLayout width="100" bkcolor="#FF92DAFD" bkcolor2="#FF74BDF2">
+            <Combo name="redisdata_format_combo"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+              <ListLabelElement text="自动识别" selected="true" />
+              <ListLabelElement text="普通文本" />
+              <ListLabelElement text="JSON格式" />
+              <ListLabelElement text="XML格式"  />              
+            </Combo>  
+      </HorizontalLayout>   
+      
+       </HorizontalLayout>
+      <HorizontalLayout height="2">
+         <Container bkimage="horizontal_border.bmp" />
+      </HorizontalLayout>
+      <HorizontalLayout>
+         <RichEdit   name="redisdata_value_rich" text="" font="3" textpadding="10,0,8,0" bordersize="0" vscrollbar="true" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+      </HorizontalLayout>
+      <HorizontalLayout height="2">
+         <Container bkimage="horizontal_border.bmp" />
+      </HorizontalLayout>
+      <HorizontalLayout height="30">
+          <Button name="redisdata_commit" text="提交" relativepos="0,0,0,0"  float="false" normalimage="file='refresh.png' source='0,0,140,53'" hotimage="file='refresh.png' source='140,0,280,53'" pushedimage="file='refresh.png' source='280,0,420,53'"/>
+      </HorizontalLayout>
+      </VerticalLayout>
+     </HorizontalLayout>
+  </HorizontalLayout> 
+
+</Window>

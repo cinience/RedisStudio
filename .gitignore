@@ -1,0 +1,13 @@
+/bin
+/bin/tmp
+/*.ncb
+/RedisStudio/Debug
+*.user
+*.user
+*.db
+*.aps
+/*.opensdf
+/*.sdf
+/*.suo
+/ipch
+/ipch

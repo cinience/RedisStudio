@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="300,200" caption="0,0,0,36" roundcorner="4,4" >
+	<VerticalLayout inset="4,0,4,4" bkimage="file='winbk.bmp' corner='4,48,4,4' mask='#FFFF00FF'" >
+   <HorizontalLayout height="40" >
+      <Label name="lab_conn_add" visible="false" inset="2,2,2,0" text="增加连接信息" textcolor="#FFFFFFFF" width="80" height="32"/>
+      <Label name="lab_conn_alt" visible="false" inset="2,2,2,0" text="修改连接信息" textcolor="#FFFFFFFF" width="80" height="32"/>
+      <HorizontalLayout />
+      <HorizontalLayout width="42" >
+          <!-- <Button name="closebtn" width="42" maxheight="18" tooltip="退出该窗口" normalimage="file='frame_btn_close_normal.bmp' mask='#FFFF00FF'" hotimage="file='frame_btn_close_hot.bmp' mask='#FFFF00FF'" pushedimage="file='frame_btn_close_down.bmp' mask='#FFFF00FF'"/>
+           -->
+      </HorizontalLayout>
+   </HorizontalLayout>
+   
+    <HorizontalLayout height="20" >
+			<Label text="名称：" name="lbl_server_name"  float="false" width="60"/>
+			<Edit name="edt_server_name" text="Redis-localhost" width="230" float="false"  tooltip="" bordercolor="#FF4EA0D1" bordersize="1"/>
+    </HorizontalLayout>
+    <HorizontalLayout height="4" />      
+    <HorizontalLayout height="20" >
+			<Label text="主机IP：" name="lbl_server_ip" float="false"  width="60"/>
+			<Edit name="edt_server_ip" text="127.0.0.1" width="230" float="false" tooltip="" bordercolor="#FF4EA0D1" bordersize="1"/>
+    </HorizontalLayout>
+    <HorizontalLayout height="4" />   
+    <HorizontalLayout height="20" >
+			<Label text="端口：" name="lbl_server_port" float="false"  width="60" />
+			<Edit name="edt_server_port" text="6379" width="230" float="false"  tooltip="" bordercolor="#FF4EA0D1" bordersize="1"/>
+    </HorizontalLayout>
+    <HorizontalLayout height="4" />   
+    <HorizontalLayout height="20" >
+			<Label text="密码：" name="lbl_server_passwd" float="false"  width="60" />
+			<Edit name="edt_server_passwd" float="false" width="230" tooltip="" bordercolor="#FF4EA0D1" bordersize="1"/>
+    </HorizontalLayout>
+     <HorizontalLayout height="24" />   
+     <HorizontalLayout height="24" >
+        <HorizontalLayout width="32" />
+        <HorizontalLayout width="82" >
+        <Button name="btn_conn_save" text="保存" width="82" tooltip="" normalimage="button_normal.jpg" hotimage="button_hover.jpg" pushedimage="button_pushed.jpg" />
+        </HorizontalLayout>
+        <HorizontalLayout />
+         <HorizontalLayout width="110">
+            <Button name="btn_conn_cancel" text="取消" width="82" tooltip="" normalimage="button_normal.jpg" hotimage="button_hover.jpg" pushedimage="button_pushed.jpg" />
+         </HorizontalLayout>
+     </HorizontalLayout>
+ </VerticalLayout>
+</Window>
