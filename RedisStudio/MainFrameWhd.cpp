@@ -185,11 +185,11 @@ void CMainFrameWnd::OnClick( TNotifyUI& msg )
 	}
 	else if (msg.pSender->GetName() == _T("Issue"))
 	{
-		::ShellExecute(NULL, NULL, _T("https://github.com/cinience/Redis-Studio/issues"), NULL, NULL, NULL); 
+		::ShellExecute(NULL, NULL, _T("https://github.com/cinience/RedisStudio/issues"), NULL, NULL, NULL); 
 	}
 	else if (msg.pSender->GetName() == _T("Star"))
 	{
-		::ShellExecute(NULL, NULL, _T("https://github.com/cinience/Redis-Studio/stargazers"), NULL, NULL, NULL);
+		::ShellExecute(NULL, NULL, _T("https://github.com/cinience/RedisStudio/stargazers"), NULL, NULL, NULL);
 	}
 }
 
