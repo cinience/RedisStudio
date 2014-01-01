@@ -104,6 +104,8 @@ void RedisConfigUI::DoFillData()
 		name.Append(key);
 		CControlUI* pCtl = GetPaintMgr()->FindControl(name);
 
+		if (!pCtl) continue;
+
 		if (pCtl->GetClass() == exampleEditUI.GetClass())
 		{
 			CEditUI* pEdit = static_cast<CEditUI*> (pCtl);
