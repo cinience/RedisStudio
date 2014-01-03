@@ -167,13 +167,8 @@ void RedisDataUI::OnSelectChanged( TNotifyUI &msg )
 
 void RedisDataUI::OnItemClick( TNotifyUI &msg )
 {
-   
-}
-
-void RedisDataUI::OnItemActive( TNotifyUI &msg )
-{
 	CDuiString name = msg.pSender->GetClass();
-    if (name == _T("ListTextElementUI"))
+	if (name == _T("ListTextElementUI"))
 	{
 		OnItemActiveForList(msg);
 	}
@@ -181,6 +176,11 @@ void RedisDataUI::OnItemActive( TNotifyUI &msg )
 	{
 		OnItemActiveForTree(msg);
 	}
+}
+
+void RedisDataUI::OnItemActive( TNotifyUI &msg )
+{
+
 }
 
 void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
