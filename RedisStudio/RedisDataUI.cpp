@@ -360,6 +360,21 @@ void RedisDataUI::RefreshKeys(ContactData* pContactData)
 			pPNode->AddAt(NewNode(theValue, true), pPNode->GetCountChild());
 		}
 	}
+
+	/// 临时解决默认全部展开的问题
+	CTreeViewUI* pView = pParentNode->GetTreeView();
+
+	for (int idx=0; idx<pView->GetCount(); ++idx)
+	{
+		CTreeNodeUI* pTmpNode = static_cast<CTreeNodeUI*> (pView->GetItemAt(idx));
+		if (pTmpNode == pParentNode) continue;
+		pTmpNode->GetFolderButton()->Selected(true);
+	}
+	for (int nodeIdx=0; nodeIdx<pParentNode->GetCountChild(); ++nodeIdx)
+	{
+		CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(nodeIdx);
+		pView->SetItemExpand(false, pKeyNode);
+	}
 }
 
 void RedisDataUI::RefreshValues(ContactData* pContactData)
