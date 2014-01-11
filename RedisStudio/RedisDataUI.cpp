@@ -445,9 +445,19 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
 	pNodeTmp->SetItemText(CharacterSet::ANSIToUnicode(text).c_str());  
 	pNodeTmp->SetAttribute(_T("height"), _T("22"));
 	pNodeTmp->SetAttribute(_T("inset"), _T("0,0,0,0"));
-	pNodeTmp->SetAttribute(_T("itemattr"), _T("valign=\"vcenter\" font=\"5\" textpadding=\"5,3,0,0\""));
-	if (isLeaf) pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
-	else pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,0,128,16'\" normalimage=\"file='TreeStandard.png' source='112,16,128,32'\""));
+	if (isLeaf)
+	{
+		pNodeTmp->SetAttribute(_T("itemattr"), _T("valign=\"left\" font=\"5\" textpadding=\"5,3,0,0\""));
+		pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"21,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
+	}
+	else 
+	{
+		pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='tree_expand.png' source='0,0,16,16'\" normalimage=\"file='tree_expand.png' source='16,0,32,16'\""));
+		pNodeTmp->SetAttribute(_T("itemattr"), _T("bkimage=\"file='TreeStandard.png' source='112,0,128,16' dest='5,3,21,19'\" valign=\"left\" font=\"5\" textpadding=\"25,3,0,0\""));
+	}
+	
+	// if (isLeaf) pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
+	// else pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,0,128,16'\" normalimage=\"file='TreeStandard.png' source='112,16,128,32'\""));
 	return pNodeTmp;
 }
 

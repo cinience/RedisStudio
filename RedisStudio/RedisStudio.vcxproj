@@ -66,10 +66,10 @@
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)bin\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)bin\tmp\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)tmp\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)bin\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)bin\tmp\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)tmp\$(ProjectName)\</IntDir>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">.\Debug_u\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">.\Debug_u\</IntDir>
@@ -138,6 +138,10 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>md "$(SolutionDir)bin/skin"
+xcopy "$(SolutionDir)skin" "$(SolutionDir)bin/skin" /s /e /k /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -189,6 +193,10 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
+    <PostBuildEvent>
+      <Command>md "$(SolutionDir)bin/skin"
+xcopy "$(SolutionDir)skin" "$(SolutionDir)bin/skin" /s /e /k /y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">
     <Midl>

@@ -1,4 +1,4 @@
-/bin
+*.pdb
 /bin/tmp
 /*.ncb
 /RedisStudio/Debug
@@ -6,8 +6,13 @@
 *.user
 *.db
 *.aps
+*.lib
+*.exp
 /*.opensdf
 /*.sdf
 /*.suo
 /ipch
 /ipch
+/tmp
+/bin/skin
+/bin/Config.json
