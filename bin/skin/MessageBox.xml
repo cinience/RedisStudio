@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="308,125" caption="0,0,0,36" roundcorner="4,4">
+<Font name="宋体" size="14" bold="false" italic="false" default="true" />
+	<VerticalLayout inset="4,0,0,4" bordersize="1" bordercolor="#FF768D9B" inset="0,0,0,0" bkimage="file='winbk.bmp' corner='4,48,4,4' mask='#FFFF00FF'" >
+   <HorizontalLayout height="40" >
+      <Label name="lab_msg_info" padding="5,0,0,0" visible="false" inset="2,2,2,0" text="提示"  textcolor="#FFFFFFFF" width="80" height="32"/>
+      <Label name="lab_msg_warn" padding="5,0,0,0"visible="false" inset="2,2,2,0" text="警告"  textcolor="#FFFFFFFF" width="80" height="32"/>
+      <Label name="lab_msg_error" padding="5,0,0,0" visible="false" inset="2,2,2,0" text="错误"  textcolor="#FFFFFFFF" width="80" height="32"/>
+      <HorizontalLayout />
+      <HorizontalLayout width="47" >
+          <Button name="closebtn" width="46" padding="0,1,1,0" maxheight="18" tooltip="退出该窗口" normalimage="file='winbk_menu_close.bmp' source='1,0,46,18'" hotimage="file='winbk_menu_close.bmp' source='48,0,93,18'" pushedimage="file='winbk_menu_close.bmp' source='95,0,140,18'"/>           
+      </HorizontalLayout>
+   </HorizontalLayout>
+   
+    <HorizontalLayout height="48" >
+    <HorizontalLayout height="40" width="45">
+      <Control name="ctl_msg_info" visible="false" padding="5,0,0,0" height="40" width="40" bkimage="msg_icon_info.png" />
+      <Control name="ctl_msg_warn" visible="false" padding="5,0,0,0" height="40" width="40" bkimage="msg_icon_warning.png" />  
+      <Control name="ctl_msg_error" visible="false" padding="5,0,0,0" height="40" width="40" bkimage="msg_icon_error.png" />     
+    </HorizontalLayout>
+    <HorizontalLayout inset="10,2,2,0" height="40" >
+      <Label name="lbl_msg_20001" visible="false" inset="8,2,2,0" text="精疲力尽的开发中！" height="32"/>  
+      <Label name="lbl_msg_20002" visible="false" inset="8,2,2,0" text="请先单击选择项" height="32"/>  
+      <Label name="lbl_msg_10010" visible="false" inset="8,2,2,0" text="请先连接服务端" height="32"/>   
+      <Label name="lbl_msg_10011" visible="false" inset="8,2,2,0" text="$不能为空" height="32"/>  
+      <Label name="lbl_msg_10012" visible="false" inset="8,2,2,0" text="正在加载数据，请稍候" height="32"/>  
+      <Label name="lbl_msg_10013" visible="false" inset="8,2,2,0" text="已有连接正在处理中，请稍后重试" height="32"/>  
+      <Label name="lbl_msg_10014" visible="false" inset="8,2,2,0" text="解析配置文件失败" height="32"/>  
+      <Label name="lbl_msg_10015" visible="false" inset="8,2,2,0" text="名称已存在" height="32"/> 
+      <Label name="lbl_msg_10016" visible="false" inset="8,2,2,0" text="服务器连接失败或权限验证失败" height="32"/>      
+    </HorizontalLayout>
+   </HorizontalLayout>  
+    <HorizontalLayout height="10" />
+   <HorizontalLayout height="25" >
+    <HorizontalLayout />
+     <HorizontalLayout height="24" width="82">
+          <Button name="btn_msg_ok" text="我知道了" width="82" tooltip="" normalimage="button_normal.jpg" hotimage="button_hover.jpg" pushedimage="button_pushed.jpg" />       
+     </HorizontalLayout>
+   <HorizontalLayout />
+   </HorizontalLayout>
+ </VerticalLayout>
+</Window>

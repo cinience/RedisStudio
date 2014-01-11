@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+  <HorizontalLayout>
+  <VerticalLayout>
+    <TreeView name="InfoTreeView" childpadding="4" multipleitem="true" inset="1,1,1,1" bordersize="0" bordercolor="#FF2B2B2B" itemtextcolor="#00000000" itemhottextcolor="#00000000" selitemtextcolor="#00000000" itemhotbkcolor="#FFF0F0F0" itemselectedbkcolor="#FFFCFCFC" vscrollbar="true" hscrollbar="true" >
+        <TreeNode text="服务端信息" name="server_treenode" inset="0,0,0,0" height="40" bkimage="treeview_header.png" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;40,8,0,0&quot;" folderattr="padding=&quot;0,15,0,0&quot; width=&quot;10&quot; height=&quot;10&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="版本" tooltip="redis_version" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="redis_version" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="模式" tooltip="redis_mode" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="redis_mode" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="进程号" tooltip="process_id" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="process_id" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="运行时间(s)" tooltip="uptime_in_seconds" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="uptime_in_seconds" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>     
+       </TreeNode>
+       
+       <TreeNode text="客户端信息" name="client_treenode" inset="0,0,0,0" height="40" bkimage="treeview_header.png" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;40,8,0,0&quot;" folderattr="padding=&quot;0,15,0,0&quot; width=&quot;10&quot; height=&quot;10&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="连接数" tooltip="connected_clients" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="connected_clients" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="阻塞连接数" tooltip="blocked_clients" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="blocked_clients" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="最大输入缓存" tooltip="client_biggest_input_buf" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="client_biggest_input_buf" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="最长的输出列表" tooltip="client_longest_output_list" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="client_longest_output_list" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>     
+       </TreeNode>
+       
+       <TreeNode text="内存信息" name="mem_treenode" inset="0,0,0,0" height="40" bkimage="treeview_header.png" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;40,8,0,0&quot;" folderattr="padding=&quot;0,15,0,0&quot; width=&quot;10&quot; height=&quot;10&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="占用内存(byte)" tooltip="used_memory" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="used_memory" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="占用内存" tooltip="used_memory_human" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="used_memory_human" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="常驻集大小" tooltip="used_memory_rss" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="used_memory_rss" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="内存消耗峰值(byte)" tooltip="used_memory_peak" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="used_memory_peak" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode> 
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="lua占用内存(byte)" tooltip="used_memory_lua" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="used_memory_lua"  text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>  
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="内存使用率(%)" tooltip="mem_fragmentation_ratio" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="mem_fragmentation_ratio" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>  
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="内存分配器" tooltip="mem_allocator" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="mem_allocator" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>            
+       </TreeNode>   
+
+        <TreeNode text="持久化信息" name="Persistence_treenode" inset="0,0,0,0" height="40" bkimage="treeview_header.png" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;40,8,0,0&quot;" folderattr="padding=&quot;0,15,0,0&quot; width=&quot;10&quot; height=&quot;10&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;8&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="加载进程数" tooltip="loading" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="loading" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;8&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="RDB最后改变次数" tooltip="rdb_changes_since_last_save" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="rdb_changes_since_last_save" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;8&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="RDB最后保存时间" tooltip="rdb_last_save_time" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="rdb_last_save_time" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>
+          <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;8&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
+              <Text text="AOF是否允许(1:是 0:否)" tooltip="aof_enabled" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text  name="aof_enabled" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+          </TreeNode>     
+       </TreeNode>
+
+       
+    </TreeView>
+    </VerticalLayout>
+    <VerticalLayout width="1" inset="0,1,0,1">
+      <Container bkimage="vertical_border.bmp" />
+    </VerticalLayout>
+    <VerticalLayout width="200" inset="8,15,8,15">
+        <VerticalLayout />
+        <VerticalLayout height="100" >
+            <HorizontalLayout height="24">
+                <HorizontalLayout />
+                <HorizontalLayout width="82">
+                   <Button name="btn_refreshinfo_start" text="自动刷新" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>
+                   <Button name="btn_refreshinfo_stop" visible="false" text="停止刷新" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>
+                </HorizontalLayout>
+                <HorizontalLayout />
+            </HorizontalLayout>
+        </VerticalLayout>
+    </VerticalLayout>
+  </HorizontalLayout>
+</Window>

@@ -1,0 +1,891 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+  <HorizontalLayout>
+    <VerticalLayout>
+      <HorizontalLayout inset="1,1,0,0" >       
+         <List name="redisconfiglist" inset="0,1,0,1" itemlinecolor="#FFF0F0F0" bkcolor="#FFFFFFFF" colorhsl="false" itemshowhtml="true" vscrollbar="true" hscrollbar="false" header="hidden" tooltip="" itemalign="center" itembkcolor="#FFFFFFFF" itemaltbk="false" menu="false">
+          <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="bind" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="IP绑定" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_bind"  text="" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+          </ListContainerElement>  
+           
+           <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="unixsocket" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="UNIX套接字" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_unixsocket"  text="" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+            </ListContainerElement> 
+            
+            
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="port" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="端口" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_port"  text="6379" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="requirepass"  float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="访问密码" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_requirepass"  text="" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+            
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="dir" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="工作目录" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_dir"  text="/var" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>   
+            
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="dbfilename" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="DB文件"  float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_dbfilename"  text="dump.rdb" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>    
+            
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="masterauth" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="Master密码" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_masterauth"  text="" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+            
+           
+           
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="logfile" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="日志文件" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_logfile"  text="" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>   
+           
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="pidfile" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="PID文件" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_pidfile"  text="" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="databases" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="数据库数目" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_databases"  text="16" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="maxclients" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="最大客户端连接数" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_maxclients"  text="0" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+          
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="maxmemory" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="最大内存" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_maxmemory"  text="" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+         </ListContainerElement>  
+
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="maxmemory-samples" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="最大内存实例个数" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_maxmemory-samples"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+         </ListContainerElement>  
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="timeout" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="超时时间" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_timeout"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+         </ListContainerElement>  
+
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="tcp-keepalive" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="TCP生存时间" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_tcp-keepalive"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+         </ListContainerElement>  
+            
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="auto-aof-rewrite-percentage" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="auto-aof-rewrite-percentage" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_auto-aof-rewrite-percentage"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+         </ListContainerElement> 
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="auto-aof-rewrite-min-size" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="auto-aof-rewrite-min-size" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_auto-aof-rewrite-min-size"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+         
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="hash-max-ziplist-entries" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="hash-max-ziplist-entries" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_hash-max-ziplist-entries"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>     
+
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="hash-max-ziplist-value" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="hash-max-ziplist-value" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_hash-max-ziplist-value"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>          
+            
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="list-max-ziplist-entries" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="list-max-ziplist-entries" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_list-max-ziplist-entries"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>      
+
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="list-max-ziplist-value" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="list-max-ziplist-value" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_list-max-ziplist-value"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+            
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="set-max-intset-entries" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="set-max-intset-entries" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_set-max-intset-entries"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>         
+        
+
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="zset-max-ziplist-entries" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="zset-max-ziplist-entries" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_zset-max-ziplist-entries"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>                       
+        
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="zset-max-ziplist-value" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="zset-max-ziplist-value" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_zset-max-ziplist-value"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>    
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="lua-time-limit" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="LUA运行时间限制" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_lua-time-limit"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+       
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="slowlog-log-slower-than" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="slowlog-log-slower-than" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_slowlog-log-slower-than"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+       
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="slowlog-max-len" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="slowlog-max-len" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_slowlog-max-len"  text="3" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>       
+        
+   
+
+           
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="repl-ping-slave-period" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="repl-ping-slave-period" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_repl-ping-slave-period"  text="16" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>   
+
+
+        
+          
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="watchdog-period" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="watchdog-period" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_watchdog-period"  text="0" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+            
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="slave-priority" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="slave-priority" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_slave-priority"  text="0" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+         
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="hz" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="频率" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_hz"  text="0" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>        
+
+
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="maxmemory-policy" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="maxmemory-policy" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_maxmemory-policy"  text="0" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>           
+            
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="hz" name="appendfsync" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="appendfsync" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_appendfsync"  text="everysec" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="save" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="持久化" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_save"  text="everysec" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="client-output-buffer-limit" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="client-output-buffer-limit" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_client-output-buffer-limit"  text="everysec" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="unixsocketperm" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="unixsocketperm" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_unixsocketperm"  text="everysec" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+                      
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="slaveof" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="slaveof"  float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_slaveof"  text="" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="no-appendfsync-on-rewrite" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="no-appendfsync-on-rewrite" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                  <Combo name="redisconfig_no-appendfsync-on-rewrite"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="slave-serve-stale-data" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="slave-serve-stale-data" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_slave-serve-stale-data"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+       
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="slave-read-only" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="slave-read-only" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_slave-read-only"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="stop-writes-on-bgsave-error" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="stop-writes-on-bgsave-error" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_stop-writes-on-bgsave-error"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement>  
+       
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="daemonize" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="启动为精灵进程"  float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_daemonize"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+       
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="rdbcompression" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="压缩RDB文件" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_rdbcompression"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="rdbchecksum" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="校验RDB文件"  float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_rdbchecksum"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+           
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="activerehashing" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="activerehashing" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_activerehashing"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+        
+           
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="repl-disable-tcp-nodelay" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="repl-disable-tcp-nodelay" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_repl-disable-tcp-nodelay"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true"  />
+                  <ListLabelElement text="否" visible="true"  />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+       
+       
+      <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="repl-timeout" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="repl-timeout" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20">
+                 <Edit   name="redisconfig_repl-timeout"  text="everysec" font="3" textpadding="1,0,1,0" bordersize="1" bordercolor="#FFF0F0F0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="aof-rewrite-incremental-fsync" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="aof-rewrite-incremental-fsync" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_aof-rewrite-incremental-fsync"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" selected="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+        
+        
+          <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="appendonly" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="appendonly" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_appendonly"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >
+                  <ListLabelElement text="是" visible="true" />
+                  <ListLabelElement text="否" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+        
+        <ListContainerElement height="40">    
+            <VerticalLayout height="40">     
+              <HorizontalLayout height="20">              
+                 <Text   text="loglevel" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>                 
+               </HorizontalLayout>
+               <HorizontalLayout height="20">
+                <HorizontalLayout height="20" width="300">
+                    <Text   text="日志级别" float="false" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+                 </HorizontalLayout>
+                 <HorizontalLayout height="20" width="100">
+                 <Combo name="redisconfig_loglevel"  normalimage="file='Combo_nor.bmp' corner='2,2,20,2'" hotimage="file='Combo_over.bmp' corner='2,2,20,2'" pushedimage="file='Combo_over.bmp' corner='2,2,20,2'" textpadding="1,1,1,1" >                  
+                  <ListLabelElement text="调试(debug)" visible="true" />
+                  <ListLabelElement text="跟踪(verbose)" visible="true" />
+                  <ListLabelElement text="提示(notice)" visible="true" />
+                  <ListLabelElement text="警告(warning)" visible="true" />
+                 </Combo> 
+                 </HorizontalLayout>
+               </HorizontalLayout>              
+            </VerticalLayout>
+        </ListContainerElement> 
+        
+
+        </List>
+      </HorizontalLayout>    
+    </VerticalLayout>
+        <VerticalLayout width="1" inset="0,1,0,1">
+      <Container bkimage="vertical_border.bmp" />
+    </VerticalLayout>
+    <VerticalLayout width="200" inset="8,15,8,15">
+            <VerticalLayout />
+        <VerticalLayout height="100" >
+            <HorizontalLayout height="24">
+                <HorizontalLayout />
+                <HorizontalLayout width="82">
+                   <Button name="btn_config_submit" text="提交修改" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>                   
+                </HorizontalLayout>
+                <HorizontalLayout />
+            </HorizontalLayout>
+        </VerticalLayout>       
+       <Button pos="20, 250, 160, 300" name="btn_config_sync" visible="false" text="同步配置" relativepos="50,50,0,0"  float="true" normalimage="file='refresh.png' source='0,0,140,53'" hotimage="file='refresh.png' source='140,0,280,53'" pushedimage="file='refresh.png' source='280,0,420,53'"/>
+    </VerticalLayout>
+  </HorizontalLayout>
+</Window>

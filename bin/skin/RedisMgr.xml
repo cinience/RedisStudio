@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+  <HorizontalLayout>
+    <VerticalLayout>
+      <HorizontalLayout>
+       <Text text="{c #386382}正在开发中，请关注最新进展{/c}" float="true" pos="0,5,0,0" width="200" height="19" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />           
+      </HorizontalLayout>    
+    </VerticalLayout>
+     <VerticalLayout width="1" inset="0,1,0,1">
+      <Container bkimage="vertical_border.bmp" />
+    </VerticalLayout>
+    <VerticalLayout width="200" inset="8,15,8,15">
+     
+    </VerticalLayout>
+  </HorizontalLayout>
+</Window>
