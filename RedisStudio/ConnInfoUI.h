@@ -44,6 +44,8 @@ public:
 
 	void OnRfhConnInfo(TNotifyUI& msg);
 
+	void DoEvent(TEventUI& event);
+
 	void DoConnect();
 
 private:

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "RedisConfigUI.h"
-#include "RedisClient.h"
-#include "CharacterSet.h"
+#include "Redis/RedisClient.h"
+#include "Base/CharacterSet.h"
 
 DUI_BEGIN_MESSAGE_MAP(RedisConfigUI, CNotifyPump)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
@@ -99,12 +99,13 @@ void RedisConfigUI::DoFillData()
 	for ( ; it!=itend; ++it)
 	{
 		CDuiString name = _T("redisconfig_");
-		CDuiString key = CharacterSet::ANSIToUnicode(it->first).c_str();
-		CDuiString val = CharacterSet::ANSIToUnicode(it->second).c_str();
+		CDuiString key = Base::CharacterSet::ANSIToUnicode(it->first).c_str();
+		CDuiString val = Base::CharacterSet::ANSIToUnicode(it->second).c_str();
 		name.Append(key);
 		CControlUI* pCtl = GetPaintMgr()->FindControl(name);
 
-		if (!pCtl) continue;
+		/// xmlÖÐÎ´ÅäÖÃ¸ÃÏî
+		if (pCtl == NULL) continue;
 
 		if (pCtl->GetClass() == exampleEditUI.GetClass())
 		{
@@ -143,7 +144,7 @@ void RedisConfigUI::DoApplyData()
 	for ( ; it!=itend; ++it)
 	{
 		CDuiString name = _T("redisconfig_");
-		CDuiString key = CharacterSet::ANSIToUnicode(it->first).c_str();	
+		CDuiString key = Base::CharacterSet::ANSIToUnicode(it->first).c_str();	
 		name.Append(key);
 		CControlUI* pCtl = GetPaintMgr()->FindControl(name);
 
@@ -151,7 +152,7 @@ void RedisConfigUI::DoApplyData()
 		if (pCtl->GetClass() == exampleEditUI.GetClass())
 		{
 			CEditUI* pEdit = static_cast<CEditUI*> (pCtl);
-			val = CharacterSet::UnicodeToANSI(pEdit->GetText().GetData());
+			val = Base::CharacterSet::UnicodeToANSI(pEdit->GetText().GetData());
 		}
 		else if (pCtl->GetClass() == exampleComboUI.GetClass())
 		{

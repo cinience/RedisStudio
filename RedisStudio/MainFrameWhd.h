@@ -24,8 +24,6 @@ public:
 
 	virtual CDuiString GetSkinFile();
 
-	//virtual CDuiString GetZIPFileName();
-
 	virtual UILIB_RESOURCETYPE GetResourceType() const;
 
 	void InitWindow() ;

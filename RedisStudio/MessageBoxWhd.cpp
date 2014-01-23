@@ -1,8 +1,7 @@
 #include "stdafx.h"
 #include "MessageBoxWhd.h"
 #include <sstream>
-
-#include "CharacterSet.h"
+#include "Base/CharacterSet.h"
 
 DUI_BEGIN_MESSAGE_MAP(MessageBoxWhd, WindowImplBase)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
@@ -43,7 +42,7 @@ void MessageBoxWhd::InitWindow()
 
 	std::stringstream ss;
 	ss<<"lbl_msg_"<<m_uMsgCode;
-	CLabelUI* pTextUI = static_cast<CLabelUI*> (m_PaintManager.FindControl(CharacterSet::ANSIToUnicode(ss.str()).c_str()));
+	CLabelUI* pTextUI = static_cast<CLabelUI*> (m_PaintManager.FindControl(Base::CharacterSet::ANSIToUnicode(ss.str()).c_str()));
 	if (pTextUI)
 	{
 		pTextUI->SetVisible(true);

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+  <Font name="宋体" size="12" bold="false" default="true" />
+  <Font name="宋体" size="12" bold="true"/>
+  <Default name="Menu" value="inset=&quot;2,2,2,2&quot; itemtextpadding=&quot;35,0,0,0&quot; bkimage=&quot;file='menu_bk.png' corner='30,8,8,8'&quot; hole=&quot;false&quot;" />
+  <Menu>
+    <!-- <MenuElement name="menu_key_rename" text="重命名" /> -->
+    <MenuElement name="menu_key_del"    text="删除" />
+  </Menu>
+</Window>

@@ -1,6 +1,8 @@
 #include "StdAfx.h"
 #include "CharacterSet.h"
 
+namespace Base {
+
 std::string CharacterSet::UnicodeConvert( const std::wstring& strWide, UINT uCodePage )
 {
 	std::string strANSI;
@@ -51,4 +53,4 @@ std::wstring CharacterSet::UTF8ToUnicode( const std::string& str )
 	return rt;
 }
 
-
+} // namespace Base

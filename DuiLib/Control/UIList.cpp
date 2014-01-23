@@ -113,6 +113,7 @@ bool CListUI::Add(CControlUI* pControl)
     // We also need to recognize header sub-items
     if( _tcsstr(pControl->GetClass(), _T("ListHeaderItemUI")) != NULL ) {
         bool ret = m_pHeader->Add(pControl);
+        int headCount = m_pHeader->GetCount();
         m_ListInfo.nColumns = MIN(m_pHeader->GetCount(), UILIST_MAX_COLUMNS);
         return ret;
     }
@@ -168,7 +169,15 @@ bool CListUI::Remove(CControlUI* pControl)
 {
     if( pControl->GetInterface(_T("ListHeader")) != NULL ) return CVerticalLayoutUI::Remove(pControl);
     // We also need to recognize header sub-items
-    if( _tcsstr(pControl->GetClass(), _T("ListHeaderItemUI")) != NULL ) return m_pHeader->Remove(pControl);
+    if( _tcsstr(pControl->GetClass(), _T("ListHeaderItemUI")) != NULL )
+    {
+        if (m_pHeader->Remove(pControl))
+        {
+            m_ListInfo.nColumns = MIN(m_pHeader->GetCount(), UILIST_MAX_COLUMNS);
+            return true;
+        }
+        return false;
+    }
 
     int iIndex = m_pList->GetItemIndex(pControl);
     if (iIndex == -1) return false;
@@ -2256,7 +2265,7 @@ void CListContainerElementUI::DoEvent(TEventUI& event)
             return;
         }
     }
-    if( event.Type == UIEVENT_BUTTONDOWN || event.Type == UIEVENT_RBUTTONDOWN )
+    if( event.Type == UIEVENT_BUTTONDOWN )
     {
         if( IsEnabled() ){
             m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMCLICK);
@@ -2265,6 +2274,17 @@ void CListContainerElementUI::DoEvent(TEventUI& event)
         }
         return;
     }
+
+	if( event.Type == UIEVENT_RBUTTONDOWN )
+	{
+		if( IsEnabled() ){
+			m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMRCLICK);
+			Select();
+			Invalidate();
+		}
+		return;
+	}
+
     if( event.Type == UIEVENT_BUTTONUP ) 
     {
         return;

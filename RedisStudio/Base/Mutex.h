@@ -1,6 +1,9 @@
-#pragma once
+#ifndef Base_ScopedMutex_INCLUDED
+#define Base_ScopedMutex_INCLUDED
 
 #include "ScopedLock.h"
+
+namespace Base {
 
 class  Mutex
 {
@@ -48,4 +51,6 @@ inline void Mutex::unlock()
 	LeaveCriticalSection(&_cs);
 }
 
+} // namespace Base
 
+#endif

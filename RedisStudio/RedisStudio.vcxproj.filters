@@ -12,11 +12,26 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{db597cb6-b6bc-4461-8971-1e3607e14396}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\DuiEx">
+      <UniqueIdentifier>{1a0cf2f1-2884-4c15-8897-e9c15a1fde7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Base">
+      <UniqueIdentifier>{436f8d9b-8fa5-4b10-b5f3-2d9e968b3218}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Base">
+      <UniqueIdentifier>{1b75613b-6acb-4502-8fa9-ae25a5953fbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\DuiEx">
+      <UniqueIdentifier>{453cb08d-1ed7-4d36-93cb-cebc15a95382}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Redis">
+      <UniqueIdentifier>{7b20847b-78f3-422a-87e1-9c59073aa1ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Redis">
+      <UniqueIdentifier>{697f197a-6e73-41bf-895d-ffdfabe56a90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CharacterSet.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ConnInfoSubWhd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -32,12 +47,6 @@
     <ClCompile Include="MessageBoxWhd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mutex.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="RedisClient.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="RedisConfigUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -50,24 +59,60 @@
     <ClCompile Include="RedisMgrUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RedisResult.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="StdAfx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="String.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UserMessage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Base\Event.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Runnable.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Thread.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="DuiEx\UIMenu.cpp">
+      <Filter>Source Files\DuiEx</Filter>
+    </ClCompile>
+    <ClCompile Include="Redis\RedisClient.cpp">
+      <Filter>Source Files\Redis</Filter>
+    </ClCompile>
+    <ClCompile Include="Redis\RedisHashModel.cpp">
+      <Filter>Source Files\Redis</Filter>
+    </ClCompile>
+    <ClCompile Include="Redis\RedisListModel.cpp">
+      <Filter>Source Files\Redis</Filter>
+    </ClCompile>
+    <ClCompile Include="Redis\RedisModelFactory.cpp">
+      <Filter>Source Files\Redis</Filter>
+    </ClCompile>
+    <ClCompile Include="Redis\RedisResult.cpp">
+      <Filter>Source Files\Redis</Filter>
+    </ClCompile>
+    <ClCompile Include="Redis\RedisSetModel.cpp">
+      <Filter>Source Files\Redis</Filter>
+    </ClCompile>
+    <ClCompile Include="Redis\RedisStringModel.cpp">
+      <Filter>Source Files\Redis</Filter>
+    </ClCompile>
+    <ClCompile Include="Redis\RedisZSetModel.cpp">
+      <Filter>Source Files\Redis</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Mutex.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\CharacterSet.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\String.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractUI.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ConnInfoSubWhd.h">
@@ -80,9 +125,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MessageBoxWhd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mutex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RedisClient.h">
@@ -100,16 +142,7 @@
     <ClInclude Include="RedisMgrUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RedisResult.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ScopedLock.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="StdAfx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="String.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UserMessage.h">
@@ -117,6 +150,66 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DuiEx\ObserverBase.h">
+      <Filter>Header Files\DuiEx</Filter>
+    </ClInclude>
+    <ClInclude Include="DuiEx\UIMenu.h">
+      <Filter>Header Files\DuiEx</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Event.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Runnable.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\RunnableAdapter.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Thread.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\AbstractRedisModel.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\RedisClient.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\RedisHashModel.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\RedisListModel.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\RedisModelFactory.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\RedisResult.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\RedisSetModel.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\RedisStringModel.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\RedisZSetModel.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Redis\ScopedRedisReply.h">
+      <Filter>Header Files\Redis</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Mutex.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\ScopedLock.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\String.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\CharacterSet.h">
+      <Filter>Header Files\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

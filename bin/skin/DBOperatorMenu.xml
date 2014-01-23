@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window>
+  <Font name="宋体" size="12" bold="false" default="true" />
+  <Font name="宋体" size="12" bold="true"/>
+  <Default name="Menu" value="inset=&quot;2,2,2,2&quot; itemtextpadding=&quot;35,0,0,0&quot; bkimage=&quot;file='menu_bk.png' corner='30,8,8,8'&quot; hole=&quot;false&quot;" />
+  <Menu>
+    <MenuElement name="menu_keys_reload" text="重新加载" /> 
+    <!-- <MenuElement name="menu_keys_add"    text="新建记录" /> -->
+    <!-- <MenuElement name="menu_keys_del"    text="清空数据" /> -->
+  </Menu>
+</Window>

@@ -2,7 +2,7 @@
 
 #include "AbstractUI.h"
 
-#include "RedisClient.h"
+#include "Redis/RedisClient.h"
 
 class RedisConfigUI : public AbstraceUI
 {

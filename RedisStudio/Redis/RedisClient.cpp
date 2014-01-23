@@ -1,15 +1,14 @@
 #include "StdAfx.h"
 #include "RedisClient.h"
-
-
-#include "stdarg.h"
-
+#include <stdarg.h>
+#include "../Base/CharacterSet.h"
 #include "RedisResult.h"
+#include "AbstractRedisModel.h"
 
 RedisClient::RedisClient() : m_bReConnect(true),m_isConnected(false),
 m_pClient(NULL)
 {
-	
+	m_ModelFactory.reset(new RedisModelFactory(this));
 }
 
 
@@ -123,6 +122,13 @@ bool RedisClient::keys(TSeqArrayResults& results)
 	return retVal;
 }
 
+bool RedisClient::Exists(const std::string& key)
+{
+    ScopedRedisReply reply(Command("EXISTS %s", key.c_str()));
+    if (reply.IsNull() || reply->type!=REDIS_REPLY_INTEGER || reply->integer==0) return false;
+    return true;
+}
+
 bool RedisClient::Type(const std::string& key, string& type)
 {
 	bool retVal = false;
@@ -146,7 +152,7 @@ void RedisClient::Quit()
 redisReply* RedisClient::Command( const char* fmt, ... )
 {
 	if (!m_pClient) NULL;
-	Mutex::ScopedLock scopedLock(m_mutex);
+	Base::Mutex::ScopedLock scopedLock(m_mutex);
 	redisReply* reply = NULL;
 	va_list ap;
 	va_start(ap, fmt);
@@ -157,12 +163,16 @@ redisReply* RedisClient::Command( const char* fmt, ... )
 		m_fnDisConnect(m_strName);
 		m_isConnected = false;
 	}
+    if (reply && reply->type == REDIS_REPLY_ERROR)
+    {
+        SetLastError(reply->str);
+    }
 	return reply;
 }
 
 void RedisClient::SetLastError( const std::string& err )
 {
-	//m_StrErr = m_StrErr.Append()
+	m_StrErr = Base::CharacterSet::ANSIToUnicode(err).c_str();
 }
 
 DuiLib::CDuiString RedisClient::GetLastError()
@@ -272,173 +282,32 @@ bool RedisClient::ReWriteConfig()
 bool RedisClient::GetData( const std::string& key, std::string& type, RedisResult& results )
 {
 	redisReply* reply = NULL;
-	if (! Type(key, type)) return false;
+	if (!Type(key, type)) return false;
 
-	if (type == "none")
-	{
-		return false;
-	}
-	
-	if (type == "string")
-	{
-		if (!GetStringData(key, results)) return false;
-	} 
-	else if (type == "list")
-	{
-		if (!GetListData(key, results)) return false;
-	}
-	else if (type == "set")
-	{
-		if (!GetSetData(key, results)) return false;
-	}
-	else if (type == "zset")
-	{
-		if (!GetZSetData(key, results)) return false;
-	}
-	else if (type == "hash")
-	{
-		if (!GetHashData(key, results)) return false;
-	}
-	return true;
+	if (type == "none") return false;
+    return m_ModelFactory->GetRedisModel(type)->GetData(key, results);
 }
 
-bool RedisClient::GetStringData( const std::string& key, RedisResult& results)
+bool RedisClient::DelKey( const std::string& key )
 {
-	bool retVal = false;
-	redisReply* reply = Command("GET %s", key.c_str());
-	if (!reply)  return retVal;
-	results.NewColumn("Value");
-	if (reply->type == REDIS_REPLY_STRING)
-	{
-		results.NewRow();
-		string& myvalue = results.Value(results.RowSize()-1, 0);
-		myvalue.assign(reply->str, reply->len);
-		retVal = true;
-	}
-	return retVal;
+    ScopedRedisReply reply(Command("DEL %s", key.c_str()));
+    if (reply.IsNull() || reply->type != REDIS_REPLY_INTEGER || reply->integer == 0)
+    {
+        return false;
+    }
+    return true;
 }
 
-bool RedisClient::GetListData( const std::string& key, RedisResult& results )
+bool RedisClient::UpdateData( const std::string& key, 
+                              const std::string& oldValue, 
+                              const std::string& newValue,
+                              int idx,
+                              const std::string& field)
 {
-	bool retVal = false;
-	redisReply* reply = Command("LRANGE %s %d %d", key.c_str(), 0, -1);
-	if (!reply)  return retVal;
-    results.NewColumn("Value");
-	if (reply->type == REDIS_REPLY_ARRAY)
-	{
-		std::size_t i = 0;
-		redisReply* tmpReply ;
-		while (i < reply->elements)
-		{
-			tmpReply = reply->element[i];
-			results.NewRow();
-			string& myvalue = results.Value(results.RowSize()-1, 0);
-			myvalue.assign(tmpReply->str, tmpReply->len);
-			i++;
-		}
-		retVal = true;
-	}
-	freeReplyObject(reply);
+    redisReply* reply = NULL;
+    std::string type;
+    if (!Type(key, type)) return false;
 
-	return retVal;
-}
-
-bool RedisClient::GetSetData( const std::string& key, RedisResult& results )
-{
-	bool retVal = false;
-	redisReply* reply = Command("SMEMBERS %s", key.c_str());
-	if (!reply)  return retVal;
-	results.NewColumn("Value");
-	if (reply->type == REDIS_REPLY_ARRAY)
-	{
-		std::size_t i = 0;
-		redisReply* tmpReply ;
-		while (i < reply->elements)
-		{
-			tmpReply = reply->element[i];
-			results.NewRow();
-			string& myvalue = results.Value(results.RowSize()-1, 0);
-			myvalue.assign(tmpReply->str, tmpReply->len);
-			i++;
-		}
-		retVal = true;
-		
-	}
-	freeReplyObject(reply);
-	return retVal;
-}
-
-bool RedisClient::GetZSetData( const std::string& key, RedisResult& results )
-{
-	bool retVal = false;
-	redisReply* reply = Command("ZREVRANGE %s %d %d WITHSCORES", key.c_str(), 0, -1);
-	if (!reply)  return retVal;
-	
-	results.NewColumn("Score");
-	results.NewColumn("Value");
-	if (reply->type == REDIS_REPLY_ARRAY)
-	{
-		std::size_t i = 0;
-		redisReply* tmpReply ;
-		while (i < reply->elements)
-		{
-			tmpReply = reply->element[i];
-			if (i%2 == 0)
-			{
-				results.NewRow();
-				
-				string& myvalue = results.Value(results.RowSize()-1, 1);
-				myvalue.assign(tmpReply->str, tmpReply->len);
-			}
-			else 
-			{
-				string& myvalue = results.Value(results.RowSize()-1, 0);
-				myvalue.assign(tmpReply->str, tmpReply->len);
-			}			
-			i++;
-		}
-		retVal = true;
-	}
-	freeReplyObject(reply);
-	return retVal;
-}
-
-bool RedisClient::GetHashData( const std::string& key, RedisResult& results )
-{
-	bool retVal = false;
-	redisReply* reply = Command("HKEYS %s", key.c_str());
-	if (!reply)  return retVal;
-	results.NewColumn("Field ");
-	results.NewColumn("Value");
-	if (reply->type == REDIS_REPLY_ARRAY)
-	{
-		std::size_t i = 0;
-		redisReply* tmpReply ;
-		bool isOK = true;
-		while (i < reply->elements)
-		{
-			tmpReply = reply->element[i];
-			redisReply* theReply = Command("HGET %s %s", key.c_str(), tmpReply->str);
-			if (!theReply) break;
-			if (theReply->type != REDIS_REPLY_STRING) 
-			{
-				isOK = false;
-				freeReplyObject(theReply);
-				break;
-			}
-			results.NewRow();
-
-			string& myFiled = results.Value(results.RowSize()-1, 0) ;
-			myFiled.assign(tmpReply->str, tmpReply->len);
-
-			string& myvalue = results.Value(results.RowSize()-1, 1) ;
-			myvalue.assign(theReply->str, theReply->len);
-			freeReplyObject(theReply);
-			i++;
-		}
-		if (isOK)
-		retVal = true;
-	}
-	freeReplyObject(reply);
-	return retVal;
+    if (type == "none") return false;
+    return m_ModelFactory->GetRedisModel(type)->UpdateData(key, oldValue, newValue, idx, field);
 }

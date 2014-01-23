@@ -76,7 +76,8 @@
               <ListLabelElement text="自动识别" selected="true" />
               <ListLabelElement text="普通文本" />
               <ListLabelElement text="JSON格式" />
-              <ListLabelElement text="XML格式"  />              
+              <ListLabelElement text="XML格式"  />  
+              <ListLabelElement text="十六进制"  />       
             </Combo>  
       </HorizontalLayout>   
       

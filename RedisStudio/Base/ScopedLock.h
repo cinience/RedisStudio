@@ -1,4 +1,7 @@
-#pragma once
+#ifndef Base_ScopedLock_INCLUDED
+#define Base_ScopedLock_INCLUDED
+
+namespace Base {
 
 template <class M>
 class ScopedLock
@@ -21,3 +24,7 @@ private:
 	ScopedLock(const ScopedLock&);
 	ScopedLock& operator = (const ScopedLock&);
 };
+
+} // namespace 
+
+#endif

@@ -28,6 +28,8 @@
       <Label name="lbl_msg_10014" visible="false" inset="8,2,2,0" text="解析配置文件失败" height="32"/>  
       <Label name="lbl_msg_10015" visible="false" inset="8,2,2,0" text="名称已存在" height="32"/> 
       <Label name="lbl_msg_10016" visible="false" inset="8,2,2,0" text="服务器连接失败或权限验证失败" height="32"/>      
+      <Label name="lbl_msg_10030" visible="false" inset="8,2,2,0" text="该键已经不存在，请重新加载" height="32"/>
+      <Label name="lbl_msg_10031" visible="false" inset="8,2,2,0" text="更新该数据失败" height="32"/>         
     </HorizontalLayout>
    </HorizontalLayout>  
     <HorizontalLayout height="10" />

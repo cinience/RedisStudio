@@ -2,7 +2,7 @@
 #include <string>
 #include "ConnInfoSubWhd.h"
 #include "ConnInfoUI.h"
-#include "CharacterSet.h"
+#include "Base/CharacterSet.h"
 #include "UserMessage.h"
 
 
@@ -38,10 +38,10 @@ void ConnInfoSubWhd::InitWindow()
 	}
 	else 
 	{
-		m_pEditName->SetText(CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerNameIndex][m_celIdx]).c_str());
-		m_pEditHost->SetText(CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerIpIndex][m_celIdx]).c_str());
-		m_pEditPort->SetText(CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerPortIndex][m_celIdx]).c_str());
-		m_pEditAuth->SetText(CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerAuthIndex][m_celIdx]).c_str());
+		m_pEditName->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerNameIndex][m_celIdx]).c_str());
+		m_pEditHost->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerIpIndex][m_celIdx]).c_str());
+		m_pEditPort->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerPortIndex][m_celIdx]).c_str());
+		m_pEditAuth->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerAuthIndex][m_celIdx]).c_str());
 		pLabelAdd->SetVisible(false);
 		pLabelAlt->SetVisible(true);
 	}
@@ -74,7 +74,7 @@ DuiLib::UILIB_RESOURCETYPE ConnInfoSubWhd::GetResourceType() const
 
 DuiLib::CDuiString ConnInfoSubWhd::GetSkinFolder()
 {
-	return _T("skin\\");
+	return _T("..\\skin\\");
 }
 
 DuiLib::CDuiString ConnInfoSubWhd::GetSkinFile()
@@ -111,10 +111,10 @@ void ConnInfoSubWhd::OnClick( TNotifyUI& msg )
 
 bool ConnInfoSubWhd::OnAddInfo()
 {
-	std::string name = CharacterSet::UnicodeToANSI(m_pEditName->GetText().GetData());
-	std::string ip =  CharacterSet::UnicodeToANSI(m_pEditHost->GetText().GetData());
-	std::string port =  CharacterSet::UnicodeToANSI(m_pEditPort->GetText().GetData());
-	std::string auth =  CharacterSet::UnicodeToANSI(m_pEditAuth->GetText().GetData());
+	std::string name = Base::CharacterSet::UnicodeToANSI(m_pEditName->GetText().GetData());
+	std::string ip =  Base::CharacterSet::UnicodeToANSI(m_pEditHost->GetText().GetData());
+	std::string port =  Base::CharacterSet::UnicodeToANSI(m_pEditPort->GetText().GetData());
+	std::string auth =  Base::CharacterSet::UnicodeToANSI(m_pEditAuth->GetText().GetData());
 	if (name.empty())
 	{
 		CDuiString CtlName = m_pEditName->GetName();
@@ -157,10 +157,10 @@ bool ConnInfoSubWhd::OnAddInfo()
 
 bool ConnInfoSubWhd::OnAltInfo()
 {
-	std::string name = CharacterSet::UnicodeToANSI(m_pEditName->GetText().GetData());
-	std::string ip =  CharacterSet::UnicodeToANSI(m_pEditHost->GetText().GetData());
-	std::string port =  CharacterSet::UnicodeToANSI(m_pEditPort->GetText().GetData());
-	std::string auth =  CharacterSet::UnicodeToANSI(m_pEditAuth->GetText().GetData());
+	std::string name = Base::CharacterSet::UnicodeToANSI(m_pEditName->GetText().GetData());
+	std::string ip =  Base::CharacterSet::UnicodeToANSI(m_pEditHost->GetText().GetData());
+	std::string port =  Base::CharacterSet::UnicodeToANSI(m_pEditPort->GetText().GetData());
+	std::string auth =  Base::CharacterSet::UnicodeToANSI(m_pEditAuth->GetText().GetData());
 	TDicTables& dicObj = *m_pdicServerInfo;
 	for (std::size_t idx=0; idx<dicObj[ConnInfoUI::kServerNameIndex].size(); ++idx)
 	{

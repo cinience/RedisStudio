@@ -5,7 +5,7 @@
 #include "resource.h"
 #include "MainFrameWhd.h"
 #include "UserMessage.h"
-#include "RedisClient.h"
+#include "Redis/RedisClient.h"
 #include "ConnInfoUI.h"
 #include "RedisInfoUI.h"
 #include "RedisDataUI.h"

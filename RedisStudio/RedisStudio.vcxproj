@@ -299,19 +299,30 @@ xcopy "$(SolutionDir)skin" "$(SolutionDir)bin/skin" /s /e /k /y</Command>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CharacterSet.cpp" />
+    <ClCompile Include="Base\CharacterSet.cpp" />
+    <ClCompile Include="Base\Event.cpp" />
+    <ClCompile Include="Base\Mutex.cpp" />
+    <ClCompile Include="Base\Runnable.cpp" />
+    <ClCompile Include="Base\String.cpp" />
+    <ClCompile Include="Base\Thread.cpp" />
     <ClCompile Include="ConnInfoSubWhd.cpp" />
     <ClCompile Include="ConnInfoUI.cpp" />
+    <ClCompile Include="DuiEx\UIMenu.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainFrameWhd.cpp" />
     <ClCompile Include="MessageBoxWhd.cpp" />
-    <ClCompile Include="Mutex.cpp" />
-    <ClCompile Include="RedisClient.cpp" />
     <ClCompile Include="RedisConfigUI.cpp" />
     <ClCompile Include="RedisDataUI.cpp" />
     <ClCompile Include="RedisInfoUI.cpp" />
     <ClCompile Include="RedisMgrUI.cpp" />
-    <ClCompile Include="RedisResult.cpp" />
+    <ClCompile Include="Redis\RedisClient.cpp" />
+    <ClCompile Include="Redis\RedisHashModel.cpp" />
+    <ClCompile Include="Redis\RedisListModel.cpp" />
+    <ClCompile Include="Redis\RedisModelFactory.cpp" />
+    <ClCompile Include="Redis\RedisResult.cpp" />
+    <ClCompile Include="Redis\RedisSetModel.cpp" />
+    <ClCompile Include="Redis\RedisStringModel.cpp" />
+    <ClCompile Include="Redis\RedisZSetModel.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -322,26 +333,40 @@ xcopy "$(SolutionDir)skin" "$(SolutionDir)bin/skin" /s /e /k /y</Command>
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="String.cpp" />
     <ClCompile Include="UserMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractUI.h" />
-    <ClInclude Include="CharacterSet.h" />
+    <ClInclude Include="Base\CharacterSet.h" />
+    <ClInclude Include="Base\Event.h" />
+    <ClInclude Include="Base\Mutex.h" />
+    <ClInclude Include="Base\Runnable.h" />
+    <ClInclude Include="Base\RunnableAdapter.h" />
+    <ClInclude Include="Base\ScopedLock.h" />
+    <ClInclude Include="Base\String.h" />
+    <ClInclude Include="Base\Thread.h" />
     <ClInclude Include="ConnInfoSubWhd.h" />
     <ClInclude Include="ConnInfoUI.h" />
+    <ClInclude Include="DuiEx\ObserverBase.h" />
+    <ClInclude Include="DuiEx\UIMenu.h" />
     <ClInclude Include="MainFrameWhd.h" />
     <ClInclude Include="MessageBoxWhd.h" />
-    <ClInclude Include="Mutex.h" />
     <ClInclude Include="RedisClient.h" />
     <ClInclude Include="RedisConfigUI.h" />
     <ClInclude Include="RedisDataUI.h" />
     <ClInclude Include="RedisInfoUI.h" />
     <ClInclude Include="RedisMgrUI.h" />
-    <ClInclude Include="RedisResult.h" />
-    <ClInclude Include="ScopedLock.h" />
+    <ClInclude Include="Redis\AbstractRedisModel.h" />
+    <ClInclude Include="Redis\RedisClient.h" />
+    <ClInclude Include="Redis\RedisHashModel.h" />
+    <ClInclude Include="Redis\RedisListModel.h" />
+    <ClInclude Include="Redis\RedisModelFactory.h" />
+    <ClInclude Include="Redis\RedisResult.h" />
+    <ClInclude Include="Redis\RedisSetModel.h" />
+    <ClInclude Include="Redis\RedisStringModel.h" />
+    <ClInclude Include="Redis\RedisZSetModel.h" />
+    <ClInclude Include="Redis\ScopedRedisReply.h" />
     <ClInclude Include="StdAfx.h" />
-    <ClInclude Include="String.h" />
     <ClInclude Include="UserMessage.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

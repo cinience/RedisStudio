@@ -1,7 +1,10 @@
-#pragma once
+#ifndef Base_String_INCLUDED
+#define Base_String_INCLUDED
 
 #include <string>
 #include <vector>
+
+namespace Base {
 
 class String
 {
@@ -17,4 +20,10 @@ public:
 	static bool IsSpace(const char& ch);
 
 	static void Split(const std::string& str, const std::string& separators, TSeqStr& tokens, int options=0);
+
+    static std::string Chrtos(char byte);
 };
+
+}  // namespace Base
+
+#endif

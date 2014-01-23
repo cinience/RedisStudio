@@ -1,4 +1,7 @@
-#pragma once
+#ifndef Base_CharacterSet_INCLUDED
+#define Base_CharacterSet_INCLUDED
+
+namespace Base {
 
 class CharacterSet
 {
@@ -14,3 +17,7 @@ public:
 	static std::wstring UTF8ToUnicode(const std::string& str);
 
 };
+
+} // namespace Base
+
+#endif

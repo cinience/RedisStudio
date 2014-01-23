@@ -3,8 +3,9 @@
 #include <list>
 #include <map>
 #include <string>
-#include "Mutex.h"
-
+#include "../Base/Mutex.h"
+#include "ScopedRedisReply.h"
+#include "RedisModelFactory.h"
 
 typedef void (* callback)(const CDuiString& );
 
@@ -37,11 +38,13 @@ public:
 
 	bool keys(TSeqArrayResults& results);
 
+    bool Exists(const std::string& key);
+
 	bool Type(const std::string& key, string& type);
 
 	bool DatabasesNum(int& num);
 
-	int DatabasesNum();
+	int  DatabasesNum();
 
 	bool SelectDB(int dbindex);
 
@@ -53,15 +56,13 @@ public:
 
 	bool GetData(const std::string& key, std::string& type, RedisResult& results);
 
-	bool GetStringData(const std::string& key, RedisResult& result);
+    bool UpdateData(const std::string& key, 
+                    const std::string& oldValue, 
+                    const std::string& newValue,
+                    int idx,
+                    const std::string& field="");
 
-	bool GetListData(const std::string& key, RedisResult& results);
-
-	bool GetSetData(const std::string& key, RedisResult& results);
-
-	bool GetZSetData(const std::string& key, RedisResult& results);
-
-	bool GetHashData(const std::string& key, RedisResult& results);
+    bool DelKey(const std::string& key);
 
 	redisReply* Command(const char* fmt, ...);
 
@@ -76,7 +77,7 @@ public:
 		m_fnDisConnect = fn;
 	}
 
-public:
+private:
 	redisContext* m_pClient;
 	bool          m_bReConnect;
 	CDuiString    m_strName;
@@ -87,5 +88,7 @@ public:
 	CDuiString    m_StrErr;
 	bool          m_isConnected;
     callback      m_fnDisConnect;
-	Mutex         m_mutex;
+	Base::Mutex         m_mutex;
+    std::auto_ptr<RedisModelFactory> m_ModelFactory;
+    
 };
