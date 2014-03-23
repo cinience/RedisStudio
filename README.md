@@ -26,3 +26,7 @@ RedisStudio
   如果你喜欢Redis Studio 并想加入开发设计Redis Studio，请联系我！
 - 
   如果你对Redis Studio 有任何建议，请在Issues中提出来。
+
+# UI
+
+![UI](https://raw.githubusercontent.com/cinience/RedisStudio/master/package/redis.png "RedisStudio UI")
