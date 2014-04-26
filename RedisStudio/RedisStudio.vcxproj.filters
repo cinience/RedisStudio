@@ -110,6 +110,9 @@
     <ClCompile Include="Base\String.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
+    <ClCompile Include="RedisHelpUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractUI.h">
@@ -210,6 +213,9 @@
     </ClInclude>
     <ClInclude Include="Base\CharacterSet.h">
       <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RedisHelpUI.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

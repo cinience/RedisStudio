@@ -191,7 +191,7 @@ bool RedisClient::DatabasesNum(int& num)
 	redisReply* reply = Command("config get databases");
 	if (!reply) return retVal;
 
-	if (reply->type == REDIS_REPLY_ARRAY)
+	if (reply->type == REDIS_REPLY_ARRAY && reply->elements>1 )
 	{
 		retVal = true;
 		num = atoi(reply->element[1]->str);

@@ -32,6 +32,7 @@
                 <Option name="btn_RedisData" text="数据" float="true" pos="160,0,0,0" width="65" height="62" textpadding="0,0,0,2" textcolor="#FF386382" disabledtextcolor="#FFA7A6AA" font="1" align="centerbottom" normalimage="toolbar_normal.png" hotimage="toolbar_hover.png" pushedimage="toolbar_pushed.png" group="quickbar" foreimage="file=&apos;commmon.png&apos; dest=&apos;10,5,50,45&apos;" selectedimage="toolbar_pushed.png" />                
                 <Option name="btn_RedisConfig" text="配置" float="true" pos="235,0,0,0" width="65" height="62" textpadding="0,0,0,2" textcolor="#FF386382" disabledtextcolor="#FFA7A6AA" font="1" align="centerbottom" normalimage="toolbar_normal.png" hotimage="toolbar_hover.png" pushedimage="toolbar_pushed.png" group="quickbar" foreimage="file=&apos;redisconfig.png&apos; dest=&apos;10,5,50,45&apos;" selectedimage="toolbar_pushed.png" />
                 <Option name="btn_RedisMgr" visible="false" text="管理" float="true" pos="310,0,0,0" width="65" height="62" textpadding="0,0,0,2" textcolor="#FF386382" disabledtextcolor="#FFA7A6AA" font="1" align="centerbottom" normalimage="toolbar_normal.png" hotimage="toolbar_hover.png" pushedimage="toolbar_pushed.png" group="quickbar" foreimage="file=&apos;redismgr.png&apos; dest=&apos;10,5,50,45&apos;" selectedimage="toolbar_pushed.png" />
+                <Option name="btn_RedisHelp" text="参考" float="true" pos="310,0,0,0" width="65" height="62" textpadding="0,0,0,2" textcolor="#FF386382" disabledtextcolor="#FFA7A6AA" font="1" align="centerbottom" normalimage="toolbar_normal.png" hotimage="toolbar_hover.png" pushedimage="toolbar_pushed.png" group="quickbar" foreimage="file=&apos;redisconfig.png&apos; dest=&apos;10,5,50,45&apos;" selectedimage="toolbar_pushed.png" />
             </HorizontalLayout>
             <HorizontalLayout width="132" inset="0,10,5,0">
                 <Button height="42" bkimage="file=&apos;Redis_Logo.png&apos;" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" align="center" />
@@ -60,6 +61,9 @@
                     </HorizontalLayout>
                     <HorizontalLayout>
                         <RedisMgr name="RedisMgr" virtualwnd="RedisMgr" />
+                    </HorizontalLayout>
+                    <HorizontalLayout>
+                        <RedisHelp name="RedisHelp" virtualwnd="RedisHelp" />
                     </HorizontalLayout>
                 </TabLayout>
             </HorizontalLayout>

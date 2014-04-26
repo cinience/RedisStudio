@@ -11,6 +11,7 @@
 #include "RedisDataUI.h"
 #include "RedisConfigUI.h"
 #include "RedisMgrUI.h"
+#include "RedisHelpUI.h"
 
 
 DUI_BEGIN_MESSAGE_MAP(CMainFrameWnd, WindowImplBase)
@@ -138,7 +139,11 @@ CControlUI* CMainFrameWnd::CreateControl(LPCTSTR pstrClassName)
 		strXML = _T("RedisMgr.xml");
 		p = new RedisMgrUI(strXML, &m_PaintManager);
 	}
-
+	else if (_tcsicmp(pstrClassName, _T("RedisHelp")) == 0)
+	{
+		strXML = _T("RedisHelp.xml");
+		p = new RedisHelpUI(strXML, &m_PaintManager);
+	}
 	//if (! strXML.IsEmpty())
 	//{
 	//	CControlUI* pUI = builder.Create(strXML.GetData(), NULL, NULL, &m_PaintManager, NULL); // 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息。
@@ -200,6 +205,7 @@ void CMainFrameWnd::OnSelectChanged( TNotifyUI &msg )
 	CTabLayoutUI* pControl = static_cast<CTabLayoutUI*>(m_PaintManager.FindControl(_T("switch")));
     
 	if (name != _T("ConnInfo") &&
+		name != _T("RedisHelp") &&
 		!RedisClient::GetInstance().IsConnected())
 	{
 		pControl->SelectItem(0);

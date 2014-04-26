@@ -313,6 +313,7 @@ xcopy "$(SolutionDir)skin" "$(SolutionDir)bin/skin" /s /e /k /y</Command>
     <ClCompile Include="MessageBoxWhd.cpp" />
     <ClCompile Include="RedisConfigUI.cpp" />
     <ClCompile Include="RedisDataUI.cpp" />
+    <ClCompile Include="RedisHelpUI.cpp" />
     <ClCompile Include="RedisInfoUI.cpp" />
     <ClCompile Include="RedisMgrUI.cpp" />
     <ClCompile Include="Redis\RedisClient.cpp" />
@@ -354,6 +355,7 @@ xcopy "$(SolutionDir)skin" "$(SolutionDir)bin/skin" /s /e /k /y</Command>
     <ClInclude Include="RedisClient.h" />
     <ClInclude Include="RedisConfigUI.h" />
     <ClInclude Include="RedisDataUI.h" />
+    <ClInclude Include="RedisHelpUI.h" />
     <ClInclude Include="RedisInfoUI.h" />
     <ClInclude Include="RedisMgrUI.h" />
     <ClInclude Include="Redis\AbstractRedisModel.h" />

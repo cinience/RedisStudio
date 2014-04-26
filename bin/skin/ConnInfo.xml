@@ -12,7 +12,7 @@
             <ListHeaderItem text="名称" font="1" width="150" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
             <ListHeaderItem text="主机IP" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
             <ListHeaderItem text="端口" font="1" width="50"  hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
-            <ListHeaderItem text="密码" font="1"  hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
+            <ListHeaderItem text="密码" font="1"  hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/> 
           </ListHeader>
         </List>
       </HorizontalLayout>

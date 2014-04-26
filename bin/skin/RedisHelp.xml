@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window>
+  <HorizontalLayout>
+                <TabLayout name="TabLayoutUI1" float="false">
+                    <ActiveX name="ie" float="false" clsid="{8856F961-340A-11D0-A96B-00C04FD705A2}" delaycreate="false" />
+                </TabLayout>
+  </HorizontalLayout>
+</Window>
