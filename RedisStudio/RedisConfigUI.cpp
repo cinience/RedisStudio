@@ -147,7 +147,7 @@ void RedisConfigUI::DoApplyData()
 		CDuiString key = Base::CharacterSet::ANSIToUnicode(it->first).c_str();	
 		name.Append(key);
 		CControlUI* pCtl = GetPaintMgr()->FindControl(name);
-
+		if (pCtl == NULL) continue;
 		string val ;
 		if (pCtl->GetClass() == exampleEditUI.GetClass())
 		{

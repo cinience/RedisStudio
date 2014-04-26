@@ -18,52 +18,42 @@
       </HorizontalLayout>
     
     </VerticalLayout>
-    <VerticalLayout width="1" inset="0,1,0,1">
+    <VerticalLayout width="1" inset="0,0,0,0">
       <Container bkimage="vertical_border.bmp" />
     </VerticalLayout>
-    <VerticalLayout width="200" inset="8,15,8,15">
-    <VerticalLayout />
-    <VerticalLayout height="200" >
-    
-        <HorizontalLayout height="24">
-            <HorizontalLayout />
-            <HorizontalLayout width="82">
-               <Button name="btn_conn_rfh" text="刷新" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>
-            </HorizontalLayout>
-            <HorizontalLayout />
-        </HorizontalLayout>
+    <VerticalLayout width="201" inset="0,0,0,0">
+        <VerticalLayout />
         
-        <HorizontalLayout height="24" />
-        
-        <HorizontalLayout height="24">
-            <HorizontalLayout />
-            <HorizontalLayout width="82">
-               <Button name="btn_conn_add" text="增加" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>
-            </HorizontalLayout>
-            <HorizontalLayout />
-        </HorizontalLayout>
-        
-        <HorizontalLayout height="24" />
-        
-        <HorizontalLayout height="24">
-            <HorizontalLayout />
-            <HorizontalLayout width="82">
-               <Button name="btn_conn_del" text="删除" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>
-            </HorizontalLayout>
-            <HorizontalLayout />
-        </HorizontalLayout>
-        
-        <HorizontalLayout height="24" />
-        
-        <HorizontalLayout height="24">
-            <HorizontalLayout />
-            <HorizontalLayout width="82">
-               <Button name="btn_conn_alt" text="修改" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>
-            </HorizontalLayout>
-            <HorizontalLayout />
-        </HorizontalLayout> 
-        
-    </VerticalLayout>
+        <VerticalLayout height="202" >
+              <HorizontalLayout height="1" width="200">
+               <Container bkimage="horizontal_border.bmp" />
+              </HorizontalLayout>
+              <HorizontalLayout height="100" width="200" bkcolor="#FFFFFFFF">
+                    <VerticalLayout width="100" >
+                     <Button name="btn_conn_rfh" width="100" height="100" text="" normalimage="file='btn_refresh_normal.png'" hotimage="file='btn_refresh_hover.png' source='0,0,100,100'" pushedimage="file='btn_refresh_hover.png' source='0,0,100,100'"/>
+                    </VerticalLayout>
+                    <VerticalLayout width="1" >
+                    <Container bkimage="v_dotline.png" />
+                    </VerticalLayout>
+                     <VerticalLayout > 
+                     <Button name="btn_conn_add" width="100" height="100" text="" normalimage="file='btn_add_normal.png'" hotimage="file='btn_add_hover.png' source='0,0,100,100'" pushedimage="file='btn_add_hover.png' source='0,0,100,100'"/>
+                     </VerticalLayout>
+              </HorizontalLayout>
+              <HorizontalLayout height="1" width="200">
+               <Container bkimage="h_dotline.png" />
+              </HorizontalLayout>
+              <HorizontalLayout height="100" width="200">
+                    <VerticalLayout width="100" >
+                     <Button name="btn_conn_del" width="100" height="100" text="" normalimage="file='btn_delete_normal.png'" hotimage="file='btn_delete_hover.png' source='0,0,100,100'" pushedimage="file='btn_delete_hover.png' source='0,0,100,100'"/>
+                    </VerticalLayout>
+                    <VerticalLayout width="1" >
+                    <Container bkimage="v_dotline.png" />
+                    </VerticalLayout>
+                    <VerticalLayout > 
+                    <Button name="btn_conn_alt" width="100" height="100" text="" normalimage="file='btn_alter_normal.png'" hotimage="file='btn_alter_hover.png' source='0,0,100,100'" pushedimage="file='btn_alter_hover.png' source='0,0,100,100'"/>                     
+                    </VerticalLayout>
+              </HorizontalLayout>  
+        </VerticalLayout>
     </VerticalLayout>
   </HorizontalLayout>
 </Window>

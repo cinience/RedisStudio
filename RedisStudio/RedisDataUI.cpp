@@ -399,6 +399,7 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
         if (!RedisClient::GetInstance().SelectDB(nodeIdx)) continue;
         
         RedisClient::TSeqArrayResults results;
+		//results.sort();
         if (!RedisClient::GetInstance().keys(results)) return;
         RedisClient::TSeqArrayResults::const_iterator it    = results.begin();
         RedisClient::TSeqArrayResults::const_iterator itend = results.end();
@@ -424,6 +425,7 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
                     {
                         pPNode = pTempNode;
                         hasFind = true;
+						break;
                     }
                 }
                 if (hasFind)
