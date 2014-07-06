@@ -32,7 +32,7 @@ bool RedisZSetModel::GetData( const std::string& key, RedisResult& results )
             {
                 string& myvalue = results.Value(results.RowSize()-1, 0);
                 myvalue.assign(tmpReply->str, tmpReply->len);
-            }			
+            }            
             i++;
         }
         retVal = true;

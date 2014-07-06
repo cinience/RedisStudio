@@ -10,67 +10,67 @@ class RedisInfoUI;
 class CMainFrameWnd : public WindowImplBase
 {
 public:
-	CMainFrameWnd();
+    CMainFrameWnd();
 
-	~CMainFrameWnd();
+    ~CMainFrameWnd();
 
-	LPCTSTR GetWindowClassName() const;
+    LPCTSTR GetWindowClassName() const;
 
-	UINT GetClassStyle() const;
+    UINT GetClassStyle() const;
 
-	void OnFinalMessage(HWND hWnd);
+    void OnFinalMessage(HWND hWnd);
 
-	virtual CDuiString GetSkinFolder();
+    virtual CDuiString GetSkinFolder();
 
-	virtual CDuiString GetSkinFile();
+    virtual CDuiString GetSkinFile();
 
-	virtual UILIB_RESOURCETYPE GetResourceType() const;
+    virtual UILIB_RESOURCETYPE GetResourceType() const;
 
-	void InitWindow() ;
+    void InitWindow() ;
 
-	CControlUI* CreateControl(LPCTSTR pstrClassName);
+    CControlUI* CreateControl(LPCTSTR pstrClassName);
 
-	void Notify(TNotifyUI& msg);
+    void Notify(TNotifyUI& msg);
 
-	virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
+    virtual LRESULT HandleCustomMessage(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 
-	DUI_DECLARE_MESSAGE_MAP()
+    DUI_DECLARE_MESSAGE_MAP()
 
-	virtual void OnClick(TNotifyUI& msg);
+    virtual void OnClick(TNotifyUI& msg);
 
-	virtual void OnSelectChanged( TNotifyUI &msg );
+    virtual void OnSelectChanged( TNotifyUI &msg );
 
-	virtual void OnItemClick( TNotifyUI &msg );
+    virtual void OnItemClick( TNotifyUI &msg );
 
-	LRESULT OnConnected(HWND hwnd, WPARAM wParam, LPARAM lParam);
+    LRESULT OnConnected(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
-	LRESULT OnUnConnected(HWND hwnd, WPARAM wParam, LPARAM lParam);
+    LRESULT OnUnConnected(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
-	LRESULT OnConnecting(HWND hwnd, WPARAM wParam, LPARAM lParam);
-
-public:
-	void DoConnectEvent(void* data);
-
-	void DoUnConnectEvent(void* data);
+    LRESULT OnConnecting(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
 public:
-	static HWND m_hwnd;
-	static void OndisConnectCallback(const CDuiString& name);
+    void DoConnectEvent(void* data);
+
+    void DoUnConnectEvent(void* data);
+
+public:
+    static HWND m_hwnd;
+    static void OndisConnectCallback(const CDuiString& name);
 
 private:
-	CButtonUI* m_pCloseBtn;
-	CButtonUI* m_pMaxBtn;
-	CButtonUI* m_pRestoreBtn;
-	CButtonUI* m_pMinBtn;
+    CButtonUI* m_pCloseBtn;
+    CButtonUI* m_pMaxBtn;
+    CButtonUI* m_pRestoreBtn;
+    CButtonUI* m_pMinBtn;
 
-	CHorizontalLayoutUI* m_pLayConnect;
-	CHorizontalLayoutUI* m_pLayConnecting;
-	CHorizontalLayoutUI* m_pLayUnconect;
-	CTextUI* m_pConnectControl ;
-	CTextUI* m_pUnConnectControl ;
-	CTextUI* m_pConnectingControl ;
+    CHorizontalLayoutUI* m_pLayConnect;
+    CHorizontalLayoutUI* m_pLayConnecting;
+    CHorizontalLayoutUI* m_pLayUnconect;
+    CTextUI* m_pConnectControl ;
+    CTextUI* m_pUnConnectControl ;
+    CTextUI* m_pConnectingControl ;
 
-	CStdStringPtrMap m_TabContainer;
+    CStdStringPtrMap m_TabContainer;
 };
 
 

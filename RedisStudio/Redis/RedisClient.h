@@ -15,46 +15,46 @@ class RedisResult;
 class RedisClient
 {
 public:
-	typedef std::list<std::string> TSeqArrayResults;
-	typedef std::map<std::string, std::string> TDicConfig;
+    typedef std::list<std::string> TSeqArrayResults;
+    typedef std::map<std::string, std::string> TDicConfig;
 public:
-	RedisClient();
+    RedisClient();
 
-	~RedisClient();
+    ~RedisClient();
 
-	static RedisClient& GetInstance();
+    static RedisClient& GetInstance();
 
-	void SetServerInfo(const CDuiString& name, const string& ip, int port,const string& auth);
+    void SetServerInfo(const CDuiString& name, const string& ip, int port,const string& auth);
 
-	bool Connect();
+    bool Connect();
 
-	bool IsConnected();
+    bool IsConnected();
 
-	void NeedReConnect();
+    void NeedReConnect();
 
-	void Quit();
+    void Quit();
 
-	bool Info(std::string& results);
+    bool Info(std::string& results);
 
-	bool keys(TSeqArrayResults& results);
+    bool keys(TSeqArrayResults& results);
 
     bool Exists(const std::string& key);
 
-	bool Type(const std::string& key, string& type);
+    bool Type(const std::string& key, string& type);
 
-	bool DatabasesNum(int& num);
+    bool DatabasesNum(int& num);
 
-	int  DatabasesNum();
+    int  DatabasesNum();
 
-	bool SelectDB(int dbindex);
+    bool SelectDB(int dbindex);
 
-	bool GetConfig(TDicConfig& dicConfig);
+    bool GetConfig(TDicConfig& dicConfig);
 
-	bool SetConfig(const TDicConfig& dicConfig);
+    bool SetConfig(const TDicConfig& dicConfig);
 
-	bool ReWriteConfig();
+    bool ReWriteConfig();
 
-	bool GetData(const std::string& key, std::string& type, RedisResult& results);
+    bool GetData(const std::string& key, std::string& type, RedisResult& results);
 
     bool UpdateData(const std::string& key, 
                     const std::string& oldValue, 
@@ -64,31 +64,31 @@ public:
 
     bool DelKey(const std::string& key);
 
-	redisReply* Command(const char* fmt, ...);
+    redisReply* Command(const char* fmt, ...);
 
-	void SetLastError(const std::string& err);
+    void SetLastError(const std::string& err);
 
-	CDuiString GetLastError();
+    CDuiString GetLastError();
 
-	CDuiString GetName();
+    CDuiString GetName();
 public:
-	void SetDisConnectCallback(callback fn)
-	{
-		m_fnDisConnect = fn;
-	}
+    void SetDisConnectCallback(callback fn)
+    {
+        m_fnDisConnect = fn;
+    }
 
 private:
-	redisContext* m_pClient;
-	bool          m_bReConnect;
-	CDuiString    m_strName;
-	string        m_strIP;
-	int           m_iPort;
-	string        m_strAuth;
-	int           m_Databases;
-	CDuiString    m_StrErr;
-	bool          m_isConnected;
+    redisContext* m_pClient;
+    bool          m_bReConnect;
+    CDuiString    m_strName;
+    string        m_strIP;
+    int           m_iPort;
+    string        m_strAuth;
+    int           m_Databases;
+    CDuiString    m_StrErr;
+    bool          m_isConnected;
     callback      m_fnDisConnect;
-	Base::Mutex         m_mutex;
+    Base::Mutex         m_mutex;
     std::auto_ptr<RedisModelFactory> m_ModelFactory;
     
 };

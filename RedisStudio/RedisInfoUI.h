@@ -11,27 +11,27 @@ class CTreeView;
 class RedisInfoUI : public AbstraceUI
 {
 public:
-	RedisInfoUI(const CDuiString& strXML, CPaintManagerUI* pm);
+    RedisInfoUI(const CDuiString& strXML, CPaintManagerUI* pm);
 
     ~RedisInfoUI();
 
-	void Initialize();
+    void Initialize();
 
-	int GetIndex();
-	
-	CDuiString GetVirtualwndName();
+    int GetIndex();
+    
+    CDuiString GetVirtualwndName();
 
-	void RefreshWnd();
+    void RefreshWnd();
 
-	DUI_DECLARE_MESSAGE_MAP()
+    DUI_DECLARE_MESSAGE_MAP()
 
     virtual LRESULT HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
-	virtual void OnClick(TNotifyUI& msg);
+    virtual void OnClick(TNotifyUI& msg);
 
-	virtual void OnSelectChanged( TNotifyUI &msg );
+    virtual void OnSelectChanged( TNotifyUI &msg );
 
-	virtual void OnItemClick( TNotifyUI &msg );
+    virtual void OnItemClick( TNotifyUI &msg );
 
 public:
     LRESULT OnInfoRefresh(HWND hwnd, WPARAM wParam, LPARAM lParam);
@@ -41,13 +41,13 @@ public:
 
     void  BackgroundWork();
 
-private:	
+private:    
     void  RefreshInfo();
 
 private:
-	CButtonUI*       m_RefreshStart;
-	CButtonUI*       m_RefreshStop;
-	CTreeNodeUI*     m_pServerInfoNode;
+    CButtonUI*       m_RefreshStart;
+    CButtonUI*       m_RefreshStop;
+    CTreeNodeUI*     m_pServerInfoNode;
     bool             m_bIsRefresh;
     Base::Thread     m_Thread;
     std::auto_ptr< Base::RunnableAdapter<RedisInfoUI> > m_pWork;

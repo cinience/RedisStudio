@@ -16,9 +16,9 @@
 class CTreeView;
 
 struct TreeKeyContactData
-{	
-	CTreeNodeUI* pPNode;
-	CTreeNodeUI* pNode;
+{    
+    CTreeNodeUI* pPNode;
+    CTreeNodeUI* pNode;
 };
 
 class RedisDataUI : public AbstraceUI
@@ -33,55 +33,55 @@ public:
         RedisResult result;
     };
 
-	RedisDataUI(const CDuiString& strXML, CPaintManagerUI* pm);
+    RedisDataUI(const CDuiString& strXML, CPaintManagerUI* pm);
 
-	void Initialize();
+    void Initialize();
 
-	int  GetIndex();
-	
-	CDuiString GetVirtualwndName();
+    int  GetIndex();
+    
+    CDuiString GetVirtualwndName();
 
-	void RefreshWnd();
+    void RefreshWnd();
 
-	virtual LRESULT HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
+    virtual LRESULT HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
-	DUI_DECLARE_MESSAGE_MAP()
+    DUI_DECLARE_MESSAGE_MAP()
 
-	virtual void OnClick(TNotifyUI& msg);
+    virtual void OnClick(TNotifyUI& msg);
 
-	virtual void OnItemClick( TNotifyUI &msg );
+    virtual void OnItemClick( TNotifyUI &msg );
 
-	virtual void OnItemActive( TNotifyUI &msg );
+    virtual void OnItemActive( TNotifyUI &msg );
 
-	virtual void OnMenuWakeup( TNotifyUI &msg );
+    virtual void OnMenuWakeup( TNotifyUI &msg );
 
-	void    OnItemActiveForTree( TNotifyUI &msg );
+    void    OnItemActiveForTree( TNotifyUI &msg );
 
-	void    OnItemActiveForList( TNotifyUI &msg );
+    void    OnItemActiveForList( TNotifyUI &msg );
 
-	void    OnPaginate(TNotifyUI& msg);
+    void    OnPaginate(TNotifyUI& msg);
 
-	void    OnCommit(TNotifyUI& msg);
+    void    OnCommit(TNotifyUI& msg);
 
-	LRESULT OnDataAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
+    LRESULT OnDataAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
-	LRESULT OnKeyAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
+    LRESULT OnKeyAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
     LRESULT OnKeyDel(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
     LRESULT OnDataVerbose(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
     bool    OnMenuClick( void* param );
-private:	
-	void    SetPageValues();
+private:    
+    void    SetPageValues();
 
-	std::size_t  GetMaxPage();
+    std::size_t  GetMaxPage();
 
-	void  SetRichEditText(const std::string& text);
+    void  SetRichEditText(const std::string& text);
 
-	bool  TryJsonFomat(std::string& text);
+    bool  TryJsonFomat(std::string& text);
 
-	bool  TryXMLFormat(std::string& text);
+    bool  TryXMLFormat(std::string& text);
 
     bool  TryHexFormat(std::string& text);
 
@@ -96,7 +96,7 @@ public:
 
     void    BackgroundWorkForRefreshKeys(void);
 
-	void    BackgroundWorkForRefreshValues(void);
+    void    BackgroundWorkForRefreshValues(void);
 
 private:
     CTreeNodeUI* NewNode(const string& text, bool isLeaf=false);
@@ -104,27 +104,27 @@ private:
     void         DelChildNode(CTreeNodeUI* pNode);
 
 private:
-	CListUI* m_pList;
-	CHorizontalLayoutUI* m_pHorizontalLayout;
-	CEditUI*         m_pKeyEdit;
-	CEditUI*         m_PTypeEdit;
-	CEditUI*         m_pDataSizeEdit;
+    CListUI* m_pList;
+    CHorizontalLayoutUI* m_pHorizontalLayout;
+    CEditUI*         m_pKeyEdit;
+    CEditUI*         m_PTypeEdit;
+    CEditUI*         m_pDataSizeEdit;
 
-	CEditUI*         m_pPageCur;
-	CButtonUI*       m_pPageFrist;
-	CButtonUI*       m_pPageLast;
-	CButtonUI*       m_pPageNext;
-	CButtonUI*       m_pPageFinal;
-	CButtonUI*       m_pCommit;
-	CComboUI*        m_pComboFormat;
+    CEditUI*         m_pPageCur;
+    CButtonUI*       m_pPageFrist;
+    CButtonUI*       m_pPageLast;
+    CButtonUI*       m_pPageNext;
+    CButtonUI*       m_pPageFinal;
+    CButtonUI*       m_pCommit;
+    CComboUI*        m_pComboFormat;
 
-	CRichEditUI*     m_pRichEdit;
-	CTreeNodeUI*     m_pServerInfoNode;
+    CRichEditUI*     m_pRichEdit;
+    CTreeNodeUI*     m_pServerInfoNode;
 
     Base::Event      m_oEventListHeader;
     Base::Event      m_oEventKey;
 
-	static const std::size_t m_PageSize = 100;
+    static const std::size_t m_PageSize = 100;
 
     CTreeNodeUI*     m_pAssistNode;  // 辅助key tree右键菜单，该值为当前点击右键的节点
     RedisDataStruct  m_RedisData;

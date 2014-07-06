@@ -3,38 +3,38 @@
 class MessageBoxWhd : public WindowImplBase
 {
 public:
-	enum MsgType
-	{
-		Info,
-		Warn,
-		Error
-	};
+    enum MsgType
+    {
+        Info,
+        Warn,
+        Error
+    };
 
 public:
-	MessageBoxWhd(MsgType type, UINT code, CDuiString msg);
+    MessageBoxWhd(MsgType type, UINT code, CDuiString msg);
 
-	~MessageBoxWhd(void);
+    ~MessageBoxWhd(void);
 
-	void InitWindow();
+    void InitWindow();
 
-	LPCTSTR GetWindowClassName() const;
+    LPCTSTR GetWindowClassName() const;
 
-	UINT GetClassStyle() const;
+    UINT GetClassStyle() const;
 
-	void OnFinalMessage(HWND hWnd);;
+    void OnFinalMessage(HWND hWnd);;
 
-	virtual CDuiString GetSkinFolder();
+    virtual CDuiString GetSkinFolder();
 
-	virtual CDuiString GetSkinFile();
+    virtual CDuiString GetSkinFile();
 
-	virtual UILIB_RESOURCETYPE GetResourceType() const;
+    virtual UILIB_RESOURCETYPE GetResourceType() const;
 
-	DUI_DECLARE_MESSAGE_MAP()
+    DUI_DECLARE_MESSAGE_MAP()
 
-	virtual void OnClick(TNotifyUI& msg);
+    virtual void OnClick(TNotifyUI& msg);
 
 private:
-	MsgType m_uType;
-	CDuiString m_dstrExMsg;
-	UINT m_uMsgCode;
+    MsgType m_uType;
+    CDuiString m_dstrExMsg;
+    UINT m_uMsgCode;
 };

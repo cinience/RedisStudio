@@ -13,28 +13,28 @@ namespace DuiLib {
 //
 struct ContextMenuParam
 {
-	
+    
     enum 
     {
         RemoveAll     = 1,
         RemoveSubMenu = 2
     };
 
-	HWND        hWnd;         /// 当前窗口
+    HWND        hWnd;         /// 当前窗口
     int         iType;        /// 事件类型
     CControlUI* pSender;
     bool        bLeaf;        /// 是否叶子节点菜单
-    WPARAM      wParam;	    // 1: remove all
+    WPARAM      wParam;        // 1: remove all
                             // 2: remove the sub menu
     LPARAM      lParam;
 };
 
 enum MenuAlignment
 {
-	eMenuAlignment_Left = 1 << 1,
-	eMenuAlignment_Top = 1 << 2,
-	eMenuAlignment_Right = 1 << 3,
-	eMenuAlignment_Bottom = 1 << 4,
+    eMenuAlignment_Left = 1 << 1,
+    eMenuAlignment_Top = 1 << 2,
+    eMenuAlignment_Right = 1 << 3,
+    eMenuAlignment_Bottom = 1 << 4,
 };
 
 typedef class ObserverImpl<BOOL, ContextMenuParam> ContextMenuObserver;
@@ -44,13 +44,13 @@ class CListUI;
 class CMenuUI : public CListUI
 {
 public:
-	CMenuUI();
-	~CMenuUI();
+    CMenuUI();
+    ~CMenuUI();
 
     LPCTSTR GetClass() const;
     LPVOID GetInterface(LPCTSTR pstrName);
 
-	virtual void DoEvent(TEventUI& event);
+    virtual void DoEvent(TEventUI& event);
 
     virtual bool Add(CControlUI* pControl);
     virtual bool AddAt(CControlUI* pControl, int iIndex);
@@ -59,9 +59,9 @@ public:
     virtual bool SetItemIndex(CControlUI* pControl, int iIndex);
     virtual bool Remove(CControlUI* pControl);
 
-	SIZE EstimateSize(SIZE szAvailable);
+    SIZE EstimateSize(SIZE szAvailable);
 
-	void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
+    void SetAttribute(LPCTSTR pstrName, LPCTSTR pstrValue);
 };
 
 
@@ -69,7 +69,7 @@ class CMenuElementUI;
 class CMenuWnd : public CWindowWnd, public ContextMenuReceiver
 {
 public:
-	CMenuWnd(HWND hParent = NULL);
+    CMenuWnd(HWND hParent = NULL);
     void Init(CMenuElementUI* pOwner, STRINGorID xml, LPCTSTR pSkinType, POINT point);
 
     LPCTSTR GetWindowClassName() const;
@@ -78,13 +78,13 @@ public:
 
     LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-	BOOL Receive(ContextMenuParam param);
+    BOOL Receive(ContextMenuParam param);
 
 public:
-	HWND m_hParent;
-	POINT m_BasedPoint;
-	STRINGorID      m_xml;
-	CDuiString      m_sType;
+    HWND m_hParent;
+    POINT m_BasedPoint;
+    STRINGorID      m_xml;
+    CDuiString      m_sType;
     CPaintManagerUI m_pm;
     CMenuElementUI* m_pOwner;
     CMenuUI*        m_pLayout;
@@ -96,10 +96,10 @@ public:
 class CListContainerElementUI;
 class CMenuElementUI : public CListContainerElementUI
 {
-	friend CMenuWnd;
+    friend CMenuWnd;
 public:
     CMenuElementUI();
-	~CMenuElementUI();
+    ~CMenuElementUI();
 
     LPCTSTR GetClass() const;
     LPVOID  GetInterface(LPCTSTR pstrName);
@@ -110,16 +110,16 @@ public:
 
     SIZE    EstimateSize(SIZE szAvailable);
 
-	bool    Activate();
+    bool    Activate();
 
-	void    DoEvent(TEventUI& event);
+    void    DoEvent(TEventUI& event);
 
-	CMenuWnd* GetMenuWnd();
+    CMenuWnd* GetMenuWnd();
 
-	void    CreateMenuWnd();
+    void    CreateMenuWnd();
 
 protected:
-	CMenuWnd* m_pWindow;
+    CMenuWnd* m_pWindow;
 };
 
 } // namespace DuiLib

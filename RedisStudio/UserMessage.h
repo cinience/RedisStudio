@@ -17,6 +17,6 @@
 #define WM_USER_MENU_KEYRENAME    WM_USER + 32
 
 void UserMessageBox(HWND hWnd,
-					UINT ErrorCode,
-					LPCTSTR lpExMsg,
-					UINT uType);
+                    UINT ErrorCode,
+                    LPCTSTR lpExMsg,
+                    UINT uType);

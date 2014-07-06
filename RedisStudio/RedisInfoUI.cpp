@@ -16,15 +16,15 @@ DUI_END_MESSAGE_MAP()
 
 RedisInfoUI::RedisInfoUI( const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm),m_bIsRefresh(false)
 {
-	CDialogBuilder builder;
-	CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); // 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息。
-	if( pContainer ) {
-		this->Add(pContainer);
-	}
-	else {
-		this->RemoveAll();
-		return;
-	}
+    CDialogBuilder builder;
+    CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); // 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息。
+    if( pContainer ) {
+        this->Add(pContainer);
+    }
+    else {
+        this->RemoveAll();
+        return;
+    }
 }
 
 RedisInfoUI::~RedisInfoUI()
@@ -33,19 +33,19 @@ RedisInfoUI::~RedisInfoUI()
 
 void RedisInfoUI::Initialize()
 {
-	m_RefreshStart = static_cast<CButtonUI*>(GetPaintMgr()->FindControl(kKeyStartButtonName));    
-	m_RefreshStop  = static_cast<CButtonUI*>(GetPaintMgr()->FindControl(kKeyStopButtonName));	
+    m_RefreshStart = static_cast<CButtonUI*>(GetPaintMgr()->FindControl(kKeyStartButtonName));    
+    m_RefreshStop  = static_cast<CButtonUI*>(GetPaintMgr()->FindControl(kKeyStopButtonName));    
 }
 
 
 int RedisInfoUI::GetIndex()
 {
-	return 1;
+    return 1;
 }
 
 CDuiString RedisInfoUI::GetVirtualwndName()
 {
-	return _T("RedisInfo");
+    return _T("RedisInfo");
 }
 
 void RedisInfoUI::RefreshWnd()
@@ -71,19 +71,19 @@ LRESULT RedisInfoUI::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPara
 
 void RedisInfoUI::OnClick( TNotifyUI& msg )
 {
-	if (msg.pSender == m_RefreshStart)
-	{        
-		m_bIsRefresh = true;
-		DoRefreshWork();
-		m_RefreshStop->SetVisible(true);
-		m_RefreshStart->SetVisible(false);
-	} 
-	else if (msg.pSender == m_RefreshStop)
-	{
-		m_bIsRefresh = false;
-		m_RefreshStop->SetVisible(false);
-		m_RefreshStart->SetVisible(true);
-	}
+    if (msg.pSender == m_RefreshStart)
+    {        
+        m_bIsRefresh = true;
+        DoRefreshWork();
+        m_RefreshStop->SetVisible(true);
+        m_RefreshStart->SetVisible(false);
+    } 
+    else if (msg.pSender == m_RefreshStop)
+    {
+        m_bIsRefresh = false;
+        m_RefreshStop->SetVisible(false);
+        m_RefreshStart->SetVisible(true);
+    }
 }
 
 void RedisInfoUI::OnSelectChanged( TNotifyUI &msg )
@@ -106,18 +106,18 @@ void RedisInfoUI::DoRefreshWork()
     catch (std::exception& ex)
     {
         /// who care ?
-    	(void)(ex);
+        (void)(ex);
     }
 }
 
 void RedisInfoUI::RefreshInfo()
 {
-	if (!RedisClient::GetInstance().IsConnected()) return;
+    if (!RedisClient::GetInstance().IsConnected()) return;
 
-	string info ;
-	if (!RedisClient::GetInstance().Info(info)) return;
+    string info ;
+    if (!RedisClient::GetInstance().Info(info)) return;
 
-	if (info.empty()) return;
+    if (info.empty()) return;
     std::string* pInfo = new std::string(info);
     PostMessage(GetHWND(), WM_USER_INFOUPDATE, (WPARAM)pInfo, NULL);
 }

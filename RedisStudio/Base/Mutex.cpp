@@ -5,13 +5,13 @@ namespace Base {
 
 Mutex::Mutex()
 {
-	InitializeCriticalSectionAndSpinCount(&_cs, 4000);
+    InitializeCriticalSectionAndSpinCount(&_cs, 4000);
 }
 
 
 Mutex::~Mutex()
 {
-	DeleteCriticalSection(&_cs);
+    DeleteCriticalSection(&_cs);
 }
 
 } // namespace Mutex

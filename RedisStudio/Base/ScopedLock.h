@@ -7,22 +7,22 @@ template <class M>
 class ScopedLock
 {
 public:
-	ScopedLock(M& mutex): _mutex(mutex)
-	{
-		_mutex.lock();
-	}
+    ScopedLock(M& mutex): _mutex(mutex)
+    {
+        _mutex.lock();
+    }
 
-	~ScopedLock()
-	{
-		_mutex.unlock();
-	}
+    ~ScopedLock()
+    {
+        _mutex.unlock();
+    }
 
 private:
-	M& _mutex;
+    M& _mutex;
 
-	ScopedLock();
-	ScopedLock(const ScopedLock&);
-	ScopedLock& operator = (const ScopedLock&);
+    ScopedLock();
+    ScopedLock(const ScopedLock&);
+    ScopedLock& operator = (const ScopedLock&);
 };
 
 } // namespace 

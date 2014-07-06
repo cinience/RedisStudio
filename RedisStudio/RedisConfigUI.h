@@ -7,38 +7,38 @@
 class RedisConfigUI : public AbstraceUI
 {
 public:
-	RedisConfigUI(const CDuiString& strXML, CPaintManagerUI* pm );
+    RedisConfigUI(const CDuiString& strXML, CPaintManagerUI* pm );
 
-	~RedisConfigUI(void);
+    ~RedisConfigUI(void);
 
-	void Initialize();
+    void Initialize();
 
-	virtual CDuiString GetVirtualwndName();
+    virtual CDuiString GetVirtualwndName();
 
-	virtual void RefreshWnd();
+    virtual void RefreshWnd();
 
-	virtual int GetIndex();
+    virtual int GetIndex();
 
-	DUI_DECLARE_MESSAGE_MAP()
+    DUI_DECLARE_MESSAGE_MAP()
 
 public:
-	virtual void OnClick(TNotifyUI& msg);
+    virtual void OnClick(TNotifyUI& msg);
 
-	virtual void OnSelectChanged( TNotifyUI &msg );
+    virtual void OnSelectChanged( TNotifyUI &msg );
 
-	virtual void OnItemClick( TNotifyUI &msg );
+    virtual void OnItemClick( TNotifyUI &msg );
 
-	virtual void OnItemActive( TNotifyUI &msg );
-
-private:
-	bool GetConfig();
-
-	bool SetConfig(const RedisClient::TDicConfig& config);
-
-	void DoFillData();
-
-	void DoApplyData();
+    virtual void OnItemActive( TNotifyUI &msg );
 
 private:
-	RedisClient::TDicConfig m_dicConfig;
+    bool GetConfig();
+
+    bool SetConfig(const RedisClient::TDicConfig& config);
+
+    void DoFillData();
+
+    void DoApplyData();
+
+private:
+    RedisClient::TDicConfig m_dicConfig;
 };

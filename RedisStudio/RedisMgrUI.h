@@ -5,19 +5,19 @@
 class RedisMgrUI : public AbstraceUI
 {
 public:
-	RedisMgrUI(const CDuiString& strXML, CPaintManagerUI* pm);
+    RedisMgrUI(const CDuiString& strXML, CPaintManagerUI* pm);
 
-	~RedisMgrUI(void);
+    ~RedisMgrUI(void);
 
-	void Initialize();
+    void Initialize();
 
-	int GetIndex();
+    int GetIndex();
 
-	CDuiString GetVirtualwndName();
+    CDuiString GetVirtualwndName();
 
-	void RefreshWnd();
+    void RefreshWnd();
 
-	DUI_DECLARE_MESSAGE_MAP()
+    DUI_DECLARE_MESSAGE_MAP()
 
     void OnClick(TNotifyUI& msg);
 };

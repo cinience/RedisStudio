@@ -6,7 +6,7 @@
 #include "Redis/RedisResult.h"
 #include "Redis/RedisClient.h"
 #include "rapidjson/reader.h"
-#include "rapidjson/prettywriter.h"	// for stringify JSON
+#include "rapidjson/prettywriter.h"    // for stringify JSON
 #include "rapidjson/stringbuffer.h"
 
 #include "DuiEx/UIMenu.h"
@@ -376,8 +376,8 @@ void RedisDataUI::DoRefreshValuesWork()
 
 std::size_t RedisDataUI::GetMaxPage()
 {
-	std::size_t maxPage = GetResult().RowSize()%m_PageSize ? (GetResult().RowSize()/m_PageSize)+1 : GetResult().RowSize()/m_PageSize;
-	return maxPage;
+    std::size_t maxPage = GetResult().RowSize()%m_PageSize ? (GetResult().RowSize()/m_PageSize)+1 : GetResult().RowSize()/m_PageSize;
+    return maxPage;
 }
 
 RedisResult& RedisDataUI::GetResult()
@@ -399,7 +399,7 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
         if (!RedisClient::GetInstance().SelectDB(nodeIdx)) continue;
         
         RedisClient::TSeqArrayResults results;
-		//results.sort();
+        //results.sort();
         if (!RedisClient::GetInstance().keys(results)) return;
         RedisClient::TSeqArrayResults::const_iterator it    = results.begin();
         RedisClient::TSeqArrayResults::const_iterator itend = results.end();
@@ -425,7 +425,7 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
                     {
                         pPNode = pTempNode;
                         hasFind = true;
-						break;
+                        break;
                     }
                 }
                 if (hasFind)
@@ -518,7 +518,7 @@ void RedisDataUI::SetPageValues( )
                   TryHexFormat(myValue);
                   myDuiStr  = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
               }
-        pListTextElement->SetText(colidx, myDuiStr.GetData());			
+        pListTextElement->SetText(colidx, myDuiStr.GetData());            
       }
       ::PostMessage(GetHWND(), WM_USER_DATAADD, (WPARAM)pListTextElement, NULL);
     }
@@ -539,7 +539,7 @@ LRESULT RedisDataUI::OnKeyAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
     std::auto_ptr<TreeKeyContactData> pData(reinterpret_cast<TreeKeyContactData*>(wParam));
     CTreeNodeUI* pPNode = pData->pPNode;
     CTreeNodeUI* pNode  = pData->pNode;
-    pPNode->AddChildNode(pNode);	
+    pPNode->AddChildNode(pNode);    
     /// 曲线救国，TreeView默认不展开节点
     pPNode->GetFolderButton()->Selected(true);
     pPNode->GetTreeView()->SetItemExpand(false, pPNode);
@@ -670,27 +670,27 @@ bool RedisDataUI::TryHexFormat( std::string& text )
 
 CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
 {
-	CTreeNodeUI* pNodeTmp = new CTreeNodeUI;
-	pNodeTmp->SetItemTextColor(0XFF000000);
-	pNodeTmp->SetItemHotTextColor(0XFF000000);
-	pNodeTmp->SetSelItemTextColor(0XFF000000);
-	pNodeTmp->SetItemText(Base::CharacterSet::ANSIToUnicode(text).c_str());  
-	pNodeTmp->SetAttribute(_T("height"), _T("22"));
-	pNodeTmp->SetAttribute(_T("inset"), _T("0,0,0,0"));
-	if (isLeaf)
-	{
-		pNodeTmp->SetAttribute(_T("itemattr"), _T("valign=\"left\" font=\"5\" textpadding=\"5,3,0,0\""));
-		pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"21,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
-	}
-	else 
-	{
-		pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='tree_expand.png' source='0,0,16,16'\" normalimage=\"file='tree_expand.png' source='16,0,32,16'\""));
-		pNodeTmp->SetAttribute(_T("itemattr"), _T("bkimage=\"file='TreeStandard.png' source='112,0,128,16' dest='5,3,21,19'\" valign=\"left\" font=\"5\" textpadding=\"25,3,0,0\""));
-	}
-	
-	// if (isLeaf) pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
-	// else pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,0,128,16'\" normalimage=\"file='TreeStandard.png' source='112,16,128,32'\""));
-	return pNodeTmp;
+    CTreeNodeUI* pNodeTmp = new CTreeNodeUI;
+    pNodeTmp->SetItemTextColor(0XFF000000);
+    pNodeTmp->SetItemHotTextColor(0XFF000000);
+    pNodeTmp->SetSelItemTextColor(0XFF000000);
+    pNodeTmp->SetItemText(Base::CharacterSet::ANSIToUnicode(text).c_str());  
+    pNodeTmp->SetAttribute(_T("height"), _T("22"));
+    pNodeTmp->SetAttribute(_T("inset"), _T("0,0,0,0"));
+    if (isLeaf)
+    {
+        pNodeTmp->SetAttribute(_T("itemattr"), _T("valign=\"left\" font=\"5\" textpadding=\"5,3,0,0\""));
+        pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"21,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
+    }
+    else 
+    {
+        pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='tree_expand.png' source='0,0,16,16'\" normalimage=\"file='tree_expand.png' source='16,0,32,16'\""));
+        pNodeTmp->SetAttribute(_T("itemattr"), _T("bkimage=\"file='TreeStandard.png' source='112,0,128,16' dest='5,3,21,19'\" valign=\"left\" font=\"5\" textpadding=\"25,3,0,0\""));
+    }
+    
+    // if (isLeaf) pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
+    // else pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,0,128,16'\" normalimage=\"file='TreeStandard.png' source='112,16,128,32'\""));
+    return pNodeTmp;
 }
 
  void RedisDataUI::DelChildNode( CTreeNodeUI* pNode )
@@ -701,7 +701,7 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
      //int cs = pNodelist->GetCountChild();
      //for (int i=0; i<cs; ++i)
      //{
-     //	pNodelist->Remove(pNodelist->GetChildNode(i));
+     //    pNodelist->Remove(pNodelist->GetChildNode(i));
      //}
      //cs = pNodelist->GetCountChild();
      /// 删除所有节点
