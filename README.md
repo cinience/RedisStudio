@@ -2,7 +2,7 @@ RedisStudio
 ===========
 # 地址
 -
-  [github] https://github.com/cinience/RedisStudio
+  [候选版v0.1.0下载]: https://github.com/cinience/RedisStudio/blob/master/package/RedisStudio-V0.1.0.zip?raw=true "候选版v0.1.0"
   
 # 介绍
 - 
@@ -27,6 +27,6 @@ RedisStudio
 - 
   如果你对Redis Studio 有任何建议，请在Issues中提出来。
 
-# UI
+# 界面
 
 ![UI](https://raw.githubusercontent.com/cinience/RedisStudio/master/package/redis.png "RedisStudio UI")
