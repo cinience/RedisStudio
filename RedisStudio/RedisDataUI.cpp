@@ -47,11 +47,12 @@ RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):Abstra
     CDialogBuilder builder;
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
     if( pContainer ) {
-      this->Add(pContainer);
+        this->Add(pContainer);
     }
-    else {
-      this->RemoveAll();
-      return;
+    else 
+	{
+        this->RemoveAll();
+        return;
     }
 }
 
@@ -153,11 +154,11 @@ void RedisDataUI::OnClick( TNotifyUI& msg )
       msg.pSender == m_pPageNext  ||
       msg.pSender == m_pPageFrist)
     {
-      OnPaginate(msg);
+        OnPaginate(msg);
     }
     else if (msg.pSender == m_pCommit)
     {
-      OnCommit(msg);
+        OnCommit(msg);
     }
 
 }
@@ -167,6 +168,7 @@ void RedisDataUI::OnItemClick( TNotifyUI &msg )
     CDuiString name = msg.pSender->GetClass();
     CListTextElementUI listTextElementUI ;
     CTreeNodeUI        treeNodeUI;
+	
     if (name == listTextElementUI.GetClass())
     {
         OnItemActiveForList(msg);
@@ -218,24 +220,24 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
     if (!pActiveNode) return;
     /// 非叶子节点不处理 
     if (pActiveNode->IsHasChild()) return ;
-      /// 首层db节点
+    /// 首层db节点
     if (pActiveNode->GetTag() > 0) return;
-      if (m_Thread.isRunning())
-      {
-          UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
-          return ;
-      }
+    if (m_Thread.isRunning())
+    {
+         UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
+         return ;
+    }
 
     int dbNum = -1;
     CTreeNodeUI* pDBNode = pActiveNode->GetParentNode();
     while (pDBNode)
     {
-      if (pDBNode->GetTag()>0)
-      {
-        dbNum = pDBNode->GetTag()-1;
-        break;
-      }
-      pDBNode = pDBNode->GetParentNode();
+        if (pDBNode->GetTag()>0)
+        {
+            dbNum = pDBNode->GetTag()-1;
+            break;
+        }
+        pDBNode = pDBNode->GetParentNode();
     }
     if (dbNum < 0) return ;
     m_RedisData.db = dbNum;
@@ -256,11 +258,28 @@ void RedisDataUI::OnItemActiveForList(  TNotifyUI &msg  )
 {
     CListTextElementUI* pListElement = dynamic_cast<CListTextElementUI*>(msg.pSender);
     LPCTSTR pstr;
-    if ((pstr = pListElement->GetText(1)) == NULL)
+    ///if ((pstr = pListElement->GetText(1)) == NULL)
+    ///{
+    ///   pstr = pListElement->GetText(0);
+    ///}
+    ///std::string text = Base::CharacterSet::UnicodeToANSI(pstr);
+	
+	std::size_t curPage = atoi(Base::CharacterSet::UnicodeToANSI(m_pPageCur->GetText().GetData()).c_str());
+	
+	int curCel = m_pList->GetItemIndex(pListElement);
+	/// why ? 行数不对
+	///std::size_t curIndex = m_pList->GetCurSel();
+	int realIndex = (curPage-1)*m_PageSize + curCel;
+	int colIdx = m_pList->GetHeader()->GetCount() > 1 ? 1 : 0 ;
+	string myValue = GetResult().Value(realIndex, colIdx);
+    CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
+    /// 特殊的数据
+    if (myValue.size() !=0 && myDuiStr.GetLength()==0)
     {
-        pstr = pListElement->GetText(0);
+        TryHexFormat(myValue);
+        myDuiStr  = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
     }
-    std::string text = Base::CharacterSet::UnicodeToANSI(pstr);
+	std::string text = Base::CharacterSet::UnicodeToANSI(myDuiStr.GetData());
     SetRichEditText(text);
 }
 
@@ -270,28 +289,28 @@ void RedisDataUI::OnPaginate(TNotifyUI& msg)
 
     if (msg.pSender == m_pPageNext)
     {
-      curPage += 1;
+        curPage += 1;
     }
     else if (msg.pSender == m_pPageLast)
     {
-      curPage -= 1;
+        curPage -= 1;
     }
     else if (msg.pSender == m_pPageFrist)
     {
-      curPage = 1;
+        curPage = 1;
     }
     else if (msg.pSender == m_pPageFinal)
     {
-      curPage = GetMaxPage();
+        curPage = GetMaxPage();
     }
     else 
     {
-      return;
+        return;
     }
 
     if (curPage==0 || curPage>GetMaxPage())
     {
-      return;
+        return;
     }
     m_pList->RemoveAll();
     CDuiString pageStr ;
@@ -313,7 +332,7 @@ void RedisDataUI::OnCommit(TNotifyUI& msg)
     int idx = (curPage-1)*m_PageSize + m_pList->GetCurSel();
     std::string key = Base::CharacterSet::UnicodeToANSI(m_pKeyEdit->GetText().GetData()); 
     std::string oldValue = Base::CharacterSet::UnicodeToANSI(textElement->GetText(0));
-    std::string field ;
+    std::string field;
     if (m_pList->GetHeader()->GetCount() > 1)
     {        
         field = Base::CharacterSet::UnicodeToANSI(textElement->GetText(0));
@@ -329,7 +348,6 @@ void RedisDataUI::OnCommit(TNotifyUI& msg)
 
     int valueIdx = m_pList->GetHeader()->GetCount() > 1 ? 1 : 0 ;
     textElement->SetText(valueIdx, m_pRichEdit->GetText().GetData());
-
 }
 
 void RedisDataUI::DoPaginateWork()
@@ -476,7 +494,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
     {
         CListHeaderItemUI* pHeaderItem = new CListHeaderItemUI();
 
-        pHeaderItem->SetText(Base::CharacterSet::ANSIToUnicode(GetResult().ColumnName(idx)).c_str());
+		pHeaderItem->SetText(Base::CharacterSet::ANSIToUnicode(GetResult().ColumnName(idx)).c_str());
         pHeaderItem->SetHotImage(_T("file='list_header_hot.png'"));
         pHeaderItem->SetPushedImage(_T("file='list_header_pushed.png'"));
         pHeaderItem->SetSepImage(_T("file='list_header_sep.png'"));
@@ -505,20 +523,27 @@ void RedisDataUI::SetPageValues( )
     int ipos = 0;
     for (std::size_t idx= (cur-1)*pagesize; idx<maxIndex; ++idx)
     {
-      CListTextElementUI* pListTextElement = new CListTextElementUI;
-      pListTextElement->SetOwner(m_pList);
-      pListTextElement->SetTag(idx);
-      for (std::size_t colidx=0; colidx<GetResult().ColumnSize(); ++colidx)
-      {
-        string myValue = GetResult().Value(idx, colidx);
-              CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
-              // 特殊的数据
-              if (myValue.size() !=0 && myDuiStr.GetLength()==0)
-              {
-                  TryHexFormat(myValue);
-                  myDuiStr  = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
-              }
-        pListTextElement->SetText(colidx, myDuiStr.GetData());            
+        CListTextElementUI* pListTextElement = new CListTextElementUI;
+        pListTextElement->SetOwner(m_pList);
+        pListTextElement->SetTag(idx);
+        for (std::size_t colidx=0; colidx<GetResult().ColumnSize(); ++colidx)
+        {
+            string myValue = GetResult().Value(idx, colidx);
+            CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
+            /// 特殊的数据
+            if (myValue.size() !=0 && myDuiStr.GetLength()==0)
+            {
+                TryHexFormat(myValue);
+                myDuiStr  = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
+            }
+
+		    /// 数据过长，不显示全部，否则会list拖动卡顿
+		    if (myDuiStr.GetLength() > 50) 
+		    {
+			    myDuiStr = myDuiStr.Left(50);
+			    myDuiStr.Append(_T("..."));
+		    }
+            pListTextElement->SetText(colidx, myDuiStr.GetData());            
       }
       ::PostMessage(GetHWND(), WM_USER_DATAADD, (WPARAM)pListTextElement, NULL);
     }
@@ -554,7 +579,7 @@ LRESULT RedisDataUI::OnKeyDel( HWND hwnd, WPARAM wParam, LPARAM lParam )
     CTreeNodeUI* pPNode;
     CDuiString a = pNode->GetItemText();
     std::string key = Base::CharacterSet::UnicodeToANSI(pNode->GetItemText().GetData());
-    // 暂时用同步方法删除，大数据时会有卡顿
+    /// 暂时用同步方法删除，大数据时会有卡顿
     if (!RedisClient::GetInstance().DelKey(key)) return FALSE;
     while (pNode)
     {
@@ -610,7 +635,7 @@ void RedisDataUI::SetRichEditText(const std::string& text)
       kNormalFormat = 1,
       kJsonFormat = 2,
       kXMLFormat = 3,
-          kHexFormat = 4
+      kHexFormat = 4
     };
     std::string styleText = text;
     int curSel = m_pComboFormat->GetCurSel();
@@ -625,7 +650,7 @@ void RedisDataUI::SetRichEditText(const std::string& text)
     }
     else if (curSel == kXMLFormat)
     {
-      TryXMLFormat(styleText);
+        TryXMLFormat(styleText);
     }
     else if (curSel == kHexFormat)
     {
@@ -644,8 +669,8 @@ bool RedisDataUI::TryJsonFomat( std::string& text )
     Reader reader;
     if (reader.Parse<0>(s, writer))
     {
-      styleText = buffer.GetString();
-      return true;
+        styleText = buffer.GetString();
+        return true;
     }
     return false;
 }
