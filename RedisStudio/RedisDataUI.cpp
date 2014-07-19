@@ -50,7 +50,7 @@ RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):Abstra
         this->Add(pContainer);
     }
     else 
-	{
+    {
         this->RemoveAll();
         return;
     }
@@ -168,7 +168,7 @@ void RedisDataUI::OnItemClick( TNotifyUI &msg )
     CDuiString name = msg.pSender->GetClass();
     CListTextElementUI listTextElementUI ;
     CTreeNodeUI        treeNodeUI;
-	
+
     if (name == listTextElementUI.GetClass())
     {
         OnItemActiveForList(msg);
@@ -251,27 +251,27 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
     m_pList->RemoveAll();
     m_pList->GetHeader()->RemoveAll();
     m_pHorizontalLayout->SetVisible(false);
-    DoRefreshValuesWork();   
+    DoRefreshValuesWork();
 }
 
 void RedisDataUI::OnItemActiveForList(  TNotifyUI &msg  )
 {
     CListTextElementUI* pListElement = dynamic_cast<CListTextElementUI*>(msg.pSender);
-    LPCTSTR pstr;
+    ///LPCTSTR pstr;
     ///if ((pstr = pListElement->GetText(1)) == NULL)
     ///{
     ///   pstr = pListElement->GetText(0);
     ///}
     ///std::string text = Base::CharacterSet::UnicodeToANSI(pstr);
-	
-	std::size_t curPage = atoi(Base::CharacterSet::UnicodeToANSI(m_pPageCur->GetText().GetData()).c_str());
-	
-	int curCel = m_pList->GetItemIndex(pListElement);
-	/// why ? 行数不对
-	///std::size_t curIndex = m_pList->GetCurSel();
-	int realIndex = (curPage-1)*m_PageSize + curCel;
-	int colIdx = m_pList->GetHeader()->GetCount() > 1 ? 1 : 0 ;
-	string myValue = GetResult().Value(realIndex, colIdx);
+    
+    std::size_t curPage = atoi(Base::CharacterSet::UnicodeToANSI(m_pPageCur->GetText().GetData()).c_str());
+    
+    int curCel = m_pList->GetItemIndex(pListElement);
+    /// why ? 行数不对
+    ///std::size_t curIndex = m_pList->GetCurSel();
+    int realIndex = (curPage-1)*m_PageSize + curCel;
+    int colIdx = m_pList->GetHeader()->GetCount() > 1 ? 1 : 0 ;
+    string myValue = GetResult().Value(realIndex, colIdx);
     CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
     /// 特殊的数据
     if (myValue.size() !=0 && myDuiStr.GetLength()==0)
@@ -279,7 +279,7 @@ void RedisDataUI::OnItemActiveForList(  TNotifyUI &msg  )
         TryHexFormat(myValue);
         myDuiStr  = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
     }
-	std::string text = Base::CharacterSet::UnicodeToANSI(myDuiStr.GetData());
+    std::string text = Base::CharacterSet::UnicodeToANSI(myDuiStr.GetData());
     SetRichEditText(text);
 }
 
@@ -494,7 +494,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
     {
         CListHeaderItemUI* pHeaderItem = new CListHeaderItemUI();
 
-		pHeaderItem->SetText(Base::CharacterSet::ANSIToUnicode(GetResult().ColumnName(idx)).c_str());
+        pHeaderItem->SetText(Base::CharacterSet::ANSIToUnicode(GetResult().ColumnName(idx)).c_str());
         pHeaderItem->SetHotImage(_T("file='list_header_hot.png'"));
         pHeaderItem->SetPushedImage(_T("file='list_header_pushed.png'"));
         pHeaderItem->SetSepImage(_T("file='list_header_sep.png'"));
@@ -537,12 +537,12 @@ void RedisDataUI::SetPageValues( )
                 myDuiStr  = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
             }
 
-		    /// 数据过长，不显示全部，否则会list拖动卡顿
-		    if (myDuiStr.GetLength() > 50) 
-		    {
-			    myDuiStr = myDuiStr.Left(50);
-			    myDuiStr.Append(_T("..."));
-		    }
+            /// 数据过长，不显示全部，否则会list拖动卡顿
+            if (myDuiStr.GetLength() > 50) 
+            {
+                myDuiStr = myDuiStr.Left(50);
+                myDuiStr.Append(_T("..."));
+            }
             pListTextElement->SetText(colidx, myDuiStr.GetData());            
       }
       ::PostMessage(GetHWND(), WM_USER_DATAADD, (WPARAM)pListTextElement, NULL);
@@ -602,6 +602,11 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
     m_PTypeEdit->SetText(m_RedisData.type.GetData());
     m_pDataSizeEdit->SetText(m_RedisData.size.GetData());
     m_pRichEdit->SetText(kDefaultText);    
+    /// 如果是单元素(如string)，则一并直接更新到富文本框内 
+    if (GetResult().RowSize() == 1 && GetResult().ColumnSize()==1)
+    {
+        SetRichEditText(GetResult().Value(0,0));
+    }
     
     if (GetResult().RowSize() > m_PageSize)
     {
@@ -640,6 +645,7 @@ void RedisDataUI::SetRichEditText(const std::string& text)
     std::string styleText = text;
     int curSel = m_pComboFormat->GetCurSel();
 
+    /// 没必要用面向对象的设计模式，直接if else搞定，简单直接
     if ( curSel == kAutoFomat )
     {
         if (TryJsonFomat(styleText) || TryXMLFormat(styleText)) {} 
