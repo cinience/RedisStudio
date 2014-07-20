@@ -100,11 +100,11 @@
     <VerticalLayout width="200" inset="8,15,8,15">
         <VerticalLayout />
         <VerticalLayout height="100" >
-            <HorizontalLayout height="24">
+            <HorizontalLayout height="38">
                 <HorizontalLayout />
-                <HorizontalLayout width="82">
-                   <Button name="btn_refreshinfo_start" text="自动刷新" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>
-                   <Button name="btn_refreshinfo_stop" visible="false" text="停止刷新" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>
+                <HorizontalLayout width="132">
+                   <Button name="btn_refreshinfo_start" text="" normalimage="file='refresh_on.png' source='0,0,0,0'" hotimage="file='refresh_on.png' source='0,0,0,0'" pushedimage="file='refresh_on.png' source='0,0,0,0'"/>
+                   <Button name="btn_refreshinfo_stop" visible="false" text="" normalimage="file='refresh_off.png' source='0,0,0,0'" hotimage="file='refresh_off.png' source='0,0,0,0'" pushedimage="file='refresh_off.png' source='0,0,0,0'"/>
                 </HorizontalLayout>
                 <HorizontalLayout />
             </HorizontalLayout>

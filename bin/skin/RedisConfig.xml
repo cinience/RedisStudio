@@ -877,10 +877,10 @@
     <VerticalLayout width="200" inset="8,15,8,15">
             <VerticalLayout />
         <VerticalLayout height="100" >
-            <HorizontalLayout height="24">
+            <HorizontalLayout height="36">
                 <HorizontalLayout />
-                <HorizontalLayout width="82">
-                   <Button name="btn_config_submit" text="提交修改" normalimage="file='button_normal.jpg' source='0,0,82,24'" hotimage="file='button_hover.jpg' source='0,0,82,24'" pushedimage="file='button_pushed.jpg' source='0,0,82,24'"/>                   
+                <HorizontalLayout width="130">
+                   <Button name="btn_config_submit" text="" normalimage="file='submit_normal.png' source='0,0,0,0'" hotimage="file='submit_hover.png' source='0,0,0,0'" pushedimage="file='submit_hover.png' source='0,0,0,0'"/>                   
                 </HorizontalLayout>
                 <HorizontalLayout />
             </HorizontalLayout>
