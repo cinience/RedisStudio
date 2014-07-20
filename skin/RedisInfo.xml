@@ -3,7 +3,7 @@
   <HorizontalLayout>
   <VerticalLayout>
     <TreeView name="InfoTreeView" childpadding="4" multipleitem="true" inset="1,1,1,1" bordersize="0" bordercolor="#FF2B2B2B" itemtextcolor="#00000000" itemhottextcolor="#00000000" selitemtextcolor="#00000000" itemhotbkcolor="#FFF0F0F0" itemselectedbkcolor="#FFFCFCFC" vscrollbar="true" hscrollbar="true" >
-        <TreeNode text="服务端信息" name="server_treenode" inset="0,0,0,0" height="40" bkimage="treeview_header.png" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;40,8,0,0&quot;" folderattr="padding=&quot;0,15,0,0&quot; width=&quot;10&quot; height=&quot;10&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
+        <TreeNode text="服务端信息" name="server_treenode" inset="0,0,0,0" height="40" bordersize="1" bordercolor="#FFBDC3C7" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;10,8,0,0&quot;" folderattr="padding=&quot;0,3,0,0&quot; width=&quot;32&quot; height=&quot;32&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
           <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
               <Text text="版本" tooltip="redis_version" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
               <Text  name="redis_version" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
@@ -22,7 +22,7 @@
           </TreeNode>     
        </TreeNode>
        
-       <TreeNode text="客户端信息" name="client_treenode" inset="0,0,0,0" height="40" bkimage="treeview_header.png" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;40,8,0,0&quot;" folderattr="padding=&quot;0,15,0,0&quot; width=&quot;10&quot; height=&quot;10&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
+       <TreeNode text="客户端信息" name="client_treenode" inset="0,0,0,0" height="40" bordersize="1" bordercolor="#FFBDC3C7" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;10,8,0,0&quot;" folderattr="padding=&quot;0,3,0,0&quot; width=&quot;32&quot; height=&quot;32&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
           <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
               <Text text="连接数" tooltip="connected_clients" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
               <Text  name="connected_clients" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
@@ -41,17 +41,17 @@
           </TreeNode>     
        </TreeNode>
        
-       <TreeNode text="内存信息" name="mem_treenode" inset="0,0,0,0" height="40" bkimage="treeview_header.png" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;40,8,0,0&quot;" folderattr="padding=&quot;0,15,0,0&quot; width=&quot;10&quot; height=&quot;10&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
+       <TreeNode text="内存信息" name="mem_treenode" inset="0,0,0,0" height="40" bordersize="1" bordercolor="#FFBDC3C7" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;10,8,0,0&quot;" folderattr="padding=&quot;0,3,0,0&quot; width=&quot;32&quot; height=&quot;32&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
           <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
-              <Text text="占用内存(byte)" tooltip="used_memory" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text text="已用内存(byte)" tooltip="used_memory" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
               <Text  name="used_memory" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
           </TreeNode>
           <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
-              <Text text="占用内存" tooltip="used_memory_human" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text text="已用内存" tooltip="used_memory_human" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
               <Text  name="used_memory_human" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
           </TreeNode>
           <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
-              <Text text="常驻集大小" tooltip="used_memory_rss" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
+              <Text text="常驻集(RSS)大小" tooltip="used_memory_rss" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
               <Text  name="used_memory_rss" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
           </TreeNode>
           <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;2&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
@@ -72,7 +72,7 @@
           </TreeNode>            
        </TreeNode>   
 
-        <TreeNode text="持久化信息" name="Persistence_treenode" inset="0,0,0,0" height="40" bkimage="treeview_header.png" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;40,8,0,0&quot;" folderattr="padding=&quot;0,15,0,0&quot; width=&quot;10&quot; height=&quot;10&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
+        <TreeNode text="持久化信息" name="Persistence_treenode" inset="0,0,0,0" height="40" bordersize="1" bordercolor="#FFBDC3C7" itemattr="valign=&quot;vcenter&quot; font=&quot;4&quot; textpadding=&quot;10,8,0,0&quot;" folderattr="padding=&quot;0,3,0,0&quot; width=&quot;32&quot; height=&quot;32&quot; selectedimage=&quot;file='list_icon_a.png' source='0,0,0,0' &quot; normalimage=&quot;file='list_icon_b.png' source='0,0,0,0' &quot;">
           <TreeNode  height="22" inset="0,0,0,0" itemattr="valign=&quot;vcenter&quot; font=&quot;8&quot;" folderattr="width=&quot;0&quot; float=&quot;true&quot;">
               <Text text="加载进程数" tooltip="loading" float="true" pos="30,0,0,0" width="200" height="22" textpadding="0,5,0,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />
               <Text  name="loading" text="" float="true" pos="200,0,0,0" width="193" height="22"  font="3" textpadding="0,5,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FF0E0E0E" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
