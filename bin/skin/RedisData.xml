@@ -52,10 +52,12 @@
       <HorizontalLayout height="20" name="redisdata_page" visible="false">
        <HorizontalLayout>
        </HorizontalLayout>
-       <HorizontalLayout width="248" >
+       <HorizontalLayout width="303" >
        <Button text="{u}{a}首页{/a}{/u}" name="redisdata_pagefrist" width="52" height="21" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="center" />
        <Button text="{u}{a}上一页{/a}{/u}" name="redisdata_pagelast" width="52" height="21" textcolor="#FFFFFFFF" disabledtextcolor="#FFA7A6AA" showhtml="true" align="center" />
-       <Edit   text="0" name="redisdata_curpage" font="3" width="40" align="center" readonly="true" textpadding="0,0,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+       <Edit   text="0" name="redisdata_curpage" font="2" width="45" align="center" readonly="true" textpadding="0,0,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+       <Edit   text="/" name="redisdata_breakline" font="2" width="5" align="center" readonly="true" textpadding="0,0,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+       <Edit   text="0" name="redisdata_totalpage" font="2" width="45" align="center" readonly="true" textpadding="0,0,0,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
        <Button text="{u}{a}下一页{/a}{/u}" name="redisdata_pagenext" width="52" height="21" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="center" />
        <Button text="{u}{a}尾页{/a}{/u}" name="redisdata_pagefinal" width="52" height="21" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="center" />
        </HorizontalLayout>

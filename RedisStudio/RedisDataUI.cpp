@@ -6,6 +6,7 @@
 #include "Redis/RedisResult.h"
 #include "Redis/RedisClient.h"
 #include "rapidjson/reader.h"
+#include "rapidjson/reader.h"
 #include "rapidjson/prettywriter.h"    // for stringify JSON
 #include "rapidjson/stringbuffer.h"
 
@@ -24,6 +25,7 @@ static const TCHAR* kPageName     = _T("redisdata_page");
 static const TCHAR* kPageFristName= _T("redisdata_pagefrist");
 static const TCHAR* kPageNextName = _T("redisdata_pagenext");
 static const TCHAR* kPageCurName  = _T("redisdata_curpage");
+static const TCHAR* kPageTotalName= _T("redisdata_totalpage");
 static const TCHAR* kPageLastName = _T("redisdata_pagelast");
 static const TCHAR* kPageFinalName= _T("redisdata_pagefinal");
 static const TCHAR* kCommitBtnName= _T("redisdata_commit");
@@ -66,6 +68,7 @@ void RedisDataUI::Initialize()
     m_pHorizontalLayout = dynamic_cast<CHorizontalLayoutUI*>(GetPaintMgr()->FindControl(kPageName));
 
     m_pPageCur = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kPageCurName));
+    m_pPageTotal = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kPageTotalName));
     m_pPageFrist = dynamic_cast<CButtonUI*>(GetPaintMgr()->FindControl(kPageFristName));
     m_pPageLast = dynamic_cast<CButtonUI*>(GetPaintMgr()->FindControl(kPageLastName));
     m_pPageNext = dynamic_cast<CButtonUI*>(GetPaintMgr()->FindControl(kPageNextName));
@@ -248,6 +251,7 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
     m_pRichEdit->SetText(kDefaultText);
     m_pDataSizeEdit->SetText(kDefaultText);
     m_pPageCur->SetText(_T("1"));
+    m_pPageTotal->SetText(_T("1"));
     m_pList->RemoveAll();
     m_pList->GetHeader()->RemoveAll();
     m_pHorizontalLayout->SetVisible(false);
@@ -313,9 +317,11 @@ void RedisDataUI::OnPaginate(TNotifyUI& msg)
         return;
     }
     m_pList->RemoveAll();
-    CDuiString pageStr ;
+    CDuiString pageStr, totalpageStr ;
     pageStr.Format(_T("%u"), curPage);
+    totalpageStr.Format(_T("%u"), GetMaxPage());
     m_pPageCur->SetText(pageStr.GetData());
+    m_pPageTotal->SetText(totalpageStr.GetData());
     DoPaginateWork();
 }
 
@@ -605,11 +611,24 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
     /// 如果是单元素(如string)，则一并直接更新到富文本框内 
     if (GetResult().RowSize() == 1 && GetResult().ColumnSize()==1)
     {
-        SetRichEditText(GetResult().Value(0,0));
+		string myValue = GetResult().Value(0, 0);
+        CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
+        /// 特殊的数据
+        if (myValue.size() !=0 && myDuiStr.GetLength()==0)
+        {
+            TryHexFormat(myValue);
+            myDuiStr  = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
+        }
+        std::string text = Base::CharacterSet::UnicodeToANSI(myDuiStr.GetData());
+        SetRichEditText(text);
     }
-    
+
     if (GetResult().RowSize() > m_PageSize)
     {
+        /// 设置总页数
+        CDuiString totalpageStr;
+        totalpageStr.Format(_T("%u"), GetMaxPage());
+        m_pPageTotal->SetText(totalpageStr.GetData());
         m_pHorizontalLayout->SetVisible(true);
     }    
     return TRUE;

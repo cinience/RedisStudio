@@ -111,6 +111,7 @@ private:
     CEditUI*         m_pDataSizeEdit;
 
     CEditUI*         m_pPageCur;
+	CEditUI*         m_pPageTotal;
     CButtonUI*       m_pPageFrist;
     CButtonUI*       m_pPageLast;
     CButtonUI*       m_pPageNext;

@@ -160,7 +160,7 @@ unsigned __stdcall Thread::runnableEntry(void* pThread)
     }
     catch (std::exception& exc)
     {
-        
+        (void)exc; 
     }
     catch (...)
     {
@@ -184,7 +184,7 @@ unsigned __stdcall Thread::callableEntry(void* pThread)
     }
     catch (std::exception& exc)
     {
-        
+        (void)exc;   
     }
     catch (...)
     {

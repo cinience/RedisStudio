@@ -112,9 +112,15 @@ void ConnInfoSubWhd::OnClick( TNotifyUI& msg )
 bool ConnInfoSubWhd::OnAddInfo()
 {
     std::string name = Base::CharacterSet::UnicodeToANSI(m_pEditName->GetText().GetData());
-    std::string ip =  Base::CharacterSet::UnicodeToANSI(m_pEditHost->GetText().GetData());
-    std::string port =  Base::CharacterSet::UnicodeToANSI(m_pEditPort->GetText().GetData());
+    CDuiString ipStr = m_pEditHost->GetText();
+    ipStr.Replace(_T(" "), _T(""));
+    std::string ip =  Base::CharacterSet::UnicodeToANSI(ipStr.GetData());
+
+    CDuiString portStr = m_pEditPort->GetText();
+    portStr.Replace(_T(" "), _T(""));
+    std::string port =  Base::CharacterSet::UnicodeToANSI(portStr.GetData());
     std::string auth =  Base::CharacterSet::UnicodeToANSI(m_pEditAuth->GetText().GetData());
+
     if (name.empty())
     {
         CDuiString CtlName = m_pEditName->GetName();
@@ -158,8 +164,16 @@ bool ConnInfoSubWhd::OnAddInfo()
 bool ConnInfoSubWhd::OnAltInfo()
 {
     std::string name = Base::CharacterSet::UnicodeToANSI(m_pEditName->GetText().GetData());
-    std::string ip =  Base::CharacterSet::UnicodeToANSI(m_pEditHost->GetText().GetData());
-    std::string port =  Base::CharacterSet::UnicodeToANSI(m_pEditPort->GetText().GetData());
+
+    /// 自动去除空格
+    CDuiString ipStr = m_pEditHost->GetText();
+    ipStr.Replace(_T(" "), _T(""));
+    std::string ip =  Base::CharacterSet::UnicodeToANSI(ipStr.GetData());
+
+    CDuiString portStr = m_pEditPort->GetText();
+    portStr.Replace(_T(" "), _T(""));
+    std::string port =  Base::CharacterSet::UnicodeToANSI(portStr.GetData());
+
     std::string auth =  Base::CharacterSet::UnicodeToANSI(m_pEditAuth->GetText().GetData());
     TDicTables& dicObj = *m_pdicServerInfo;
     for (std::size_t idx=0; idx<dicObj[ConnInfoUI::kServerNameIndex].size(); ++idx)

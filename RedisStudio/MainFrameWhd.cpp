@@ -263,9 +263,13 @@ LRESULT CMainFrameWnd::OnConnected( HWND hwnd, WPARAM wParam, LPARAM lParam )
 
 LRESULT CMainFrameWnd::OnUnConnected( HWND hwnd, WPARAM wParam, LPARAM lParam )
 {
+    CDuiString *s = (CDuiString*)wParam;
+    if (s != NULL)
+    UserMessageBox(GetHWND(), 10016, s->GetData(), MB_ICONINFORMATION);
     m_pLayConnect->SetVisible(false);
     m_pLayConnecting->SetVisible(false);
     m_pLayUnconect->SetVisible(true);
+    delete s;
     return TRUE;
 }
 

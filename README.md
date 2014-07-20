@@ -2,13 +2,15 @@ RedisStudio
 ===========
 # 地址
 -
-  [候选版v0.1.0下载](https://github.com/cinience/RedisStudio/blob/master/package/RedisStudio-V0.1.0.zip?raw=true,"候选版v0.1.0")
+  [候选版v0.1.0下载](https://github.com/cinience/RedisStudio/blob/master/package/RedisStudio-V0.1.0.zip?raw=true,"候选版v0.1.0")  
   
 # 介绍
 - 
-  Redis Studio 是Redis桌面客户端，支持Windows操作系统
+  Redis Studio 是Redis桌面客户端，支持Windows xp, windows 7, windows 8
 - 
   界面基于duilib开发，内核客户端采用 MSOPEN hiredis
+-
+  支持 官方Redis 2.6 2.7 2.8 
 
 # 计划
 1. 

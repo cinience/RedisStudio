@@ -39,13 +39,13 @@ bool RedisClient::Connect()
         Quit();
     }
     if (m_strName.IsEmpty()) return false;
-    struct timeval timeout = { 5, 500000 }; // 1.5 seconds 
+    struct timeval timeout = { 5, 500000 }; 
     m_pClient = redisConnectWithTimeout((char*)m_strIP.c_str(), 
         m_iPort, 
         timeout);
-    if (m_pClient->err) {
-        printf("Connection error: %s\n", m_pClient->errstr);
+    if (m_pClient->err) {        
         SetLastError(m_pClient->errstr);
+        m_fnDisConnect(GetLastError());
         return false;
     }
     if (!m_strAuth.empty())
@@ -53,6 +53,7 @@ bool RedisClient::Connect()
         redisReply* reply = Command("AUTH %s", m_strAuth.c_str());
         if (!(reply && reply->type==REDIS_REPLY_STATUS))
         {
+            SetLastError(reply->str);
             return false;
         }
     }
@@ -118,6 +119,7 @@ bool RedisClient::keys(TSeqArrayResults& results)
             i++;
         }
     }
+	results.sort();
     freeReplyObject(reply);
     return retVal;
 }
@@ -158,15 +160,18 @@ redisReply* RedisClient::Command( const char* fmt, ... )
     va_start(ap, fmt);
     reply = (redisReply*) redisvCommand(m_pClient, fmt, ap);
     va_end(ap);
-    if (reply==NULL || reply->type==REDIS_REPLY_ERROR)
-    {
-        m_fnDisConnect(m_strName);
-        m_isConnected = false;
-    }
     if (reply && reply->type == REDIS_REPLY_ERROR)
     {
         SetLastError(reply->str);
     }
+    if (reply==NULL || reply->type==REDIS_REPLY_ERROR)
+    {
+        if (reply != NULL) {
+             m_fnDisConnect(GetLastError());
+        }
+        m_isConnected = false;
+    }
+
     return reply;
 }
 
