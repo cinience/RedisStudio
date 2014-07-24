@@ -39,7 +39,7 @@ Var StartMenuGroup
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
 
-OutFile RedisStudio-${VERSION}.exe
+OutFile RedisStudio-cn-${VERSION}.exe
 InstallDir $PROGRAMFILES\RedisStudio
 CRCCheck on
 XPStyle on
@@ -58,14 +58,14 @@ ShowUninstDetails show
 
 # Installer sections
 Section -Main SEC0000
-    #${nsProcess::KillProcess} "${APP_EXE}" $R4
+    ${nsProcess::KillProcess} "${APP_EXE}" $R4
 
     SetOutPath $INSTDIR
     SetOverwrite on
-    File ../bin/${APP_EXE}
-    File ../bin/DuiLib.dll
-    File ../bin/RedisStudio.pdb
-    File /r ../bin/skin
+    File ..\bin\${APP_EXE}
+    File ..\bin\DuiLib.dll
+    File ..\bin\RedisStudio.pdb
+    File /r ..\bin\skin
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd
 
@@ -109,6 +109,7 @@ done${UNSECTION_ID}:
 Section /o -un.Main UNSEC0000
     Delete /REBOOTOK $INSTDIR\*
     Delete /REBOOTOK $INSTDIR\skin\*
+    RmDir /REBOOTOK $INSTDIR\skin
     DeleteRegValue HKLM "${REGKEY}\Components" Main
 SectionEnd
 
@@ -140,3 +141,5 @@ FunctionEnd
 
 # Installer Language Strings
 LangString ^UninstallLink ${LANG_ENGLISH} "Uninstall $(^Name)"
+
+#Thanks NSIS and Redis Desktop Manager
