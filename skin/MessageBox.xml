@@ -21,6 +21,7 @@
     <HorizontalLayout inset="10,2,2,0" height="40" >
       <Label name="lbl_msg_20001" visible="false" inset="8,2,2,0" text="精疲力尽的开发中！" height="32"/>  
       <Label name="lbl_msg_20002" visible="false" inset="8,2,2,0" text="请先单击选择项" height="32"/>  
+	  <Label name="lbl_msg_20003" visible="false" inset="8,2,2,0" text="保存配置失败，请使用管理员权限重试" height="32"/>  
       <Label name="lbl_msg_10010" visible="false" inset="8,2,2,0" text="请先连接服务端" height="32"/>   
       <Label name="lbl_msg_10011" visible="false" inset="8,2,2,0" text="$不能为空" height="32"/>  
       <Label name="lbl_msg_10012" visible="false" inset="8,2,2,0" text="正在加载数据，请稍候" height="32"/>  

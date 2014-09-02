@@ -636,6 +636,11 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
 
 bool RedisDataUI::OnMenuClick( void* param )
 {
+	if (m_Thread.isRunning())
+    {
+         UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
+         return false;
+    }
     TEventUI* pTEventUI = static_cast<TEventUI*> (param);
     CDuiString name = pTEventUI->pSender->GetName();
     if (name == kDBOperatorReloadMenuName)

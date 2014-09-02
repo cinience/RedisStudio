@@ -16,7 +16,7 @@ public:
         Type_Alt
     };
 public:
-    ConnInfoSubWhd(TDicTables* pDic,OperatorType type, int celIdx=0);
+    ConnInfoSubWhd(TDicTables* pDic, bool &needApply, OperatorType type, int celIdx=0);
 
     ~ConnInfoSubWhd(void);
 
@@ -45,6 +45,7 @@ public:
     bool OnAltInfo();
 
 private:
+	bool*                         m_needApply;
     TDicTables*                   m_pdicServerInfo;
 
     CEditUI*                      m_pEditName;

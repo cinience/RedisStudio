@@ -10,12 +10,13 @@ DUI_BEGIN_MESSAGE_MAP(ConnInfoSubWhd, WindowImplBase)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
 DUI_END_MESSAGE_MAP()
 
-ConnInfoSubWhd::ConnInfoSubWhd(TDicTables* pDic,OperatorType type, int celIdx)
+ConnInfoSubWhd::ConnInfoSubWhd(TDicTables* pDic, bool &needApply, OperatorType type, int celIdx)
 {
     ASSERT(pDic);
     m_pdicServerInfo = pDic;
     m_celIdx = celIdx;
     m_type = type;
+	m_needApply = &needApply;
 }
 
 ConnInfoSubWhd::~ConnInfoSubWhd(void)
@@ -45,6 +46,7 @@ void ConnInfoSubWhd::InitWindow()
         pLabelAdd->SetVisible(false);
         pLabelAlt->SetVisible(true);
     }
+	*m_needApply = false;
 }
 
 
@@ -92,6 +94,7 @@ void ConnInfoSubWhd::OnClick( TNotifyUI& msg )
     if(msg.pSender->GetName() == _T("btn_conn_cancel"))
     {
         Close();
+		*m_needApply = false;
         return; 
     }
     else if (msg.pSender->GetName() == _T("btn_conn_save"))
@@ -105,7 +108,15 @@ void ConnInfoSubWhd::OnClick( TNotifyUI& msg )
         {
             retVal = OnAltInfo();
         }    
-        if (retVal) Close();
+        if (retVal) 
+		{
+			*m_needApply = true;
+		} 
+		else 
+		{
+			*m_needApply = false;
+		}
+		Close();
     }
 }
 
