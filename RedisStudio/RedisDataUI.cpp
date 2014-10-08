@@ -121,6 +121,13 @@ void RedisDataUI::RefreshWnd()
     DoRefreshKeysWork();
 }
 
+bool RedisDataUI::CanChange() 
+{
+    if (m_Thread.isRunning()) {
+        return false;
+    }
+    return true;
+}
 
 LRESULT RedisDataUI::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
 {

@@ -43,6 +43,8 @@ public:
 
     void RefreshWnd();
 
+    virtual bool CanChange();
+
     virtual LRESULT HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled );
 
     DUI_DECLARE_MESSAGE_MAP()

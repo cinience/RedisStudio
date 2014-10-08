@@ -15,6 +15,11 @@ public:
 
     virtual int GetIndex() = 0;
 
+    virtual bool CanChange() 
+    {
+        return true;
+    }
+
     virtual LRESULT HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
     {
         bHandled = FALSE;

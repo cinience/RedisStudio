@@ -214,6 +214,16 @@ void CMainFrameWnd::OnSelectChanged( TNotifyUI &msg )
         UserMessageBox(GetHWND(), 10010, NULL, MB_ICONINFORMATION);
         return;
     }
+    static COptionUI* pLastButton = NULL;
+    static AbstraceUI* pLastTab = NULL;
+
+    if (pLastTab != NULL && !pLastTab->CanChange()) {
+        pControl->SelectItem(pLastTab->GetIndex());
+        if (pLastButton) pLastButton->Selected(true);
+        return;
+    }
+
+    pLastButton = static_cast<COptionUI*>(m_PaintManager.FindControl(msg.pSender->GetName()));
 
     for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
     {
@@ -222,6 +232,7 @@ void CMainFrameWnd::OnSelectChanged( TNotifyUI &msg )
             AbstraceUI* p = (AbstraceUI*)m_TabContainer.Find(name);
             p->RefreshWnd();
             pControl->SelectItem(p->GetIndex());
+            pLastTab = p;
             break;
         }        
     }
