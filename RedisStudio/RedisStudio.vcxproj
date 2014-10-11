@@ -140,7 +140,7 @@
     </Bscmake>
     <PostBuildEvent>
       <Command>md "$(SolutionDir)bin/skin"
-xcopy "$(SolutionDir)skin" "$(SolutionDir)bin/skin" /s /e /k /y
+xcopy "$(SolutionDir)Skin/skin-en" "$(SolutionDir)bin/skin" /s /e /k /y
 del "$(SolutionDir)bin\skin\*.psd"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
@@ -196,7 +196,7 @@ del "$(SolutionDir)bin\skin\*.psd"</Command>
     </Bscmake>
     <PostBuildEvent>
       <Command>md "$(SolutionDir)bin/skin"
-xcopy "$(SolutionDir)skin" "$(SolutionDir)bin/skin" /s /e /k /y
+xcopy "$(SolutionDir)Skin/skin-en" "$(SolutionDir)bin/skin" /s /e /k /y
 del "$(SolutionDir)bin\skin\*.psd"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
