@@ -216,25 +216,28 @@ void CMainFrameWnd::OnSelectChanged( TNotifyUI &msg )
     }
     static COptionUI* pLastButton = NULL;
     static AbstraceUI* pLastTab = NULL;
-
-    if (pLastTab != NULL && !pLastTab->CanChange()) {
-        pControl->SelectItem(pLastTab->GetIndex());
-        if (pLastButton) pLastButton->Selected(true);
-        return;
-    }
-
-    pLastButton = static_cast<COptionUI*>(m_PaintManager.FindControl(msg.pSender->GetName()));
-
+    AbstraceUI* p = NULL;
+    /// 除了tab的按钮的消息外，还有其它消息，所以此处只判断tab相关的消息
     for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
     {
         if (name == m_TabContainer[idx])
         {
-            AbstraceUI* p = (AbstraceUI*)m_TabContainer.Find(name);
-            p->RefreshWnd();
-            pControl->SelectItem(p->GetIndex());
-            pLastTab = p;
-            break;
-        }        
+            p = (AbstraceUI*)m_TabContainer.Find(name);
+        }
+    }
+    if (p == NULL) return;
+
+    if (pLastTab != NULL && p != pLastTab && !pLastTab->CanChange()) {
+        if (pLastButton) pLastButton->Selected(true);
+        UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
+        return;
+    }
+    
+    if (p && p!=pLastTab) {
+        p->RefreshWnd();
+        pControl->SelectItem(p->GetIndex());
+        pLastTab = p;
+        pLastButton = static_cast<COptionUI*>(m_PaintManager.FindControl(msg.pSender->GetName()));
     }
 }
 

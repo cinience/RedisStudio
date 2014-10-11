@@ -438,12 +438,20 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
         for (; it!=itend; ++it)
         {
             std::string theValue = *it;
-
+            CTreeNodeUI* pPNode = pKeyNode;
+            /*
+            if (results.size() > 10000) {
+                TreeKeyContactData* pData = new TreeKeyContactData;
+                pData->pPNode = pPNode;
+                pData->pNode = NewNode(theValue, true);
+                ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+                m_oEventKey.wait();
+                continue;
+            }
+            */
             Base::String::TSeqStr seq;
             Base::String::Split(theValue, ":", seq);
             seq[seq.size()-1] = theValue;
-
-            CTreeNodeUI* pPNode = pKeyNode;
 
             for (std::size_t idx=0; idx<seq.size()-1; ++idx)
             {
@@ -618,7 +626,7 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
     /// 如果是单元素(如string)，则一并直接更新到富文本框内 
     if (GetResult().RowSize() == 1 && GetResult().ColumnSize()==1)
     {
-		string myValue = GetResult().Value(0, 0);
+        string myValue = GetResult().Value(0, 0);
         CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
         /// 特殊的数据
         if (myValue.size() !=0 && myDuiStr.GetLength()==0)
@@ -643,7 +651,7 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
 
 bool RedisDataUI::OnMenuClick( void* param )
 {
-	if (m_Thread.isRunning())
+    if (m_Thread.isRunning())
     {
          UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
          return false;
