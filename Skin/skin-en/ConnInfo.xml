@@ -7,7 +7,7 @@
   <HorizontalLayout>
     <VerticalLayout>
       <HorizontalLayout inset="1,1,0,0">      
-         <List name="serverlist" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="false" headerbkimage="file='list_header_bg.png'" tooltip="双击连接" itemalign="center" itembkcolor="#FFF0F0F0" itemaltbk="true" menu="true">
+         <List name="serverlist" bkcolor="#FFFFFFFF" inset="0,0,0,0" itemshowhtml="true" vscrollbar="true" hscrollbar="false" headerbkimage="file='list_header_bg.png'" tooltip="Doule-click the connection" itemalign="center" itembkcolor="#FFF0F0F0" itemaltbk="true" menu="true">
           <ListHeader height="24" menu="true">
             <ListHeaderItem text="Name" font="1" width="150" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
             <ListHeaderItem text="Host" font="1" width="200" hotimage="file='list_header_hot.png'" pushedimage="file='list_header_pushed.png'" sepimage="file='list_header_sep.png'" sepwidth="1"/>
