@@ -7,7 +7,7 @@ RequestExecutionLevel admin
 SetCompress force
 SetCompressor /SOLID /FINAL lzma
 
-!define VERSION 0.1.0.0
+!define VERSION 0.1.1
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(Name)"
 !define COMPANY "cinience"
@@ -39,7 +39,7 @@ Var StartMenuGroup
 !insertmacro MUI_UNPAGE_INSTFILES
 !insertmacro MUI_LANGUAGE "English"
 
-OutFile RedisStudio-cn-${VERSION}.exe
+OutFile RedisStudio-en-${VERSION}.exe
 InstallDir $PROGRAMFILES\RedisStudio
 CRCCheck on
 XPStyle on
@@ -64,8 +64,8 @@ Section -Main SEC0000
     SetOverwrite on
     File ..\bin\${APP_EXE}
     File ..\bin\DuiLib.dll
-    File ..\bin\RedisStudio.pdb
-    File /r ..\bin\skin
+    File ..\build\*.txt 
+    File ..\build\*.dll
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd
 
