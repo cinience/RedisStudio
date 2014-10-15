@@ -66,6 +66,7 @@ Section -Main SEC0000
     File ..\bin\DuiLib.dll
     File ..\build\*.txt 
     File ..\build\*.dll
+    File /r ..\bin\skin
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd
 
