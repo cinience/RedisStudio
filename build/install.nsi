@@ -44,7 +44,7 @@ InstallDir $PROGRAMFILES\RedisStudio
 CRCCheck on
 XPStyle on
 ShowInstDetails show
-VIProductVersion 0.1.0.1379
+VIProductVersion 1.0.0.0
 VIAddVersionKey /LANG=${LANG_ENGLISH} ProductName "Redis Studio"
 VIAddVersionKey /LANG=${LANG_ENGLISH} ProductVersion "${VERSION}"
 VIAddVersionKey /LANG=${LANG_ENGLISH} CompanyName "${COMPANY}"
