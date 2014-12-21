@@ -16,7 +16,7 @@ ConnInfoSubWhd::ConnInfoSubWhd(TDicTables* pDic, bool &needApply, OperatorType t
     m_pdicServerInfo = pDic;
     m_celIdx = celIdx;
     m_type = type;
-	m_needApply = &needApply;
+    m_needApply = &needApply;
 }
 
 ConnInfoSubWhd::~ConnInfoSubWhd(void)
@@ -46,7 +46,7 @@ void ConnInfoSubWhd::InitWindow()
         pLabelAdd->SetVisible(false);
         pLabelAlt->SetVisible(true);
     }
-	*m_needApply = false;
+    *m_needApply = false;
 }
 
 
@@ -109,14 +109,14 @@ void ConnInfoSubWhd::OnClick( TNotifyUI& msg )
             retVal = OnAltInfo();
         }    
         if (retVal) 
-		{
-			*m_needApply = true;
-		} 
-		else 
-		{
-			*m_needApply = false;
-		}
-		Close();
+	{
+		*m_needApply = true;
+	} 
+	else 
+	{
+		*m_needApply = false;
+	}
+	Close();
     }
 }
 
@@ -176,7 +176,7 @@ bool ConnInfoSubWhd::OnAltInfo()
 {
     std::string name = Base::CharacterSet::UnicodeToANSI(m_pEditName->GetText().GetData());
 
-    /// �Զ�ȥ���ո�
+    /// ×ÔśŻČĽłýżŐ¸ń
     CDuiString ipStr = m_pEditHost->GetText();
     ipStr.Replace(_T(" "), _T(""));
     std::string ip =  Base::CharacterSet::UnicodeToANSI(ipStr.GetData());
