@@ -69,6 +69,7 @@ private:
     CTextUI* m_pConnectControl ;
     CTextUI* m_pUnConnectControl ;
     CTextUI* m_pConnectingControl ;
+	CTextUI* m_pVersionControl;
 
     CStdStringPtrMap m_TabContainer;
 };

@@ -3,6 +3,7 @@
 #include <comdef.h>
 #include <ShellAPI.h>
 #include "resource.h"
+#include "Version.h"
 #include "MainFrameWhd.h"
 #include "UserMessage.h"
 #include "Redis/RedisClient.h"
@@ -46,7 +47,7 @@ void CMainFrameWnd::InitWindow()
     m_pRestoreBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("restorebtn")));
     m_pMinBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("minbtn")));
 
-
+	m_pVersionControl = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("main_version")));
     m_pConnectControl = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("txt_notice_success")));
     m_pUnConnectControl = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("txt_notice_fail")));
     m_pConnectingControl = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("txt_notice_connectting")));
@@ -54,6 +55,11 @@ void CMainFrameWnd::InitWindow()
     m_pLayConnect  = static_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("main_notice_success")));
     m_pLayConnecting = static_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("main_notice_connectting")));
     m_pLayUnconect  = static_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("main_notice_fail")));
+	
+	/// 设置版本号
+    CDuiString theMsg = m_pVersionControl->GetText();
+    theMsg.Replace(_T("$version"), _T(VERSION));
+	m_pVersionControl->SetText(theMsg);
 
     for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
     {
@@ -61,7 +67,7 @@ void CMainFrameWnd::InitWindow()
         p->Initialize();
 
     }
-    //刷新默认窗口加载数据
+    /// 刷新默认窗口加载数据
     for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
     {
         AbstraceUI* p = (AbstraceUI*)m_TabContainer.Find(m_TabContainer[idx]);
