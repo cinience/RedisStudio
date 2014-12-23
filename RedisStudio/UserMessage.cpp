@@ -18,5 +18,4 @@ void UserMessageBox(HWND hWnd,
     pWhd->Create(hWnd, NULL, UI_CLASSSTYLE_DIALOG, 0, 0, 0, 0, 0, NULL);
     pWhd->CenterWindow();
     pWhd->ShowModal();
-
 }

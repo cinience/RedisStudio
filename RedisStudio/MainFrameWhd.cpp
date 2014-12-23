@@ -14,6 +14,8 @@
 #include "RedisMgrUI.h"
 #include "RedisHelpUI.h"
 
+#include "Base/Http.h"
+#include "Base/CharacterSet.h"
 
 DUI_BEGIN_MESSAGE_MAP(CMainFrameWnd, WindowImplBase)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
@@ -47,7 +49,7 @@ void CMainFrameWnd::InitWindow()
     m_pRestoreBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("restorebtn")));
     m_pMinBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("minbtn")));
 
-	m_pVersionControl = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("main_version")));
+    m_pVersionControl = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("main_version")));
     m_pConnectControl = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("txt_notice_success")));
     m_pUnConnectControl = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("txt_notice_fail")));
     m_pConnectingControl = static_cast<CTextUI*>(m_PaintManager.FindControl(_T("txt_notice_connectting")));
@@ -55,11 +57,11 @@ void CMainFrameWnd::InitWindow()
     m_pLayConnect  = static_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("main_notice_success")));
     m_pLayConnecting = static_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("main_notice_connectting")));
     m_pLayUnconect  = static_cast<CHorizontalLayoutUI*>(m_PaintManager.FindControl(_T("main_notice_fail")));
-	
-	/// 设置版本号
+
+    /// 设置版本号
     CDuiString theMsg = m_pVersionControl->GetText();
     theMsg.Replace(_T("$version"), _T(VERSION));
-	m_pVersionControl->SetText(theMsg);
+    m_pVersionControl->SetText(theMsg);
 
     for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
     {
@@ -77,6 +79,9 @@ void CMainFrameWnd::InitWindow()
           break;
         }
     }
+
+    DWORD dwThreadID = 0;
+    HANDLE hThread = CreateThread(NULL, 0, &CMainFrameWnd::BackgroundWork, GetHWND(),  0, &dwThreadID);
 }
 
 LPCTSTR CMainFrameWnd::GetWindowClassName() const
@@ -308,6 +313,27 @@ LRESULT CMainFrameWnd::OnConnecting( HWND hwnd, WPARAM wParam, LPARAM lParam )
     return TRUE;
 }
 
+LRESULT CMainFrameWnd::OnUpdate(HWND hwnd, WPARAM wParam, LPARAM lParam)
+{
+    UserMessageBox(GetHWND(), 20000, NULL, MB_ICONINFORMATION);
+	::ShellExecute(NULL, NULL, _T("https://github.com/cinience/RedisStudio/releases"), NULL, NULL, NULL); 
+    return TRUE;
+}
+
+DWORD WINAPI CMainFrameWnd::BackgroundWork( LPVOID lpParameter )
+{
+    Base::Http http("hiredis.com", 80);
+    Base::Http::Response rep = {0, ""};
+    if (http.ping()) {
+        rep = http.post("/redisstudio/version", "");
+    }
+
+    if (rep.status == 200 && rep.data.size() > 2 && rep.data != VERSION) {
+        ::PostMessage(m_hwnd, WM_USER_UPDATE, (WPARAM)NULL, NULL);
+    }
+    return 0;
+}
+
 void CMainFrameWnd::OndisConnectCallback( const CDuiString& name )
 {
     CDuiString* s = new CDuiString(name);
@@ -329,6 +355,8 @@ LRESULT CMainFrameWnd::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPa
     case WM_USER_CONNECTING:
         lRes = OnConnecting(*this, wParam, lParam);
         break;
+    case WM_USER_UPDATE:
+        lRes = OnUpdate(*this, wParam, lParam);
     default:
         bHandled = FALSE;
         break;
