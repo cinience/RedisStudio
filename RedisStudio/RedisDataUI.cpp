@@ -109,7 +109,7 @@ void RedisDataUI::RefreshWnd()
       pNode->SetContextMenuUsed(true);
 
       //pNode->SetIndex(myIdx--);
-      /// ´Ë´¦ÓÃtagÏÈ´úÌætreelevel(»¹Î´ÊµÏÖ)
+      /// æ­¤å¤„ç”¨tagå…ˆä»£æ›¿treelevel(è¿˜æœªå®ç°)
       
       pNode->SetTag(i+1);
       pNode->SetAttribute(_T("itemattr"), _T("valign=\"vcenter\" font=\"5\" textpadding=\"5,3,0,0\""));
@@ -201,7 +201,7 @@ void RedisDataUI::OnMenuWakeup( TNotifyUI &msg )
 
     bool needMenu = false;
     STRINGorID res(_T(""));
-    /// ¸¸½Úµã
+    /// çˆ¶èŠ‚ç‚¹
     if (pTreeNodeUI->GetTag() > 0)
     {
         STRINGorID xml(_T("DBOperatorMenu.xml"));
@@ -228,9 +228,9 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
 {
     CTreeNodeUI* pActiveNode = dynamic_cast<CTreeNodeUI*>(msg.pSender);
     if (!pActiveNode) return;
-    /// ·ÇÒ¶×Ó½Úµã²»´¦Àí 
+    /// éå¶å­èŠ‚ç‚¹ä¸å¤„ç† 
     if (pActiveNode->IsHasChild()) return ;
-    /// Ê×²ãdb½Úµã
+    /// é¦–å±‚dbèŠ‚ç‚¹
     if (pActiveNode->GetTag() > 0) return;
     if (m_Thread.isRunning())
     {
@@ -278,13 +278,13 @@ void RedisDataUI::OnItemActiveForList(  TNotifyUI &msg  )
     std::size_t curPage = atoi(Base::CharacterSet::UnicodeToANSI(m_pPageCur->GetText().GetData()).c_str());
     
     int curCel = m_pList->GetItemIndex(pListElement);
-    /// why ? ĞĞÊı²»¶Ô
+    /// why ? è¡Œæ•°ä¸å¯¹
     ///std::size_t curIndex = m_pList->GetCurSel();
     int realIndex = (curPage-1)*m_PageSize + curCel;
     int colIdx = m_pList->GetHeader()->GetCount() > 1 ? 1 : 0 ;
     string myValue = GetResult().Value(realIndex, colIdx);
     CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
-    /// ÌØÊâµÄÊı¾İ
+    /// ç‰¹æ®Šçš„æ•°æ®
     if (myValue.size() !=0 && myDuiStr.GetLength()==0)
     {
         TryHexFormat(myValue);
@@ -354,7 +354,7 @@ void RedisDataUI::OnCommit(TNotifyUI& msg)
     std::string newValue = Base::CharacterSet::UnicodeToANSI(m_pRichEdit->GetText().GetData()); 
     if (!RedisClient::GetInstance().UpdateData(key, oldValue, newValue, idx, field))
     {       
-        /// todo ´Ë´¦Ó¦¸ÃÌáÊ¾´íÎóÏêÇé
+        /// todo æ­¤å¤„åº”è¯¥æç¤ºé”™è¯¯è¯¦æƒ…
         UserMessageBox(GetHWND(), 10031, RedisClient::GetInstance().GetLastError().GetData() , MB_ICONERROR);
         return;
     }
@@ -499,7 +499,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
     key = Base::CharacterSet::UnicodeToANSI(pKeyEdit->GetText().GetData());
     if (!RedisClient::GetInstance().Exists(key))
     {
-        /// Èç¹û¸Ã¼üÒÑ¾­²»´æÔÚ£¬ÔòÌáÊ¾ÓÃ»§ÖØĞÂ¼ÓÔØ
+        /// å¦‚æœè¯¥é”®å·²ç»ä¸å­˜åœ¨ï¼Œåˆ™æç¤ºç”¨æˆ·é‡æ–°åŠ è½½
        ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, 10030, NULL);
        return;
     }
@@ -508,7 +508,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
     if (!RedisClient::GetInstance().GetData(key, type, GetResult())) return;
     m_RedisData.type = Base::CharacterSet::ANSIToUnicode(type).c_str();
     m_RedisData.size.Format(_T("%u"),GetResult().RowSize() );
-    /// Ô¤ÏÈÏÔÊ¾Êı¾İÀàĞÍµÈĞÅÏ¢
+    /// é¢„å…ˆæ˜¾ç¤ºæ•°æ®ç±»å‹ç­‰ä¿¡æ¯
     ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, NULL, NULL);
 
     for (std::size_t idx=0; idx<GetResult().ColumnSize(); ++idx)
@@ -521,7 +521,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
         pHeaderItem->SetSepImage(_T("file='list_header_sep.png'"));
         pHeaderItem->SetSepWidth(1);
 
-        /// listÔÚ²åÈëÖµÊ±»á¸ù¾İlistheadÀ´×÷ÏìÓ¦ÅĞ¶Ï£¬ËùÒÔĞèÒªÔÚheadÍêÈ«updateºóÔÙ²åÈëÖµ
+        /// liståœ¨æ’å…¥å€¼æ—¶ä¼šæ ¹æ®listheadæ¥ä½œå“åº”åˆ¤æ–­ï¼Œæ‰€ä»¥éœ€è¦åœ¨headå®Œå…¨updateåå†æ’å…¥å€¼
         LPARAM lparam = 0;
         if (idx+1 == GetResult().ColumnSize()) lparam = 1; 
         ::PostMessage(GetHWND(), WM_USER_DATAADD, (WPARAM)pHeaderItem, lparam);
@@ -551,14 +551,14 @@ void RedisDataUI::SetPageValues( )
         {
             string myValue = GetResult().Value(idx, colidx);
             CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
-            /// ÌØÊâµÄÊı¾İ
+            /// ç‰¹æ®Šçš„æ•°æ®
             if (myValue.size() !=0 && myDuiStr.GetLength()==0)
             {
                 TryHexFormat(myValue);
                 myDuiStr  = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
             }
 
-            /// Êı¾İ¹ı³¤£¬²»ÏÔÊ¾È«²¿£¬·ñÔò»álistÍÏ¶¯¿¨¶Ù
+            /// æ•°æ®è¿‡é•¿ï¼Œä¸æ˜¾ç¤ºå…¨éƒ¨ï¼Œå¦åˆ™ä¼šlistæ‹–åŠ¨å¡é¡¿
             if (myDuiStr.GetLength() > 50) 
             {
                 myDuiStr = myDuiStr.Left(50);
@@ -586,7 +586,7 @@ LRESULT RedisDataUI::OnKeyAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
     CTreeNodeUI* pPNode = pData->pPNode;
     CTreeNodeUI* pNode  = pData->pNode;
     pPNode->AddChildNode(pNode);    
-    /// ÇúÏß¾È¹ú£¬TreeViewÄ¬ÈÏ²»Õ¹¿ª½Úµã
+    /// æ›²çº¿æ•‘å›½ï¼ŒTreeViewé»˜è®¤ä¸å±•å¼€èŠ‚ç‚¹
     pPNode->GetFolderButton()->Selected(true);
     pPNode->GetTreeView()->SetItemExpand(false, pPNode);
     pPNode->NeedUpdate();
@@ -600,7 +600,7 @@ LRESULT RedisDataUI::OnKeyDel( HWND hwnd, WPARAM wParam, LPARAM lParam )
     CTreeNodeUI* pPNode;
     CDuiString a = pNode->GetItemText();
     std::string key = Base::CharacterSet::UnicodeToANSI(pNode->GetItemText().GetData());
-    /// ÔİÊ±ÓÃÍ¬²½·½·¨É¾³ı£¬´óÊı¾İÊ±»áÓĞ¿¨¶Ù
+    /// æš‚æ—¶ç”¨åŒæ­¥æ–¹æ³•åˆ é™¤ï¼Œå¤§æ•°æ®æ—¶ä¼šæœ‰å¡é¡¿
     if (!RedisClient::GetInstance().DelKey(key)) return FALSE;
     while (pNode)
     {
@@ -623,12 +623,12 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
     m_PTypeEdit->SetText(m_RedisData.type.GetData());
     m_pDataSizeEdit->SetText(m_RedisData.size.GetData());
     m_pRichEdit->SetText(kDefaultText);    
-    /// Èç¹ûÊÇµ¥ÔªËØ(Èçstring)£¬ÔòÒ»²¢Ö±½Ó¸üĞÂµ½¸»ÎÄ±¾¿òÄÚ 
+    /// å¦‚æœæ˜¯å•å…ƒç´ (å¦‚string)ï¼Œåˆ™ä¸€å¹¶ç›´æ¥æ›´æ–°åˆ°å¯Œæ–‡æœ¬æ¡†å†… 
     if (GetResult().RowSize() == 1 && GetResult().ColumnSize()==1)
     {
         string myValue = GetResult().Value(0, 0);
         CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
-        /// ÌØÊâµÄÊı¾İ
+        /// ç‰¹æ®Šçš„æ•°æ®
         if (myValue.size() !=0 && myDuiStr.GetLength()==0)
         {
             TryHexFormat(myValue);
@@ -640,7 +640,7 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
 
     if (GetResult().RowSize() > m_PageSize)
     {
-        /// ÉèÖÃ×ÜÒ³Êı
+        /// è®¾ç½®æ€»é¡µæ•°
         CDuiString totalpageStr;
         totalpageStr.Format(_T("%u"), GetMaxPage());
         m_pPageTotal->SetText(totalpageStr.GetData());
@@ -684,7 +684,7 @@ void RedisDataUI::SetRichEditText(const std::string& text)
     std::string styleText = text;
     int curSel = m_pComboFormat->GetCurSel();
 
-    /// Ã»±ØÒªÓÃÃæÏò¶ÔÏóµÄÉè¼ÆÄ£Ê½£¬Ö±½Óif else¸ã¶¨£¬¼òµ¥Ö±½Ó
+    /// æ²¡å¿…è¦ç”¨é¢å‘å¯¹è±¡çš„è®¾è®¡æ¨¡å¼ï¼Œç›´æ¥if elseæå®šï¼Œç®€å•ç›´æ¥
     if ( curSel == kAutoFomat )
     {
         if (TryJsonFomat(styleText) || TryXMLFormat(styleText)) {} 
@@ -765,7 +765,7 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
 
  void RedisDataUI::DelChildNode( CTreeNodeUI* pNode )
  {
-     /// nm,ÓÃÕâÖÖ·½Ê½¶¼É¾²»µô£¬µğ´úÂë
+     /// nm,ç”¨è¿™ç§æ–¹å¼éƒ½åˆ ä¸æ‰ï¼Œå¼ä»£ç 
      //pNodelist->SetDelayedDestroy(false);
      //pNodelist->RemoveAll();
      //int cs = pNodelist->GetCountChild();
@@ -774,7 +774,7 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
      //    pNodelist->Remove(pNodelist->GetChildNode(i));
      //}
      //cs = pNodelist->GetCountChild();
-     /// É¾³ıËùÓĞ½Úµã
+     /// åˆ é™¤æ‰€æœ‰èŠ‚ç‚¹
      CStdPtrArray myArray = pNode->GetTreeNodes();
      for (int i=0; i<myArray.GetSize(); ++i)
      {

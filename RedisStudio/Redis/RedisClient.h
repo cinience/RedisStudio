@@ -1,4 +1,6 @@
-#pragma once
+#ifndef RedisClient_INCLUDED
+#define RedisClient_INCLUDED
+
 #include "hiredis/hiredis.h"
 #include <list>
 #include <map>
@@ -92,3 +94,5 @@ private:
     std::auto_ptr<RedisModelFactory> m_ModelFactory;
     
 };
+
+#endif

@@ -1,4 +1,4 @@
-#ifndef RedisStringModel_INCLUDED
+﻿#ifndef RedisStringModel_INCLUDED
 #define RedisStringModel_INCLUDED
 
 #include "AbstractRedisModel.h"

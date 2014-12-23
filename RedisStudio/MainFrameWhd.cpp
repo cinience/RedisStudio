@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <exdisp.h>
 #include <comdef.h>
 #include <ShellAPI.h>
@@ -61,7 +61,7 @@ void CMainFrameWnd::InitWindow()
         p->Initialize();
 
     }
-    //Ë¢ĞÂÄ¬ÈÏ´°¿Ú¼ÓÔØÊı¾İ
+    //åˆ·æ–°é»˜è®¤çª—å£åŠ è½½æ•°æ®
     for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
     {
         AbstraceUI* p = (AbstraceUI*)m_TabContainer.Find(m_TabContainer[idx]);
@@ -146,7 +146,7 @@ CControlUI* CMainFrameWnd::CreateControl(LPCTSTR pstrClassName)
     }
     //if (! strXML.IsEmpty())
     //{
-    //    CControlUI* pUI = builder.Create(strXML.GetData(), NULL, NULL, &m_PaintManager, NULL); // ÕâÀï±ØĞë´«Èëm_PaintManager£¬²»È»×ÓXML²»ÄÜÊ¹ÓÃÄ¬ÈÏ¹ö¶¯ÌõµÈĞÅÏ¢¡£
+    //    CControlUI* pUI = builder.Create(strXML.GetData(), NULL, NULL, &m_PaintManager, NULL); // è¿™é‡Œå¿…é¡»ä¼ å…¥m_PaintManagerï¼Œä¸ç„¶å­XMLä¸èƒ½ä½¿ç”¨é»˜è®¤æ»šåŠ¨æ¡ç­‰ä¿¡æ¯ã€‚
     //    return pUI;
     //}
 
@@ -217,7 +217,7 @@ void CMainFrameWnd::OnSelectChanged( TNotifyUI &msg )
     static COptionUI* pLastButton = NULL;
     static AbstraceUI* pLastTab = NULL;
     AbstraceUI* p = NULL;
-    /// ³ıÁËtabµÄ°´Å¥µÄÏûÏ¢Íâ£¬»¹ÓĞÆäËüÏûÏ¢£¬ËùÒÔ´Ë´¦Ö»ÅĞ¶ÏtabÏà¹ØµÄÏûÏ¢
+    /// é™¤äº†tabçš„æŒ‰é’®çš„æ¶ˆæ¯å¤–ï¼Œè¿˜æœ‰å…¶å®ƒæ¶ˆæ¯ï¼Œæ‰€ä»¥æ­¤å¤„åªåˆ¤æ–­tabç›¸å…³çš„æ¶ˆæ¯
     for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
     {
         if (name == m_TabContainer[idx])

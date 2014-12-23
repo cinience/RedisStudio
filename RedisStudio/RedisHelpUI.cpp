@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "RedisHelpUI.h"
 
 DUI_BEGIN_MESSAGE_MAP(RedisHelpUI, CNotifyPump)
@@ -8,7 +8,7 @@ DUI_END_MESSAGE_MAP()
 RedisHelpUI::RedisHelpUI(const CDuiString& strXML, CPaintManagerUI* pm) : AbstraceUI(pm)
 {
     CDialogBuilder builder;
-    // ÕâÀï±ØÐë´«Èëm_PaintManager£¬²»È»×ÓXML²»ÄÜÊ¹ÓÃÄ¬ÈÏ¹ö¶¯ÌõµÈÐÅÏ¢¡£
+    // è¿™é‡Œå¿…é¡»ä¼ å…¥m_PaintManagerï¼Œä¸ç„¶å­XMLä¸èƒ½ä½¿ç”¨é»˜è®¤æ»šåŠ¨æ¡ç­‰ä¿¡æ¯ã€‚
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
     if( pContainer ) {
         this->Add(pContainer);
@@ -29,7 +29,7 @@ void RedisHelpUI::Initialize()
     if( pActiveXUI ) {
         IWebBrowser2* pWebBrowser = NULL;
         pActiveXUI->GetControl(IID_IWebBrowser2, (void**)&pWebBrowser);
-        // ºöÂÔjs´íÎó
+        // å¿½ç•¥jsé”™è¯¯
         pWebBrowser->put_Silent(true);
         if( pWebBrowser != NULL ) {
             pWebBrowser->Navigate(L"http://redis.io/commands",NULL,NULL,NULL,NULL);  

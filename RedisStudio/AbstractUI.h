@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 class AbstraceUI : public CContainerUI, public CNotifyPump
 {
@@ -26,7 +26,7 @@ public:
         return 0;
     }
 
-    // ÉèÖÃ´°¿Ú¾ä±ú
+    // è®¾ç½®çª—å£å¥æŸ„
     inline void SetHWND(HWND hwnd)
     {
         m_hWnd = hwnd;

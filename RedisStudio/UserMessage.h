@@ -1,8 +1,8 @@
-#pragma once
+ï»¿#pragma once
 
-#define WM_USER_CONNECTED         WM_USER + 1     // ³É¹¦Á¬½Ó
-#define WM_USER_UNCONNECT         WM_USER + 2     // Ê§°ÜÁ¬½Ó
-#define WM_USER_CONNECTING        WM_USER + 3     // Ê§°ÜÁ¬½Ó
+#define WM_USER_CONNECTED         WM_USER + 1     // æˆåŠŸè¿žæŽ¥
+#define WM_USER_UNCONNECT         WM_USER + 2     // å¤±è´¥è¿žæŽ¥
+#define WM_USER_CONNECTING        WM_USER + 3     // å¤±è´¥è¿žæŽ¥
 
 
 #define WM_USER_INFOUPDATE        WM_USER + 5     // info get 

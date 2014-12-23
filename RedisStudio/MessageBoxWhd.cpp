@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "MessageBoxWhd.h"
 #include <sstream>
 #include "Base/CharacterSet.h"

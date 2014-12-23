@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include <string>
 #include "ConnInfoSubWhd.h"
 #include "ConnInfoUI.h"
@@ -94,7 +94,7 @@ void ConnInfoSubWhd::OnClick( TNotifyUI& msg )
     if(msg.pSender->GetName() == _T("btn_conn_cancel"))
     {
         Close();
-		*m_needApply = false;
+        *m_needApply = false;
         return; 
     }
     else if (msg.pSender->GetName() == _T("btn_conn_save"))
@@ -109,14 +109,14 @@ void ConnInfoSubWhd::OnClick( TNotifyUI& msg )
             retVal = OnAltInfo();
         }    
         if (retVal) 
-	{
-		*m_needApply = true;
-	} 
-	else 
-	{
-		*m_needApply = false;
-	}
-	Close();
+        {
+            *m_needApply = true;
+        } 
+        else 
+        {
+            *m_needApply = false;
+        }
+        Close();
     }
 }
 
@@ -176,7 +176,6 @@ bool ConnInfoSubWhd::OnAltInfo()
 {
     std::string name = Base::CharacterSet::UnicodeToANSI(m_pEditName->GetText().GetData());
 
-    /// ×ÔśŻČĽłýżŐ¸ń
     CDuiString ipStr = m_pEditHost->GetText();
     ipStr.Replace(_T(" "), _T(""));
     std::string ip =  Base::CharacterSet::UnicodeToANSI(ipStr.GetData());

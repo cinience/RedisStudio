@@ -1,4 +1,4 @@
-#ifndef __UIMENU_H__
+ï»¿#ifndef __UIMENU_H__
 #define __UIMENU_H__
 
 #ifdef _MSC_VER
@@ -20,10 +20,10 @@ struct ContextMenuParam
         RemoveSubMenu = 2
     };
 
-    HWND        hWnd;         /// µ±Ç°´°¿Ú
-    int         iType;        /// ÊÂ¼şÀàĞÍ
+    HWND        hWnd;         /// å½“å‰çª—å£
+    int         iType;        /// äº‹ä»¶ç±»å‹
     CControlUI* pSender;
-    bool        bLeaf;        /// ÊÇ·ñÒ¶×Ó½Úµã²Ëµ¥
+    bool        bLeaf;        /// æ˜¯å¦å¶å­èŠ‚ç‚¹èœå•
     WPARAM      wParam;        // 1: remove all
                             // 2: remove the sub menu
     LPARAM      lParam;

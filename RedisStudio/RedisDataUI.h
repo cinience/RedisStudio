@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "stdafx.h"
 #include <string>
@@ -113,7 +113,7 @@ private:
     CEditUI*         m_pDataSizeEdit;
 
     CEditUI*         m_pPageCur;
-	CEditUI*         m_pPageTotal;
+    CEditUI*         m_pPageTotal;
     CButtonUI*       m_pPageFrist;
     CButtonUI*       m_pPageLast;
     CButtonUI*       m_pPageNext;
@@ -129,7 +129,7 @@ private:
 
     static const std::size_t m_PageSize = 100;
 
-    CTreeNodeUI*     m_pAssistNode;  // ¸¨Öúkey treeÓÒ¼ü²Ëµ¥£¬¸ÃÖµÎªµ±Ç°µã»÷ÓÒ¼üµÄ½Úµã
+    CTreeNodeUI*     m_pAssistNode;  // è¾…åŠ©key treeå³é”®èœå•ï¼Œè¯¥å€¼ä¸ºå½“å‰ç‚¹å‡»å³é”®çš„èŠ‚ç‚¹
     RedisDataStruct  m_RedisData;
     Base::Thread     m_Thread;
     std::set<int>    m_UpdateDbs;

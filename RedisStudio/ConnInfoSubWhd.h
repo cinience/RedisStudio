@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <map>
 #include <vector>
@@ -45,7 +45,7 @@ public:
     bool OnAltInfo();
 
 private:
-	bool*                         m_needApply;
+    bool*                         m_needApply;
     TDicTables*                   m_pdicServerInfo;
 
     CEditUI*                      m_pEditName;

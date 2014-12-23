@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "RedisClient.h"
 #include <stdarg.h>
 #include "../Base/CharacterSet.h"
@@ -119,7 +119,7 @@ bool RedisClient::keys(TSeqArrayResults& results)
             i++;
         }
     }
-	results.sort();
+    results.sort();
     freeReplyObject(reply);
     return retVal;
 }
@@ -164,7 +164,7 @@ redisReply* RedisClient::Command( const char* fmt, ... )
     {
         SetLastError(reply->str);
     }
-    if (reply==NULL || reply->type==REDIS_REPLY_ERROR)
+    if (reply==NULL)
     {
         if (reply != NULL) {
              m_fnDisConnect(GetLastError());
@@ -194,14 +194,32 @@ bool RedisClient::DatabasesNum(int& num)
 {
     bool retVal = false;
     redisReply* reply = Command("config get databases");
-    if (!reply) return retVal;
+    if (!reply) {   
+        return retVal;
+    }
 
     if (reply->type == REDIS_REPLY_ARRAY && reply->elements>1 )
     {
         retVal = true;
         num = atoi(reply->element[1]->str);
-    }
+        freeReplyObject(reply);
+    } else {
+        freeReplyObject(reply);
+        for (int idx = 0; idx<16; ++idx) {
+            reply = Command("SELECT %d", idx);
+            if (!reply) return false;
 
+            if (reply->type == REDIS_REPLY_STATUS)
+            {
+                retVal = true;
+                num = idx + 1;
+                freeReplyObject(reply);
+            } else {
+                freeReplyObject(reply);
+                break;
+            }   
+        }
+    }
     return retVal;
 }
 
