@@ -145,6 +145,20 @@ bool RedisClient::Type(const std::string& key, string& type)
     return true;
 }
 
+long long RedisClient::TTL(const std::string& key)
+{
+    bool retVal = false;
+	long long ttl = 0;
+    redisReply* reply = Command("TTL %s", key.c_str());
+    if (!reply) return ttl;
+    if (reply->type == REDIS_REPLY_INTEGER)
+    {
+		ttl = reply->integer;
+    }
+    freeReplyObject(reply);
+    return ttl;
+}
+
 void RedisClient::Quit()
 {
     Command("quit");

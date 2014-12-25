@@ -44,6 +44,8 @@ public:
 
     bool Type(const std::string& key, string& type);
 
+	long long TTL(const std::string& key);
+
     bool DatabasesNum(int& num);
 
     int  DatabasesNum();

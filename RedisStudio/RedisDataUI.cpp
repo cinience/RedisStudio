@@ -18,6 +18,8 @@ static const TCHAR* kDefaultText  = _T("");
 static const TCHAR* kKeyEditName  = _T("redisdata_key");
 static const TCHAR* kDataTypeName = _T("redisdata_type");
 static const TCHAR* kDataSizeName = _T("redisdata_size");
+static const TCHAR* kDataTTLName  = _T("redisdata_ttl");
+
 static const TCHAR* kRichEditName = _T("redisdata_value_rich");
 static const TCHAR* kDataListName = _T("redisdata_value");
 static const TCHAR* kKeysTreeName = _T("redisdata_treenode");
@@ -65,6 +67,7 @@ void RedisDataUI::Initialize()
     m_pKeyEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kKeyEditName));
     m_PTypeEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataTypeName));
     m_pDataSizeEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataSizeName));
+	m_pTTLEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataTTLName));
     m_pHorizontalLayout = dynamic_cast<CHorizontalLayoutUI*>(GetPaintMgr()->FindControl(kPageName));
 
     m_pPageCur = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kPageCurName));
@@ -507,7 +510,8 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
 
     if (!RedisClient::GetInstance().GetData(key, type, GetResult())) return;
     m_RedisData.type = Base::CharacterSet::ANSIToUnicode(type).c_str();
-    m_RedisData.size.Format(_T("%u"),GetResult().RowSize() );
+    m_RedisData.size.Format(_T("%u"), GetResult().RowSize() );
+	m_RedisData.ttl.Format(_T("%lld"), RedisClient::GetInstance().TTL(key));
     /// 预先显示数据类型等信息
     ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, NULL, NULL);
 
@@ -622,6 +626,7 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
     m_pKeyEdit->SetText(m_RedisData.key.GetData());
     m_PTypeEdit->SetText(m_RedisData.type.GetData());
     m_pDataSizeEdit->SetText(m_RedisData.size.GetData());
+	m_pTTLEdit->SetText(m_RedisData.ttl.GetData());
     m_pRichEdit->SetText(kDefaultText);    
     /// 如果是单元素(如string)，则一并直接更新到富文本框内 
     if (GetResult().RowSize() == 1 && GetResult().ColumnSize()==1)
@@ -684,7 +689,7 @@ void RedisDataUI::SetRichEditText(const std::string& text)
     std::string styleText = text;
     int curSel = m_pComboFormat->GetCurSel();
 
-    /// 没必要用面向对象的设计模式，直接if else搞定，简单直接
+    /// 必要时重构
     if ( curSel == kAutoFomat )
     {
         if (TryJsonFomat(styleText) || TryXMLFormat(styleText)) {} 

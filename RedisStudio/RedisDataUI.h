@@ -30,6 +30,7 @@ public:
         CDuiString key;
         CDuiString type;
         CDuiString size;
+		CDuiString ttl;
         RedisResult result;
     };
 
@@ -111,6 +112,7 @@ private:
     CEditUI*         m_pKeyEdit;
     CEditUI*         m_PTypeEdit;
     CEditUI*         m_pDataSizeEdit;
+	CEditUI*         m_pTTLEdit;
 
     CEditUI*         m_pPageCur;
     CEditUI*         m_pPageTotal;
