@@ -39,14 +39,15 @@ static const TCHAR* kKeyOperatorDelMenuName   = _T("menu_key_del");
 
 
 DUI_BEGIN_MESSAGE_MAP(RedisDataUI, CNotifyPump)
-DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
-DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMCLICK,OnItemClick)
+DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK, OnClick)
+DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMDBCLICK, OnItemDBClick)
+DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMCLICK, OnItemClick)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMRCLICK, OnMenuWakeup)
-DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE,OnItemActive)
+DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE, OnItemActive)
 DUI_END_MESSAGE_MAP()
 
 
-RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm),m_oEventListHeader(true),m_oEventKey(true)
+RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false)
 {
     CDialogBuilder builder;
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
@@ -166,6 +167,9 @@ LRESULT RedisDataUI::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPara
     case WM_USER_TREEADD:
       lRes = OnKeyAdd(GetHWND(), wParam, lParam);
       break;
+    case WM_USER_TREEVERBOSE:
+      lRes = OnKeyVerbose(GetHWND(), wParam, lParam);
+      break;
     case WM_USER_DATAVERBOSE:
       lRes = OnDataVerbose(GetHWND(), wParam, lParam);
       break;
@@ -196,6 +200,42 @@ void RedisDataUI::OnClick( TNotifyUI& msg )
         OnCommit(msg);
     }
 
+}
+
+void RedisDataUI::OnItemDBClick(TNotifyUI &msg)
+{
+    CDuiString name = msg.pSender->GetClass();
+    CTreeNodeUI        treeNodeUI;
+    if (name != treeNodeUI.GetClass())
+    {
+        return;
+    }
+
+    CTreeNodeUI* pActiveNode = dynamic_cast<CTreeNodeUI*>(msg.pSender);
+    if (!pActiveNode || pActiveNode->GetParentNode() == m_pRootNode) return;
+
+    if (m_bIsKeyRender) return;
+
+    /// 非叶子节点并未加载子节点，则加载子节点
+    if (pActiveNode->GetTag() != 0 && !pActiveNode->IsHasChild()) {
+        if (m_Thread.isRunning()) {
+            UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
+            return;
+        }
+        
+        m_pAssistNode = pActiveNode;
+        m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroudWorkForRenderLevel));
+        try
+        {
+            m_Thread.start(*m_pWork);
+        }
+        catch (std::exception& ex)
+        {
+            /// who care ?
+            (void)(ex);
+        }
+        return;
+    } 
 }
 
 void RedisDataUI::OnItemClick( TNotifyUI &msg )
@@ -254,6 +294,12 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
     CTreeNodeUI* pActiveNode = dynamic_cast<CTreeNodeUI*>(msg.pSender);
     if (!pActiveNode) return;
 
+    if (m_Thread.isRunning())
+    {
+        UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
+        return ;
+    }
+
     /// 首层db节点
     if (pActiveNode->GetParentNode() == m_pRootNode) return;
 
@@ -262,46 +308,9 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
         return ;
     }
 
-    /// 非叶子节点并未加载子节点，则加载子节点
-    if (pActiveNode->GetTag() != 0 && !pActiveNode->IsHasChild()) {
-        int dbNum = 0;
-        CTreeNodeUI* pPNode = pActiveNode;
-        std::vector<string> vec;
-        while (pPNode)
-        {
-            if (pPNode->GetParentNode() == m_pRootNode)
-            {
-                dbNum = pPNode->GetTag() - 1;
-                break;
-            }
-            std::string key = Base::CharacterSet::UnicodeToANSI(pPNode->GetItemText().GetData());
-            vec.push_back(key);
-            pPNode = pPNode->GetParentNode();
-        }
-        TkeyTree *item = &m_oKeyRoot[dbNum];
-        for (int idx = vec.size() -1; idx >=0 ; --idx) 
-        {
-            item = static_cast<TkeyTree*>(item->find(vec[idx])->second);
-        }
-        TkeyTree::const_iterator it = item->begin();
-        TkeyTree::const_iterator itend = item->end();
-        for ( ; it != itend; ++it) 
-        {
-            CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
-            /* 如果是叶子节点，则tag为0 */
-            pnode->SetTag(it->second == NULL ? 0 : 1);
-            TreeKeyContactData* pData = new TreeKeyContactData;
-            pData->pPNode = pActiveNode;
-            pData->pNode = pnode;
-            OnKeyAdd(GetHWND(), (WPARAM)pData, NULL);
-        }
-        return;
-    }
-
-    if (m_Thread.isRunning())
+    if (pActiveNode->GetTag() != 0)
     {
-         UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
-         return ;
+        return;
     }
 
     int dbNum = -1;
@@ -446,6 +455,8 @@ void RedisDataUI::DoPaginateWork()
 
 void RedisDataUI::DoRefreshKeysWork()
 {
+    if (m_Thread.isRunning()) return;
+
     m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroundWorkForRefreshKeys));
     try
     {
@@ -460,6 +471,8 @@ void RedisDataUI::DoRefreshKeysWork()
 
 void RedisDataUI::DoRefreshValuesWork()
 {
+    if (m_Thread.isRunning()) return;
+
     m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroundWorkForRefreshValues));
     try
     {
@@ -481,6 +494,59 @@ std::size_t RedisDataUI::GetMaxPage()
 RedisResult& RedisDataUI::GetResult()
 {
     return m_RedisData.result;
+}
+
+void RedisDataUI::BackgroudWorkForRenderLevel(void)
+{
+    /// 在OnKeyAdd pNode->GetFolderButton()->Selected(true) 会自动触发dbclick事件 所以此处要屏蔽自动产生的
+    int dbNum = 0;
+    CTreeNodeUI* pPNode = m_pAssistNode;
+    std::vector<string> vec;
+    while (pPNode)
+    {
+        if (pPNode->GetParentNode() == m_pRootNode)
+        {
+            dbNum = pPNode->GetTag() - 1;
+            break;
+        }
+        std::string key = Base::CharacterSet::UnicodeToANSI(pPNode->GetItemText().GetData());
+        vec.push_back(key);
+        pPNode = pPNode->GetParentNode();
+    }
+    TkeyTree *item = &m_oKeyRoot[dbNum];
+    for (int idx = vec.size() -1; idx >=0 ; --idx) 
+    {
+        item = static_cast<TkeyTree*>(item->find(vec[idx])->second);
+    }
+    TkeyTree::const_iterator it = item->begin();
+    TkeyTree::const_iterator itend = item->end();
+    /// 先加载叶子节点
+    for ( ; it != itend; ++it) 
+    {
+        if (it->second != NULL)  continue;
+
+        CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
+        /* 如果是叶子节点，则tag为0 */
+        pnode->SetTag(it->second == NULL ? 0 : 1);
+        TreeKeyContactData* pData = new TreeKeyContactData;
+        pData->pPNode = m_pAssistNode;
+        pData->pNode = pnode;
+        ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+    }
+    /// 加载目录节点
+    it = item->begin();
+    for ( ; it != itend; ++it) 
+    {
+        if (it->second == NULL) continue;
+        CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
+        /* 如果是叶子节点，则tag为0 */
+        pnode->SetTag(it->second == NULL ? 0 : 1);
+        TreeKeyContactData* pData = new TreeKeyContactData;
+        pData->pPNode = m_pAssistNode;
+        pData->pNode = pnode;
+        ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+    }
+    ::PostMessage(GetHWND(), WM_USER_TREEVERBOSE, NULL, NULL);
 }
 
 void RedisDataUI::BackgroundWorkForRefreshKeys(void)
@@ -602,7 +668,7 @@ void RedisDataUI::SetPageValues( )
     const std::size_t cur = atoi(pageStr.c_str());
     if (cur<=0 || cur>GetMaxPage())
     {
-      return ;
+        return ;
     }
 
     std::size_t maxIndex = cur*pagesize>GetResult().RowSize() ? GetResult().RowSize(): cur*pagesize;
@@ -650,13 +716,14 @@ LRESULT RedisDataUI::OnKeyAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
     std::auto_ptr<TreeKeyContactData> pData(reinterpret_cast<TreeKeyContactData*>(wParam));
     CTreeNodeUI* pPNode = pData->pPNode;
     CTreeNodeUI* pNode  = pData->pNode;
-    pPNode->AddChildNode(pNode);    
-    /// 曲线救国，TreeView默认不展开节点4
-    /* duilib已经修复该bug 2014-12-25 */
-    //pPNode->GetFolderButton()->Selected(true);
-    pPNode->GetTreeView()->SetItemExpand(false, pPNode);
-    //pPNode->NeedUpdate();
-    //m_oEventKey.set();
+
+    m_bIsKeyRender = true;
+    if (pNode->GetTag() != 0)
+    {
+        pNode->GetFolderButton()->Selected(true);
+    }
+    pPNode->AddChildNode(pNode);
+    m_bIsKeyRender = false;
     return TRUE;
 }
 
@@ -675,6 +742,15 @@ LRESULT RedisDataUI::OnKeyDel( HWND hwnd, WPARAM wParam, LPARAM lParam )
         pPNode->Remove(pNode);
         pNode = pPNode;
     }
+    return TRUE;
+}
+
+LRESULT RedisDataUI::OnKeyVerbose(HWND hwnd, WPARAM wParam, LPARAM lParam)
+{
+    m_bIsKeyRender = true;
+    m_pAssistNode->GetFolderButton()->Selected(false);
+    m_pAssistNode->GetFolderButton()->SetEnabled(true);
+    m_bIsKeyRender = false;
     return TRUE;
 }
 
@@ -731,6 +807,7 @@ bool RedisDataUI::OnMenuClick( void* param )
         m_UpdateDbs.insert(m_pAssistNode->GetTag() - 1);
         CTreeNodeUI* pParentNode = m_pRootNode;
         CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(m_pAssistNode->GetTag() - 1);
+        /// 同步删除，数据量大时会卡顿
         DelChildNode(pKeyNode);
         DoRefreshKeysWork();
     }
@@ -818,7 +895,7 @@ void RedisDataUI::ReleaseObject(std::size_t idx)
         {
             delete (TkeyTree*)*it;
         }
-		m_oObjPool[idx].clear();
+        m_oObjPool[idx].clear();
     }
 }
 
@@ -839,9 +916,9 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
     else 
     {
         pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='tree_expand.png' source='0,0,16,16'\" normalimage=\"file='tree_expand.png' source='16,0,32,16'\""));
-        pNodeTmp->SetAttribute(_T("itemattr"), _T("bkimage=\"file='TreeStandard.png' source='112,0,128,16' dest='5,3,21,19'\" valign=\"left\" font=\"5\" textpadding=\"25,3,0,0\""));
-    }
-    
+        pNodeTmp->SetAttribute(_T("itemattr"), _T("bkimage=\"file='TreeStandard.png' source='112,0,128,16' dest='5,3,21,19'\" valign=\"left\" font=\"5\" textpadding=\"25,3,0,0\""));		
+    }    
+    pNodeTmp->GetFolderButton()->SetEnabled(false);
     // if (isLeaf) pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
     // else pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,0,128,16'\" normalimage=\"file='TreeStandard.png' source='112,16,128,32'\""));
     return pNodeTmp;

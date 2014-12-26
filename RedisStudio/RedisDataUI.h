@@ -25,7 +25,7 @@ struct TreeKeyContactData
 class RedisDataUI : public AbstraceUI
 {
 public:
-	typedef std::map< std::string, void * > TkeyTree;
+    typedef std::map< std::string, void * > TkeyTree;
 
     struct RedisDataStruct
     {
@@ -59,6 +59,8 @@ public:
 
     virtual void OnItemClick( TNotifyUI &msg );
 
+    virtual void OnItemDBClick( TNotifyUI &msg );
+
     virtual void OnItemActive( TNotifyUI &msg );
 
     virtual void OnMenuWakeup( TNotifyUI &msg );
@@ -76,6 +78,8 @@ public:
     LRESULT OnKeyAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
     LRESULT OnKeyDel(HWND hwnd, WPARAM wParam, LPARAM lParam);
+
+    LRESULT OnKeyVerbose(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
     LRESULT OnDataVerbose(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
@@ -101,6 +105,8 @@ public:
     void    DoRefreshKeysWork();
 
     void    DoRefreshValuesWork();
+
+    void    BackgroudWorkForRenderLevel(void);
 
     void    BackgroundWorkForRefreshKeys(void);
 
@@ -135,6 +141,8 @@ private:
 
     Base::Event      m_oEventListHeader;
     Base::Event      m_oEventKey;
+
+    bool             m_bIsKeyRender;
 
     static const std::size_t m_PageSize = 100;
     std::vector<std::list<TkeyTree*>> m_oObjPool;

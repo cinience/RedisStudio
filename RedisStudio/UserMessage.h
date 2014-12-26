@@ -13,6 +13,7 @@
 #define WM_USER_TREEADD           WM_USER + 20     // 
 #define WM_USER_DATAADD           WM_USER + 21     // 
 
+#define WM_USER_TREEVERBOSE       WM_USER + 30
 #define WM_USER_DATAVERBOSE       WM_USER + 31
 
 #define WM_USER_MENU_KEYDEL       WM_USER + 41
