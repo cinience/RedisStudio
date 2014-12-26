@@ -17,7 +17,6 @@ RedisClient::~RedisClient()
     
 }
 
-
 RedisClient& RedisClient::GetInstance()
 {
     static RedisClient client;
@@ -98,13 +97,13 @@ bool RedisClient::Info(std::string& results)
     return retVal;
 }
 
-bool RedisClient::keys(TSeqArrayResults& results)
+bool RedisClient::keys(const std::string& matchstr, TSeqArrayResults& results)
 {
     bool retVal = false;
 
     if (!IsConnected()) return retVal;
 
-    redisReply* reply = Command("KEYS *");    
+    redisReply* reply = Command("KEYS %s", matchstr.c_str());    
     if (!reply) return retVal;
 
     if (reply->type == REDIS_REPLY_ARRAY)
@@ -147,15 +146,12 @@ bool RedisClient::Type(const std::string& key, string& type)
 
 long long RedisClient::TTL(const std::string& key)
 {
-    bool retVal = false;
-	long long ttl = 0;
-    redisReply* reply = Command("TTL %s", key.c_str());
-    if (!reply) return ttl;
-    if (reply->type == REDIS_REPLY_INTEGER)
+    long long ttl = 0;
+    ScopedRedisReply reply(Command("TTL %s", key.c_str()));
+    if (!reply.IsNull() && reply->type == REDIS_REPLY_INTEGER)
     {
-		ttl = reply->integer;
+        ttl = reply->integer;
     }
-    freeReplyObject(reply);
     return ttl;
 }
 
@@ -253,6 +249,17 @@ bool RedisClient::SelectDB( int dbindex )
     }
     freeReplyObject(reply);
     return true;
+}
+
+long long RedisClient::DbSize() 
+{
+    long long dbsize = 0;
+    ScopedRedisReply reply(Command("DBSIZE"));
+    if (!reply.IsNull() && reply->type == REDIS_REPLY_INTEGER)
+    {
+        dbsize = reply->integer;
+    }
+    return dbsize;
 }
 
 bool RedisClient::GetConfig(TDicConfig& dicConfig)

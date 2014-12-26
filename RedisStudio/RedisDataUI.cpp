@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "RedisDataUI.h"
 #include "Base/String.h"
 #include "UserMessage.h"
@@ -60,6 +60,14 @@ RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):Abstra
     }
 }
 
+RedisDataUI::~RedisDataUI()
+{
+    for (size_t idx = 0; idx < m_oObjPool.size(); ++idx)
+    {
+        ReleaseObject(idx);
+    }
+}
+
 void RedisDataUI::Initialize()
 {
     m_pList = dynamic_cast<CListUI*>(GetPaintMgr()->FindControl(kDataListName)); 
@@ -67,7 +75,7 @@ void RedisDataUI::Initialize()
     m_pKeyEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kKeyEditName));
     m_PTypeEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataTypeName));
     m_pDataSizeEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataSizeName));
-	m_pTTLEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataTTLName));
+    m_pTTLEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataTTLName));
     m_pHorizontalLayout = dynamic_cast<CHorizontalLayoutUI*>(GetPaintMgr()->FindControl(kPageName));
 
     m_pPageCur = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kPageCurName));
@@ -78,6 +86,8 @@ void RedisDataUI::Initialize()
     m_pPageFinal = dynamic_cast<CButtonUI*>(GetPaintMgr()->FindControl(kPageFinalName));
     m_pCommit = dynamic_cast<CButtonUI*>(GetPaintMgr()->FindControl(kCommitBtnName));
     m_pComboFormat = dynamic_cast<CComboUI*>(GetPaintMgr()->FindControl(kDataFomatName));
+
+    m_pRootNode = dynamic_cast<CTreeNodeUI*>(GetPaintMgr()->FindControl(kKeysTreeName));
 }
 
 int RedisDataUI::GetIndex()
@@ -92,16 +102,27 @@ CDuiString RedisDataUI::GetVirtualwndName()
 
 void RedisDataUI::RefreshWnd()
 {
-    CTreeNodeUI* pKeyNode = dynamic_cast<CTreeNodeUI*>(GetPaintMgr()->FindControl(kKeysTreeName));
+    if (!m_UpdateDbs.empty()) {
+        return;
+    }
+    CTreeNodeUI* pKeyNode = m_pRootNode;
     static CDuiString oldTitle = pKeyNode->GetItemText();
     DelChildNode(pKeyNode);
     int databases = RedisClient::GetInstance().DatabasesNum();
     m_UpdateDbs.clear();
+    m_oKeyRoot.clear();
+    for (std::size_t idx = 0; idx < m_oObjPool.size(); ++idx)
+    {
+        ReleaseObject(idx);
+    }
+    m_oObjPool.clear();
     for (int i=0; i<databases; ++i)
     {
+      int databases = RedisClient::GetInstance().SelectDB(i);
+      long long dbsize =  RedisClient::GetInstance().DbSize();
       m_UpdateDbs.insert(i);
       CDuiString theIndex;
-      theIndex.Format(_T("%d"), i);
+      theIndex.Format(_T("%d (%lld)"), i, dbsize);
       CDuiString newTitle = oldTitle;
       newTitle.Replace(_T("$"), theIndex.GetData());
       CTreeNodeUI* pNode = new CTreeNodeUI();
@@ -120,7 +141,8 @@ void RedisDataUI::RefreshWnd()
 
       pKeyNode->AddChildNode(pNode);
     }
-
+    m_oObjPool.resize(databases);
+    m_oKeyRoot.resize(databases);
     DoRefreshKeysWork();
 }
 
@@ -205,7 +227,7 @@ void RedisDataUI::OnMenuWakeup( TNotifyUI &msg )
     bool needMenu = false;
     STRINGorID res(_T(""));
     /// 父节点
-    if (pTreeNodeUI->GetTag() > 0)
+    if (pTreeNodeUI->GetParentNode() == m_pRootNode)
     {
         STRINGorID xml(_T("DBOperatorMenu.xml"));
         res = xml;
@@ -231,10 +253,51 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
 {
     CTreeNodeUI* pActiveNode = dynamic_cast<CTreeNodeUI*>(msg.pSender);
     if (!pActiveNode) return;
-    /// 非叶子节点不处理 
-    if (pActiveNode->IsHasChild()) return ;
+
     /// 首层db节点
-    if (pActiveNode->GetTag() > 0) return;
+    if (pActiveNode->GetParentNode() == m_pRootNode) return;
+
+    /// 非叶子节点并已加载子节点
+    if (pActiveNode->GetTag() != 0 && pActiveNode->IsHasChild()) {
+        return ;
+    }
+
+    /// 非叶子节点并未加载子节点，则加载子节点
+    if (pActiveNode->GetTag() != 0 && !pActiveNode->IsHasChild()) {
+        int dbNum = 0;
+        CTreeNodeUI* pPNode = pActiveNode;
+        std::vector<string> vec;
+        while (pPNode)
+        {
+            if (pPNode->GetParentNode() == m_pRootNode)
+            {
+                dbNum = pPNode->GetTag() - 1;
+                break;
+            }
+            std::string key = Base::CharacterSet::UnicodeToANSI(pPNode->GetItemText().GetData());
+            vec.push_back(key);
+            pPNode = pPNode->GetParentNode();
+        }
+        TkeyTree *item = &m_oKeyRoot[dbNum];
+        for (int idx = vec.size() -1; idx >=0 ; --idx) 
+        {
+            item = static_cast<TkeyTree*>(item->find(vec[idx])->second);
+        }
+        TkeyTree::const_iterator it = item->begin();
+        TkeyTree::const_iterator itend = item->end();
+        for ( ; it != itend; ++it) 
+        {
+            CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
+            /* 如果是叶子节点，则tag为0 */
+            pnode->SetTag(it->second == NULL ? 0 : 1);
+            TreeKeyContactData* pData = new TreeKeyContactData;
+            pData->pPNode = pActiveNode;
+            pData->pNode = pnode;
+            OnKeyAdd(GetHWND(), (WPARAM)pData, NULL);
+        }
+        return;
+    }
+
     if (m_Thread.isRunning())
     {
          UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
@@ -243,9 +306,10 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
 
     int dbNum = -1;
     CTreeNodeUI* pDBNode = pActiveNode->GetParentNode();
+
     while (pDBNode)
     {
-        if (pDBNode->GetTag()>0)
+        if (pDBNode->GetParentNode() == m_pRootNode)
         {
             dbNum = pDBNode->GetTag()-1;
             break;
@@ -423,73 +487,70 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
 {
     if (!RedisClient::GetInstance().IsConnected()) return;
 
-    CTreeNodeUI* pParentNode = static_cast<CTreeNodeUI*>(GetPaintMgr()->FindControl(kKeysTreeName));
+    CTreeNodeUI* pParentNode = m_pRootNode;
+    
     for (int nodeIdx=0; nodeIdx<pParentNode->GetCountChild(); ++nodeIdx)
     {
         CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(nodeIdx);
         
         if (m_UpdateDbs.find(nodeIdx) == m_UpdateDbs.end()) continue;
+
         DelChildNode(pKeyNode);
         if (!RedisClient::GetInstance().SelectDB(nodeIdx)) continue;
-        
+        /// 重新填充dbsize
+        long long dbsize =  RedisClient::GetInstance().DbSize();;
+        CDuiString theIndex;
+        theIndex.Format(_T("%d (%lld)"), nodeIdx, dbsize);
+        CDuiString newTitle = pParentNode->GetItemText();
+        newTitle.Replace(_T("$"), theIndex.GetData());
+        pKeyNode->SetItemText(newTitle);
+
         RedisClient::TSeqArrayResults results;
         //results.sort();
-        if (!RedisClient::GetInstance().keys(results)) return;
+        if (!RedisClient::GetInstance().keys("*", results)) return;
         RedisClient::TSeqArrayResults::const_iterator it    = results.begin();
         RedisClient::TSeqArrayResults::const_iterator itend = results.end();
-
-        for (; it!=itend; ++it)
+        m_oKeyRoot[nodeIdx].clear();
+        ReleaseObject(nodeIdx);
+        for (; it != itend; ++it)
         {
             std::string theValue = *it;
-            CTreeNodeUI* pPNode = pKeyNode;
-            /*
-            if (results.size() > 10000) {
-                TreeKeyContactData* pData = new TreeKeyContactData;
-                pData->pPNode = pPNode;
-                pData->pNode = NewNode(theValue, true);
-                ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
-                m_oEventKey.wait();
-                continue;
-            }
-            */
             Base::String::TSeqStr seq;
             Base::String::Split(theValue, ":", seq);
             seq[seq.size()-1] = theValue;
-
-            for (std::size_t idx=0; idx<seq.size()-1; ++idx)
+            TkeyTree* curnode = &m_oKeyRoot[nodeIdx];
+            for (std::size_t idx=0; idx < seq.size()-1; ++idx)
             {
-                CDuiString duiStr = Base::CharacterSet::ANSIToUnicode(seq[idx]).c_str();
-                bool hasFind = false;
-                for (int j=0; j<pPNode->GetCountChild(); ++j)
-                {
-                    CTreeNodeUI* pTempNode = pPNode->GetChildNode(j);
-                    if (pTempNode->GetItemText() == duiStr && pTempNode->IsHasChild())
-                    {
-                        pPNode = pTempNode;
-                        hasFind = true;
-                        break;
-                    }
-                }
-                if (hasFind)
-                {
-                    continue;
-                }
-                else 
-                {
-                    CTreeNodeUI* pnode = NewNode(seq[idx]);
-                    TreeKeyContactData* pData = new TreeKeyContactData;
-                    pData->pPNode = pPNode;
-                    pData->pNode = pnode;
-                    ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
-                    m_oEventKey.wait();
-                    pPNode = pnode;
+                TkeyTree::iterator it = curnode->find(seq[idx]);
+                if (it == curnode->end()) {
+                    TkeyTree *item = new TkeyTree;	
+                    m_oObjPool[nodeIdx].push_back(item);
+                    curnode->insert(std::pair<std::string, void*>(seq[idx], item));
+                    curnode = item;
+                } else {
+                    curnode = static_cast<TkeyTree *>(it->second);
                 }
             }
+            TkeyTree *item = NULL;	
+            curnode->insert(std::pair<std::string, void*>(seq[seq.size()-1], item));
+        }
+
+        TkeyTree::const_iterator treeit = m_oKeyRoot[nodeIdx].begin();
+        TkeyTree::const_iterator treeitend = m_oKeyRoot[nodeIdx].end();
+        for (; treeit != treeitend; ++treeit)
+        {
+            std::string theValue = treeit->first;
+            CTreeNodeUI* pPNode = pKeyNode;
+
+            //CDuiString duiStr = Base::CharacterSet::ANSIToUnicode(treeit->first).c_str();			
+            CTreeNodeUI* pnode = NewNode(theValue, treeit->second == NULL);
+            /* 如果是叶子节点，则tag为0 */
+            pnode->SetTag(treeit->second == NULL ? 0 : 1);
             TreeKeyContactData* pData = new TreeKeyContactData;
             pData->pPNode = pPNode;
-            pData->pNode = NewNode(theValue, true);
+            pData->pNode = pnode;
             ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
-            m_oEventKey.wait();
+            //m_oEventKey.wait();
         }
     }
 }
@@ -511,7 +572,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
     if (!RedisClient::GetInstance().GetData(key, type, GetResult())) return;
     m_RedisData.type = Base::CharacterSet::ANSIToUnicode(type).c_str();
     m_RedisData.size.Format(_T("%u"), GetResult().RowSize() );
-	m_RedisData.ttl.Format(_T("%lld"), RedisClient::GetInstance().TTL(key));
+    m_RedisData.ttl.Format(_T("%lld"), RedisClient::GetInstance().TTL(key));
     /// 预先显示数据类型等信息
     ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, NULL, NULL);
 
@@ -590,11 +651,12 @@ LRESULT RedisDataUI::OnKeyAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
     CTreeNodeUI* pPNode = pData->pPNode;
     CTreeNodeUI* pNode  = pData->pNode;
     pPNode->AddChildNode(pNode);    
-    /// 曲线救国，TreeView默认不展开节点
-    pPNode->GetFolderButton()->Selected(true);
+    /// 曲线救国，TreeView默认不展开节点4
+    /* duilib已经修复该bug 2014-12-25 */
+    //pPNode->GetFolderButton()->Selected(true);
     pPNode->GetTreeView()->SetItemExpand(false, pPNode);
-    pPNode->NeedUpdate();
-    m_oEventKey.set();
+    //pPNode->NeedUpdate();
+    //m_oEventKey.set();
     return TRUE;
 }
 
@@ -626,7 +688,7 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
     m_pKeyEdit->SetText(m_RedisData.key.GetData());
     m_PTypeEdit->SetText(m_RedisData.type.GetData());
     m_pDataSizeEdit->SetText(m_RedisData.size.GetData());
-	m_pTTLEdit->SetText(m_RedisData.ttl.GetData());
+    m_pTTLEdit->SetText(m_RedisData.ttl.GetData());
     m_pRichEdit->SetText(kDefaultText);    
     /// 如果是单元素(如string)，则一并直接更新到富文本框内 
     if (GetResult().RowSize() == 1 && GetResult().ColumnSize()==1)
@@ -667,6 +729,9 @@ bool RedisDataUI::OnMenuClick( void* param )
     {
         m_UpdateDbs.clear();
         m_UpdateDbs.insert(m_pAssistNode->GetTag() - 1);
+        CTreeNodeUI* pParentNode = m_pRootNode;
+        CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(m_pAssistNode->GetTag() - 1);
+        DelChildNode(pKeyNode);
         DoRefreshKeysWork();
     }
     else if (name == kKeyOperatorDelMenuName)
@@ -743,6 +808,20 @@ bool RedisDataUI::TryHexFormat( std::string& text )
     return true;
 }
 
+void RedisDataUI::ReleaseObject(std::size_t idx)
+{
+    if (m_oObjPool.size() > idx) 
+    {
+        std::list<TkeyTree*>::const_iterator it = m_oObjPool[idx].begin();
+        std::list<TkeyTree*>::const_iterator itend = m_oObjPool[idx].end();
+        for ( ; it != itend; ++it)
+        {
+            delete (TkeyTree*)*it;
+        }
+		m_oObjPool[idx].clear();
+    }
+}
+
 CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
 {
     CTreeNodeUI* pNodeTmp = new CTreeNodeUI;
@@ -772,13 +851,14 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
  {
      /// nm,用这种方式都删不掉，叼代码
      //pNodelist->SetDelayedDestroy(false);
-     //pNodelist->RemoveAll();
+     //pNode->RemoveAll();
      //int cs = pNodelist->GetCountChild();
      //for (int i=0; i<cs; ++i)
      //{
      //    pNodelist->Remove(pNodelist->GetChildNode(i));
      //}
      //cs = pNodelist->GetCountChild();
+    
      /// 删除所有节点
      CStdPtrArray myArray = pNode->GetTreeNodes();
      for (int i=0; i<myArray.GetSize(); ++i)

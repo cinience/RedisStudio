@@ -14,6 +14,7 @@ typedef void (* callback)(const CDuiString& );
 
 class RedisResult;
 
+/// 恶心的单例，有空重构 
 class RedisClient
 {
 public:
@@ -38,19 +39,21 @@ public:
 
     bool Info(std::string& results);
 
-    bool keys(TSeqArrayResults& results);
+    bool keys(const std::string &, TSeqArrayResults& results);
 
     bool Exists(const std::string& key);
 
     bool Type(const std::string& key, string& type);
 
-	long long TTL(const std::string& key);
+    long long TTL(const std::string& key);
 
     bool DatabasesNum(int& num);
 
     int  DatabasesNum();
 
     bool SelectDB(int dbindex);
+
+    long long DbSize();
 
     bool GetConfig(TDicConfig& dicConfig);
 

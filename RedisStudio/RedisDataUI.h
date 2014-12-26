@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include <string>
 #include <set>
+#include <list>
 
 #include "Base/Event.h"
 #include "Base/Thread.h"
@@ -24,17 +25,21 @@ struct TreeKeyContactData
 class RedisDataUI : public AbstraceUI
 {
 public:
+	typedef std::map< std::string, void * > TkeyTree;
+
     struct RedisDataStruct
     {
         int        db;
         CDuiString key;
         CDuiString type;
         CDuiString size;
-		CDuiString ttl;
+        CDuiString ttl;
         RedisResult result;
     };
 
     RedisDataUI(const CDuiString& strXML, CPaintManagerUI* pm);
+
+    ~RedisDataUI();
 
     void Initialize();
 
@@ -102,6 +107,8 @@ public:
     void    BackgroundWorkForRefreshValues(void);
 
 private:
+    void ReleaseObject(std::size_t idx);
+
     CTreeNodeUI* NewNode(const string& text, bool isLeaf=false);
 
     void         DelChildNode(CTreeNodeUI* pNode);
@@ -112,7 +119,7 @@ private:
     CEditUI*         m_pKeyEdit;
     CEditUI*         m_PTypeEdit;
     CEditUI*         m_pDataSizeEdit;
-	CEditUI*         m_pTTLEdit;
+    CEditUI*         m_pTTLEdit;
 
     CEditUI*         m_pPageCur;
     CEditUI*         m_pPageTotal;
@@ -130,7 +137,9 @@ private:
     Base::Event      m_oEventKey;
 
     static const std::size_t m_PageSize = 100;
-
+    std::vector<std::list<TkeyTree*>> m_oObjPool;
+    std::vector<TkeyTree>         m_oKeyRoot;
+    CTreeNodeUI*     m_pRootNode;
     CTreeNodeUI*     m_pAssistNode;  // 辅助key tree右键菜单，该值为当前点击右键的节点
     RedisDataStruct  m_RedisData;
     Base::Thread     m_Thread;
