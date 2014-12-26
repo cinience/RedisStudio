@@ -139,7 +139,11 @@ void RedisDataUI::RefreshWnd()
       pNode->SetTag(i+1);
       pNode->SetAttribute(_T("itemattr"), _T("valign=\"vcenter\" font=\"5\" textpadding=\"5,3,0,0\""));
       pNode->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='1_close.png' source='0,0,0,0'\" normalimage=\"file='1_open.png' source='0,0,0,0'\""));
-
+      /// 设置为收缩并禁用
+      m_bIsKeyRender = true;
+      pNode->GetFolderButton()->Selected(true);
+      pNode->GetFolderButton()->SetEnabled(false);
+      m_bIsKeyRender = false;
       pKeyNode->AddChildNode(pNode);
     }
     m_oObjPool.resize(databases);
@@ -212,7 +216,7 @@ void RedisDataUI::OnItemDBClick(TNotifyUI &msg)
     }
 
     CTreeNodeUI* pActiveNode = dynamic_cast<CTreeNodeUI*>(msg.pSender);
-    if (!pActiveNode || pActiveNode->GetParentNode() == m_pRootNode) return;
+    if (!pActiveNode) return;
 
     if (m_bIsKeyRender) return;
 
@@ -344,12 +348,7 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
 void RedisDataUI::OnItemActiveForList(  TNotifyUI &msg  )
 {
     CListTextElementUI* pListElement = dynamic_cast<CListTextElementUI*>(msg.pSender);
-    ///LPCTSTR pstr;
-    ///if ((pstr = pListElement->GetText(1)) == NULL)
-    ///{
-    ///   pstr = pListElement->GetText(0);
-    ///}
-    ///std::string text = Base::CharacterSet::UnicodeToANSI(pstr);
+    if (pListElement == NULL) return;
     
     std::size_t curPage = atoi(Base::CharacterSet::UnicodeToANSI(m_pPageCur->GetText().GetData()).c_str());
     
@@ -500,52 +499,91 @@ void RedisDataUI::BackgroudWorkForRenderLevel(void)
 {
     /// 在OnKeyAdd pNode->GetFolderButton()->Selected(true) 会自动触发dbclick事件 所以此处要屏蔽自动产生的
     int dbNum = 0;
-    CTreeNodeUI* pPNode = m_pAssistNode;
-    std::vector<string> vec;
-    while (pPNode)
+  
+    /// 加载首层 
+    if (m_pAssistNode->GetParentNode() == m_pRootNode)
     {
-        if (pPNode->GetParentNode() == m_pRootNode)
+        dbNum = m_pAssistNode->GetTag() - 1;
+        TkeyTree::const_iterator treeit = m_oKeyRoot[dbNum].begin();
+        TkeyTree::const_iterator treeitend = m_oKeyRoot[dbNum].end();
+        for (; treeit != treeitend; ++treeit)
         {
-            dbNum = pPNode->GetTag() - 1;
-            break;
-        }
-        std::string key = Base::CharacterSet::UnicodeToANSI(pPNode->GetItemText().GetData());
-        vec.push_back(key);
-        pPNode = pPNode->GetParentNode();
-    }
-    TkeyTree *item = &m_oKeyRoot[dbNum];
-    for (int idx = vec.size() -1; idx >=0 ; --idx) 
-    {
-        item = static_cast<TkeyTree*>(item->find(vec[idx])->second);
-    }
-    TkeyTree::const_iterator it = item->begin();
-    TkeyTree::const_iterator itend = item->end();
-    /// 先加载叶子节点
-    for ( ; it != itend; ++it) 
-    {
-        if (it->second != NULL)  continue;
+            if (treeit->second != NULL)  continue;
 
-        CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
-        /* 如果是叶子节点，则tag为0 */
-        pnode->SetTag(it->second == NULL ? 0 : 1);
-        TreeKeyContactData* pData = new TreeKeyContactData;
-        pData->pPNode = m_pAssistNode;
-        pData->pNode = pnode;
-        ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
-    }
-    /// 加载目录节点
-    it = item->begin();
-    for ( ; it != itend; ++it) 
+            std::string theValue = treeit->first;
+            CTreeNodeUI* pPNode = m_pAssistNode;
+
+            CTreeNodeUI* pnode = NewNode(theValue, treeit->second == NULL);
+            pnode->SetTag(treeit->second == NULL ? 0 : 1);
+            TreeKeyContactData* pData = new TreeKeyContactData;
+            pData->pPNode = pPNode;
+            pData->pNode = pnode;
+            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        }
+        treeit = m_oKeyRoot[dbNum].begin();
+        for (; treeit != treeitend; ++treeit)
+        {
+            if (treeit->second == NULL) continue;
+            std::string theValue = treeit->first;
+            CTreeNodeUI* pPNode = m_pAssistNode;
+
+            CTreeNodeUI* pnode = NewNode(theValue, treeit->second == NULL);
+            pnode->SetTag(treeit->second == NULL ? 0 : 1);
+            TreeKeyContactData* pData = new TreeKeyContactData;
+            pData->pPNode = pPNode;
+            pData->pNode = pnode;
+            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        }
+    } else 
     {
-        if (it->second == NULL) continue;
-        CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
-        /* 如果是叶子节点，则tag为0 */
-        pnode->SetTag(it->second == NULL ? 0 : 1);
-        TreeKeyContactData* pData = new TreeKeyContactData;
-        pData->pPNode = m_pAssistNode;
-        pData->pNode = pnode;
-        ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        CTreeNodeUI* pPNode = m_pAssistNode;
+        std::vector<string> vec;
+        while (pPNode)
+        {
+            if (pPNode->GetParentNode() == m_pRootNode)
+            {
+                dbNum = pPNode->GetTag() - 1;
+                break;
+            }
+            std::string key = Base::CharacterSet::UnicodeToANSI(pPNode->GetItemText().GetData());
+            vec.push_back(key);
+            pPNode = pPNode->GetParentNode();
+        }
+        TkeyTree *item = &m_oKeyRoot[dbNum];
+        for (int idx = vec.size() -1; idx >=0 ; --idx) 
+        {
+            item = static_cast<TkeyTree*>(item->find(vec[idx])->second);
+        }
+        TkeyTree::const_iterator it = item->begin();
+        TkeyTree::const_iterator itend = item->end();
+        /// 先加载叶子节点
+        for ( ; it != itend; ++it) 
+        {
+            if (it->second != NULL)  continue;
+
+            CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
+            /// 如果是叶子节点，则tag为0
+            pnode->SetTag(it->second == NULL ? 0 : 1);
+            TreeKeyContactData* pData = new TreeKeyContactData;
+            pData->pPNode = m_pAssistNode;
+            pData->pNode = pnode;
+            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        }
+        /// 加载目录节点
+        it = item->begin();
+        for ( ; it != itend; ++it) 
+        {
+            if (it->second == NULL) continue;
+            CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
+            /// 如果是叶子节点，则tag为0
+            pnode->SetTag(it->second == NULL ? 0 : 1);
+            TreeKeyContactData* pData = new TreeKeyContactData;
+            pData->pPNode = m_pAssistNode;
+            pData->pNode = pnode;
+            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        }
     }
+    /// 该层加载完成,通知允许展开节点
     ::PostMessage(GetHWND(), WM_USER_TREEVERBOSE, NULL, NULL);
 }
 
@@ -572,7 +610,7 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
         pKeyNode->SetItemText(newTitle);
 
         RedisClient::TSeqArrayResults results;
-        //results.sort();
+ 
         if (!RedisClient::GetInstance().keys("*", results)) return;
         RedisClient::TSeqArrayResults::const_iterator it    = results.begin();
         RedisClient::TSeqArrayResults::const_iterator itend = results.end();
@@ -599,24 +637,6 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
             }
             TkeyTree *item = NULL;	
             curnode->insert(std::pair<std::string, void*>(seq[seq.size()-1], item));
-        }
-
-        TkeyTree::const_iterator treeit = m_oKeyRoot[nodeIdx].begin();
-        TkeyTree::const_iterator treeitend = m_oKeyRoot[nodeIdx].end();
-        for (; treeit != treeitend; ++treeit)
-        {
-            std::string theValue = treeit->first;
-            CTreeNodeUI* pPNode = pKeyNode;
-
-            //CDuiString duiStr = Base::CharacterSet::ANSIToUnicode(treeit->first).c_str();			
-            CTreeNodeUI* pnode = NewNode(theValue, treeit->second == NULL);
-            /* 如果是叶子节点，则tag为0 */
-            pnode->SetTag(treeit->second == NULL ? 0 : 1);
-            TreeKeyContactData* pData = new TreeKeyContactData;
-            pData->pPNode = pPNode;
-            pData->pNode = pnode;
-            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
-            //m_oEventKey.wait();
         }
     }
 }
@@ -809,6 +829,10 @@ bool RedisDataUI::OnMenuClick( void* param )
         CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(m_pAssistNode->GetTag() - 1);
         /// 同步删除，数据量大时会卡顿
         DelChildNode(pKeyNode);
+        m_bIsKeyRender = true;
+        pKeyNode->GetFolderButton()->Selected(true);
+        pKeyNode->GetFolderButton()->SetEnabled(false);
+        m_bIsKeyRender = false;
         DoRefreshKeysWork();
     }
     else if (name == kKeyOperatorDelMenuName)
@@ -822,11 +846,11 @@ void RedisDataUI::SetRichEditText(const std::string& text)
 {
     enum DataFomat
     {
-      kAutoFomat = 0,
-      kNormalFormat = 1,
-      kJsonFormat = 2,
-      kXMLFormat = 3,
-      kHexFormat = 4
+        kAutoFomat = 0,
+        kNormalFormat = 1,
+        kJsonFormat = 2,
+        kXMLFormat = 3,
+        kHexFormat = 4
     };
     std::string styleText = text;
     int curSel = m_pComboFormat->GetCurSel();
@@ -926,16 +950,6 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
 
  void RedisDataUI::DelChildNode( CTreeNodeUI* pNode )
  {
-     /// nm,用这种方式都删不掉，叼代码
-     //pNodelist->SetDelayedDestroy(false);
-     //pNode->RemoveAll();
-     //int cs = pNodelist->GetCountChild();
-     //for (int i=0; i<cs; ++i)
-     //{
-     //    pNodelist->Remove(pNodelist->GetChildNode(i));
-     //}
-     //cs = pNodelist->GetCountChild();
-    
      /// 删除所有节点
      CStdPtrArray myArray = pNode->GetTreeNodes();
      for (int i=0; i<myArray.GetSize(); ++i)
