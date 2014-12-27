@@ -1,4 +1,4 @@
-#ifndef RedisModelFactory_INCLUDED
+﻿#ifndef RedisModelFactory_INCLUDED
 #define RedisModelFactory_INCLUDED
 #include <map>
 

@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "Thread.h"
 #include <exception>
 #include <process.h>

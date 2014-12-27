@@ -1,4 +1,4 @@
-#ifndef Base_RunnableAdapter_INCLUDED
+﻿#ifndef Base_RunnableAdapter_INCLUDED
 #define Base_RunnableAdapter_INCLUDED
 
 #include "Base/Runnable.h"

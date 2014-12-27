@@ -38,7 +38,13 @@
       <HorizontalLayout height="2">
          <Container bkimage="horizontal_border.bmp" />
       </HorizontalLayout>
-
+      <HorizontalLayout height="20">
+        <Text   text="{c #386382}TTL:{/c}" float="false" pos="0,0,0,0" width="200" height="20" textpadding="2,5,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap"/>
+        <Edit   name="redisdata_ttl"  text="" font="3" readonly="true" textpadding="10,0,8,0" bordersize="0" focusbordercolor="#FF154B83" nativebkcolor="#FFF0F0F0" bkcolor="#00000000" textcolor="#FF4B4F51" disabledtextcolor="#FFA7A6AA" />
+      </HorizontalLayout>
+      <HorizontalLayout height="2">
+         <Container bkimage="horizontal_border.bmp" />
+      </HorizontalLayout>
       <HorizontalLayout>
          <List name="redisdata_value" bkcolor="#FFFFFFFF" inset="1,1,1,1" itemshowhtml="true" vscrollbar="true" hscrollbar="false" headerbkimage="file='list_header_bg.png'" itemalign="center" itembkcolor="#FFF0F0F0" itemaltbk="true" hscrollbar="false" menu="true">
               <ListHeader height="20" menu="true">

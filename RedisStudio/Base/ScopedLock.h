@@ -1,4 +1,4 @@
-#ifndef Base_ScopedLock_INCLUDED
+﻿#ifndef Base_ScopedLock_INCLUDED
 #define Base_ScopedLock_INCLUDED
 
 namespace Base {

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "stdafx.h"
 #include <exdisp.h>
@@ -48,12 +48,15 @@ public:
 
     LRESULT OnConnecting(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
+    LRESULT OnUpdate(HWND hwnd, WPARAM wParam, LPARAM lParam);
+
 public:
     void DoConnectEvent(void* data);
 
     void DoUnConnectEvent(void* data);
 
 public:
+    static DWORD WINAPI BackgroundWork(LPVOID lpParameter);
     static HWND m_hwnd;
     static void OndisConnectCallback(const CDuiString& name);
 
@@ -69,6 +72,7 @@ private:
     CTextUI* m_pConnectControl ;
     CTextUI* m_pUnConnectControl ;
     CTextUI* m_pConnectingControl ;
+    CTextUI* m_pVersionControl;
 
     CStdStringPtrMap m_TabContainer;
 };

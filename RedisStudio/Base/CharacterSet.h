@@ -1,4 +1,4 @@
-#ifndef Base_CharacterSet_INCLUDED
+﻿#ifndef Base_CharacterSet_INCLUDED
 #define Base_CharacterSet_INCLUDED
 
 namespace Base {

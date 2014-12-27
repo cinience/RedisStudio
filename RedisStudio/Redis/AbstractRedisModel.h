@@ -1,4 +1,4 @@
-#ifndef AbstractRedisModel_INCLUDED
+﻿#ifndef AbstractRedisModel_INCLUDED
 #define AbstractRedisModel_INCLUDED
 
 #include "RedisResult.h"
@@ -16,8 +16,6 @@ public:
         const std::string& newValue,
         int idx = 0,
         const std::string& field="") = 0;
-
-
 
     RedisClient* GetClient()
     {

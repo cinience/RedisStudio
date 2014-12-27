@@ -1,4 +1,4 @@
-#ifndef ScopedRedisReply_INCLUDED
+﻿#ifndef ScopedRedisReply_INCLUDED
 #define ScopedRedisReply_INCLUDED
 
 #include "hiredis/hiredis.h"
@@ -30,8 +30,5 @@ public:
 private:
     redisReply* m_pReply;
 };
-
-
-
 
 #endif

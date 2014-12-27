@@ -89,6 +89,8 @@
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='UnicodeRelease|Win32'" />
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</GenerateManifest>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -303,6 +305,7 @@ del "$(SolutionDir)bin\skin\*.psd"</Command>
   <ItemGroup>
     <ClCompile Include="Base\CharacterSet.cpp" />
     <ClCompile Include="Base\Event.cpp" />
+    <ClCompile Include="Base\Http.cpp" />
     <ClCompile Include="Base\Mutex.cpp" />
     <ClCompile Include="Base\Runnable.cpp" />
     <ClCompile Include="Base\String.cpp" />
@@ -342,6 +345,7 @@ del "$(SolutionDir)bin\skin\*.psd"</Command>
     <ClInclude Include="AbstractUI.h" />
     <ClInclude Include="Base\CharacterSet.h" />
     <ClInclude Include="Base\Event.h" />
+    <ClInclude Include="Base\Http.h" />
     <ClInclude Include="Base\Mutex.h" />
     <ClInclude Include="Base\Runnable.h" />
     <ClInclude Include="Base\RunnableAdapter.h" />
@@ -373,6 +377,7 @@ del "$(SolutionDir)bin\skin\*.psd"</Command>
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="UserMessage.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Version.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="icon.ico" />

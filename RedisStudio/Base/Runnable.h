@@ -1,4 +1,4 @@
-#ifndef Base_Runnable_INCLUDED
+﻿#ifndef Base_Runnable_INCLUDED
 #define Base_Runnable_INCLUDED
 
 namespace Base {

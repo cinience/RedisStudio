@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "RedisZSetModel.h"
 
 RedisZSetModel::RedisZSetModel( RedisClient* client ) : AbstractRedisModel(client)

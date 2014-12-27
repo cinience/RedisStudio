@@ -1,4 +1,6 @@
-#pragma once
+#ifndef RedisClient_INCLUDED
+#define RedisClient_INCLUDED
+
 #include "hiredis/hiredis.h"
 #include <list>
 #include <map>
@@ -9,9 +11,9 @@
 
 typedef void (* callback)(const CDuiString& );
 
-
 class RedisResult;
 
+/// 恶心的单例，有空重构 
 class RedisClient
 {
 public:
@@ -36,17 +38,21 @@ public:
 
     bool Info(std::string& results);
 
-    bool keys(TSeqArrayResults& results);
+    bool keys(const std::string &, TSeqArrayResults& results);
 
     bool Exists(const std::string& key);
 
     bool Type(const std::string& key, string& type);
+
+    long long TTL(const std::string& key);
 
     bool DatabasesNum(int& num);
 
     int  DatabasesNum();
 
     bool SelectDB(int dbindex);
+
+    long long DbSize();
 
     bool GetConfig(TDicConfig& dicConfig);
 
@@ -92,3 +98,5 @@ private:
     std::auto_ptr<RedisModelFactory> m_ModelFactory;
     
 };
+
+#endif

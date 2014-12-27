@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "RedisHashModel.h"
 
 RedisHashModel::RedisHashModel( RedisClient* client ) : AbstractRedisModel(client)
@@ -52,7 +52,7 @@ bool RedisHashModel::UpdateData( const std::string& key,
                                  int idx,
                                  const std::string& field)
 {
-    /// Èç¹û¹şÏ£±íÖĞÓò field ÒÑ¾­´æÔÚÇÒ¾ÉÖµÒÑ±»ĞÂÖµ¸²¸Ç£¬·µ»Ø 0 ¡£
+    /// å¦‚æœå“ˆå¸Œè¡¨ä¸­åŸŸ field å·²ç»å­˜åœ¨ä¸”æ—§å€¼å·²è¢«æ–°å€¼è¦†ç›–ï¼Œè¿”å› 0 ã€‚
     ScopedRedisReply reply(GetClient()->Command("HSET %s %s %s", key.c_str(), field.c_str(), newValue.c_str()));
     if(reply.IsNull() || reply->type != REDIS_REPLY_INTEGER || reply->integer!=0) 
         return false;

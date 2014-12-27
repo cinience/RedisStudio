@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "RedisConfigUI.h"
 #include "Redis/RedisClient.h"
 #include "Base/CharacterSet.h"
@@ -13,7 +13,7 @@ DUI_END_MESSAGE_MAP()
 RedisConfigUI::RedisConfigUI(const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm)
 {    
     CDialogBuilder builder;
-    // ÕâÀï±ØÐë´«Èëm_PaintManager£¬²»È»×ÓXML²»ÄÜÊ¹ÓÃÄ¬ÈÏ¹ö¶¯ÌõµÈÐÅÏ¢¡£
+    // è¿™é‡Œå¿…é¡»ä¼ å…¥m_PaintManagerï¼Œä¸ç„¶å­XMLä¸èƒ½ä½¿ç”¨é»˜è®¤æ»šåŠ¨æ¡ç­‰ä¿¡æ¯ã€‚
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
     if( pContainer ) {
         this->Add(pContainer);
@@ -104,7 +104,7 @@ void RedisConfigUI::DoFillData()
         name.Append(key);
         CControlUI* pCtl = GetPaintMgr()->FindControl(name);
 
-        /// xmlÖÐÎ´ÅäÖÃ¸ÃÏî
+        /// xmlä¸­æœªé…ç½®è¯¥é¡¹
         if (pCtl == NULL) continue;
 
         if (pCtl->GetClass() == exampleEditUI.GetClass())

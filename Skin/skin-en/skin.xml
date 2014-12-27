@@ -71,7 +71,7 @@
         </HorizontalLayout>
         <HorizontalLayout height="24">
            <VerticalLayout width="300">
-            <Text text="{c #386382}Version：0.1.0{/c}" float="true" pos="0,5,0,0" width="200" height="19" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />           
+            <Text name="main_version" text="{c #386382}Version：$version{/c}" float="true" pos="0,5,0,0" width="200" height="19" textpadding="2,0,2,0" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="wrap" />           
            </VerticalLayout>  
             <HorizontalLayout>   
             </HorizontalLayout>

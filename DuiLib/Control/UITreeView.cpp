@@ -232,28 +232,91 @@ namespace DuiLib
 	//************************************
 	bool CTreeNodeUI::AddAt( CControlUI* pControl, int iIndex )
 	{
-		if(NULL == static_cast<CTreeNodeUI*>(pControl->GetInterface(_T("TreeNode"))))
-			return false;
+        if (!pControl)
+            return false;
+
+        if(_tcsicmp(pControl->GetClass(), _T("TreeNodeUI")) != 0)
+            return false;
+
+		if (!GetFolderButton()->IsSelected())    //add by£ºRedrain   2014.8.8
+		{
+			m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMDBCLICK);
+		}
+
+        //filter invalidate index
+        int iDestIndex = iIndex;
+        if (iDestIndex < 0)
+        {
+            iDestIndex = 0;
+        }
+        else if (iDestIndex > GetCountChild())
+        {
+            iDestIndex = GetCountChild();
+        }
+        if(iIndex != iDestIndex) iIndex = iDestIndex;
 
 		CTreeNodeUI* pIndexNode = static_cast<CTreeNodeUI*>(mTreeNodes.GetAt(iIndex));
-		if(!pIndexNode){
-			if(!mTreeNodes.Add(pControl))
-				return false;
-		}
-		else if(pIndexNode && !mTreeNodes.InsertAt(iIndex,pControl))
-			return false;
-
-		if(!pIndexNode && pTreeView && pTreeView->GetItemAt(GetTreeIndex()+1))
-			pIndexNode = static_cast<CTreeNodeUI*>(pTreeView->GetItemAt(GetTreeIndex()+1)->GetInterface(_T("TreeNode")));
 
 		pControl = CalLocation((CTreeNodeUI*)pControl);
 
-		if(pTreeView && pIndexNode)
-			return pTreeView->AddAt((CTreeNodeUI*)pControl,pIndexNode);
-		else 
-			return pTreeView->Add((CTreeNodeUI*)pControl);
-
-		return true;
+        bool bRet = false;
+        int iTreeIndex = -1;
+        if (pTreeView)
+        {
+            //Get TreeView insert index
+            if (pIndexNode)
+            {
+                iTreeIndex = pIndexNode->GetTreeIndex();
+                bRet = pTreeView->AddAt((CTreeNodeUI*)pControl, iTreeIndex) >= 0;
+                if (bRet)
+                {
+                    mTreeNodes.InsertAt(iIndex, pControl);
+                }
+            }
+            else
+            {
+                CTreeNodeUI *pChildNode = NULL;
+                //insert child node position index(new node insert to tail, default add tail)
+                int iChIndex = -1;
+                //insert child node tree-view position index(new node insert to tail)
+                int iChTreeIndex = -1;
+                //search tree index reverse
+                for (int i = GetCountChild(); i > 0; i++)
+                {
+                    pChildNode = GetChildNode(i - 1);
+                    iChTreeIndex = pChildNode->GetTreeIndex();
+                    if (iChTreeIndex >= GetTreeIndex() && iChTreeIndex <= GetTreeIndex() + GetCountChild() )
+                    {
+                        //new child node position
+                        iChIndex = i;
+                        //child node tree position
+                        iTreeIndex = iChTreeIndex + 1;
+                        break;
+                    }
+                }
+                //child not find tree index directly insert to parent tail
+                if (iTreeIndex <= GetTreeIndex())
+                {
+                    iTreeIndex = GetTreeIndex() + 1;
+                }
+                //insert TreeNode to TreeView
+                bRet = pTreeView->AddAt((CTreeNodeUI*)pControl, iTreeIndex) >= 0;
+                //insert TreeNode to parent TreeNode
+                if (bRet)
+                {
+                    if (iChIndex > 0)
+                        bRet = mTreeNodes.InsertAt(iChIndex, pControl);
+                    else
+                        bRet = mTreeNodes.Add(pControl);
+                }
+            }
+        }
+        else
+        {
+            //parent TreeNode not bind TreeView just insert to parent TreeNode
+            bRet = mTreeNodes.InsertAt(iIndex, pControl);
+        }
+		return bRet;
 	}
 
 	//************************************
@@ -354,6 +417,10 @@ namespace DuiLib
 		if (_tcsicmp(_pTreeNodeUI->GetClass(), _T("TreeNodeUI")) != 0)
 			return false;
 
+		if (!GetFolderButton()->IsSelected())       //add by£ºRedrain   2014.8.8
+		{
+			m_pManager->SendNotify(this, DUI_MSGTYPE_ITEMDBCLICK);
+		}
 		_pTreeNodeUI = CalLocation(_pTreeNodeUI);
  
 		bool nRet = true;
@@ -792,8 +859,8 @@ namespace DuiLib
 		pControl->GetFolderButton()->OnNotify += MakeDelegate(this,&CTreeViewUI::OnFolderChanged);
 		pControl->GetCheckBox()->OnNotify += MakeDelegate(this,&CTreeViewUI::OnCheckBoxChanged);
 
-		pControl->SetVisibleFolderBtn(m_bVisibleFolderBtn);
 		pControl->SetVisibleCheckBtn(m_bVisibleCheckBtn);
+		pControl->SetVisibleFolderBtn(m_bVisibleFolderBtn);
 		if(m_uItemMinWidth > 0)
 			pControl->SetMinWidth(m_uItemMinWidth);
 
@@ -809,6 +876,7 @@ namespace DuiLib
 					Add(pNode);
 			}
 		}
+		else
 
 		pControl->SetTreeView(this);
 		return true;
@@ -829,9 +897,21 @@ namespace DuiLib
 		if (_tcsicmp(pControl->GetClass(), _T("TreeNodeUI")) != 0)
 			return -1;
 
-		CTreeNodeUI* pParent = static_cast<CTreeNodeUI*>(GetItemAt(iIndex - 1));
-		if(!pParent)
-			return -1;
+        //filter invalidate index
+        int iDestIndex = iIndex;
+        if (iDestIndex < 0)
+        {
+            iDestIndex = 0;
+        }
+        else if (iDestIndex > GetCount())
+        {
+            iDestIndex = GetCount();
+        }
+        if(iIndex != iDestIndex) iIndex = iDestIndex;
+
+		//CTreeNodeUI* pParent = static_cast<CTreeNodeUI*>(GetItemAt(iIndex));
+		//if(!pParent)
+		//	return -1;
 
 		pControl->OnNotify += MakeDelegate(this,&CTreeViewUI::OnDBClickItem);
 		pControl->GetFolderButton()->OnNotify += MakeDelegate(this,&CTreeViewUI::OnFolderChanged);
@@ -839,6 +919,7 @@ namespace DuiLib
 
 		pControl->SetVisibleFolderBtn(m_bVisibleFolderBtn);
 		pControl->SetVisibleCheckBtn(m_bVisibleCheckBtn);
+        pControl->SetTreeView(this);
 
 		if(m_uItemMinWidth > 0)
 			pControl->SetMinWidth(m_uItemMinWidth);
@@ -852,13 +933,12 @@ namespace DuiLib
 			{
 				CTreeNodeUI* pNode = pControl->GetChildNode(nIndex);
 				if(pNode)
-					return AddAt(pNode,iIndex+1);
+                {
+                    iIndex = AddAt(pNode, iIndex +1);
+                }
 			}
 		}
-		else
-			return iIndex+1;
-
-		return -1;
+        return iIndex;
 	}
 
 	//************************************

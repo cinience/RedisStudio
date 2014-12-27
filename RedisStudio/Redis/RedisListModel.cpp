@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "RedisListModel.h"
 
 RedisListModel::RedisListModel( RedisClient* client ) : AbstractRedisModel(client)

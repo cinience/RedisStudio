@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "RedisClient.h"
 #include <stdarg.h>
 #include "../Base/CharacterSet.h"
@@ -16,7 +16,6 @@ RedisClient::~RedisClient()
 {
     
 }
-
 
 RedisClient& RedisClient::GetInstance()
 {
@@ -98,13 +97,13 @@ bool RedisClient::Info(std::string& results)
     return retVal;
 }
 
-bool RedisClient::keys(TSeqArrayResults& results)
+bool RedisClient::keys(const std::string& matchstr, TSeqArrayResults& results)
 {
     bool retVal = false;
 
     if (!IsConnected()) return retVal;
 
-    redisReply* reply = Command("KEYS *");    
+    redisReply* reply = Command("KEYS %s", matchstr.c_str());    
     if (!reply) return retVal;
 
     if (reply->type == REDIS_REPLY_ARRAY)
@@ -119,7 +118,7 @@ bool RedisClient::keys(TSeqArrayResults& results)
             i++;
         }
     }
-	results.sort();
+    results.sort();
     freeReplyObject(reply);
     return retVal;
 }
@@ -145,6 +144,17 @@ bool RedisClient::Type(const std::string& key, string& type)
     return true;
 }
 
+long long RedisClient::TTL(const std::string& key)
+{
+    long long ttl = 0;
+    ScopedRedisReply reply(Command("TTL %s", key.c_str()));
+    if (!reply.IsNull() && reply->type == REDIS_REPLY_INTEGER)
+    {
+        ttl = reply->integer;
+    }
+    return ttl;
+}
+
 void RedisClient::Quit()
 {
     Command("quit");
@@ -164,7 +174,7 @@ redisReply* RedisClient::Command( const char* fmt, ... )
     {
         SetLastError(reply->str);
     }
-    if (reply==NULL || reply->type==REDIS_REPLY_ERROR)
+    if (reply==NULL)
     {
         if (reply != NULL) {
              m_fnDisConnect(GetLastError());
@@ -194,14 +204,32 @@ bool RedisClient::DatabasesNum(int& num)
 {
     bool retVal = false;
     redisReply* reply = Command("config get databases");
-    if (!reply) return retVal;
+    if (!reply) {   
+        return retVal;
+    }
 
     if (reply->type == REDIS_REPLY_ARRAY && reply->elements>1 )
     {
         retVal = true;
         num = atoi(reply->element[1]->str);
-    }
+        freeReplyObject(reply);
+    } else {
+        freeReplyObject(reply);
+        for (int idx = 0; idx<16; ++idx) {
+            reply = Command("SELECT %d", idx);
+            if (!reply) return false;
 
+            if (reply->type == REDIS_REPLY_STATUS)
+            {
+                retVal = true;
+                num = idx + 1;
+                freeReplyObject(reply);
+            } else {
+                freeReplyObject(reply);
+                break;
+            }   
+        }
+    }
     return retVal;
 }
 
@@ -221,6 +249,17 @@ bool RedisClient::SelectDB( int dbindex )
     }
     freeReplyObject(reply);
     return true;
+}
+
+long long RedisClient::DbSize() 
+{
+    long long dbsize = 0;
+    ScopedRedisReply reply(Command("DBSIZE"));
+    if (!reply.IsNull() && reply->type == REDIS_REPLY_INTEGER)
+    {
+        dbsize = reply->integer;
+    }
+    return dbsize;
 }
 
 bool RedisClient::GetConfig(TDicConfig& dicConfig)

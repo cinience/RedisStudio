@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "RedisDataUI.h"
 #include "Base/String.h"
 #include "UserMessage.h"
@@ -18,6 +18,8 @@ static const TCHAR* kDefaultText  = _T("");
 static const TCHAR* kKeyEditName  = _T("redisdata_key");
 static const TCHAR* kDataTypeName = _T("redisdata_type");
 static const TCHAR* kDataSizeName = _T("redisdata_size");
+static const TCHAR* kDataTTLName  = _T("redisdata_ttl");
+
 static const TCHAR* kRichEditName = _T("redisdata_value_rich");
 static const TCHAR* kDataListName = _T("redisdata_value");
 static const TCHAR* kKeysTreeName = _T("redisdata_treenode");
@@ -37,14 +39,15 @@ static const TCHAR* kKeyOperatorDelMenuName   = _T("menu_key_del");
 
 
 DUI_BEGIN_MESSAGE_MAP(RedisDataUI, CNotifyPump)
-DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
-DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMCLICK,OnItemClick)
+DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK, OnClick)
+DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMDBCLICK, OnItemDBClick)
+DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMCLICK, OnItemClick)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMRCLICK, OnMenuWakeup)
-DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE,OnItemActive)
+DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE, OnItemActive)
 DUI_END_MESSAGE_MAP()
 
 
-RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm),m_oEventListHeader(true),m_oEventKey(true)
+RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false)
 {
     CDialogBuilder builder;
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
@@ -58,6 +61,14 @@ RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):Abstra
     }
 }
 
+RedisDataUI::~RedisDataUI()
+{
+    for (size_t idx = 0; idx < m_oObjPool.size(); ++idx)
+    {
+        ReleaseObject(idx);
+    }
+}
+
 void RedisDataUI::Initialize()
 {
     m_pList = dynamic_cast<CListUI*>(GetPaintMgr()->FindControl(kDataListName)); 
@@ -65,6 +76,7 @@ void RedisDataUI::Initialize()
     m_pKeyEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kKeyEditName));
     m_PTypeEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataTypeName));
     m_pDataSizeEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataSizeName));
+    m_pTTLEdit = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kDataTTLName));
     m_pHorizontalLayout = dynamic_cast<CHorizontalLayoutUI*>(GetPaintMgr()->FindControl(kPageName));
 
     m_pPageCur = dynamic_cast<CEditUI*>(GetPaintMgr()->FindControl(kPageCurName));
@@ -75,6 +87,8 @@ void RedisDataUI::Initialize()
     m_pPageFinal = dynamic_cast<CButtonUI*>(GetPaintMgr()->FindControl(kPageFinalName));
     m_pCommit = dynamic_cast<CButtonUI*>(GetPaintMgr()->FindControl(kCommitBtnName));
     m_pComboFormat = dynamic_cast<CComboUI*>(GetPaintMgr()->FindControl(kDataFomatName));
+
+    m_pRootNode = dynamic_cast<CTreeNodeUI*>(GetPaintMgr()->FindControl(kKeysTreeName));
 }
 
 int RedisDataUI::GetIndex()
@@ -89,35 +103,59 @@ CDuiString RedisDataUI::GetVirtualwndName()
 
 void RedisDataUI::RefreshWnd()
 {
-    CTreeNodeUI* pKeyNode = dynamic_cast<CTreeNodeUI*>(GetPaintMgr()->FindControl(kKeysTreeName));
+    CDuiString redisName = RedisClient::GetInstance().GetName();
+    /// ç”¨æˆ·æ˜¯å¦å·²ç»è¿æ¥å…¶å®ƒserver
+    if (redisName != m_sCurRedisName) 
+    {
+        m_sCurRedisName = redisName;
+        m_UpdateDbs.clear();
+    } 
+
+    if (!m_UpdateDbs.empty()) {
+        return;
+    }
+    CTreeNodeUI* pKeyNode = m_pRootNode;
     static CDuiString oldTitle = pKeyNode->GetItemText();
     DelChildNode(pKeyNode);
     int databases = RedisClient::GetInstance().DatabasesNum();
     m_UpdateDbs.clear();
+    m_oKeyRoot.clear();
+    for (std::size_t idx = 0; idx < m_oObjPool.size(); ++idx)
+    {
+        ReleaseObject(idx);
+    }
+    m_oObjPool.clear();
     for (int i=0; i<databases; ++i)
     {
-      m_UpdateDbs.insert(i);
-      CDuiString theIndex;
-      theIndex.Format(_T("%d"), i);
-      CDuiString newTitle = oldTitle;
-      newTitle.Replace(_T("$"), theIndex.GetData());
-      CTreeNodeUI* pNode = new CTreeNodeUI();
+        int databases = RedisClient::GetInstance().SelectDB(i);
+        long long dbsize =  RedisClient::GetInstance().DbSize();
+        m_UpdateDbs.insert(i);
+        CDuiString theIndex;
+        theIndex.Format(_T("%d (%lld)"), i, dbsize);
+        CDuiString newTitle = oldTitle;
+        newTitle.Replace(_T("$"), theIndex.GetData());
+        CTreeNodeUI* pNode = new CTreeNodeUI();
       
-      pNode->SetItemText(newTitle);
-      //pNode->SetBkImage(pNodelist->GetBkImage());
-      pNode->SetFixedHeight(20);
-      pNode->SetContextMenuUsed(true);
+        pNode->SetItemText(newTitle);
+        //pNode->SetBkImage(pNodelist->GetBkImage());
+        pNode->SetFixedHeight(20);
+        pNode->SetContextMenuUsed(true);
 
-      //pNode->SetIndex(myIdx--);
-      /// ´Ë´¦ÓÃtagÏÈ´úÌætreelevel(»¹Î´ÊµÏÖ)
+        //pNode->SetIndex(myIdx--);
+        /// æ­¤å¤„ç”¨tagå…ˆä»£æ›¿treelevel(è¿˜æœªå®ç°)
       
-      pNode->SetTag(i+1);
-      pNode->SetAttribute(_T("itemattr"), _T("valign=\"vcenter\" font=\"5\" textpadding=\"5,3,0,0\""));
-      pNode->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='1_close.png' source='0,0,0,0'\" normalimage=\"file='1_open.png' source='0,0,0,0'\""));
-
-      pKeyNode->AddChildNode(pNode);
+        pNode->SetTag(i+1);
+        pNode->SetAttribute(_T("itemattr"), _T("valign=\"vcenter\" font=\"5\" textpadding=\"5,3,0,0\""));
+        pNode->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='1_close.png' source='0,0,0,0'\" normalimage=\"file='1_open.png' source='0,0,0,0'\""));
+        /// è®¾ç½®ä¸ºæ”¶ç¼©å¹¶ç¦ç”¨
+        m_bIsKeyRender = true;
+        pNode->GetFolderButton()->Selected(true);
+        pNode->GetFolderButton()->SetEnabled(false);
+        m_bIsKeyRender = false;
+        pKeyNode->AddChildNode(pNode);
     }
-
+    m_oObjPool.resize(databases);
+    m_oKeyRoot.resize(databases);
     DoRefreshKeysWork();
 }
 
@@ -136,21 +174,24 @@ LRESULT RedisDataUI::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPara
     switch (uMsg)
     {
     case WM_USER_DATAADD:
-      lRes = OnDataAdd(GetHWND(), wParam, lParam);
-      break;
+        lRes = OnDataAdd(GetHWND(), wParam, lParam);
+        break;
     case WM_USER_TREEADD:
-      lRes = OnKeyAdd(GetHWND(), wParam, lParam);
-      break;
+        lRes = OnKeyAdd(GetHWND(), wParam, lParam);
+        break;
+    case WM_USER_TREEVERBOSE:
+        lRes = OnKeyVerbose(GetHWND(), wParam, lParam);
+        break;
     case WM_USER_DATAVERBOSE:
-      lRes = OnDataVerbose(GetHWND(), wParam, lParam);
-      break;
+        lRes = OnDataVerbose(GetHWND(), wParam, lParam);
+        break;
     case WM_USER_MENU_KEYDEL:
-      lRes = OnKeyDel(GetHWND(), wParam, lParam);
-      break;
+        lRes = OnKeyDel(GetHWND(), wParam, lParam);
+        break;
     default:
-      bHandled = FALSE;
-      lRes = FALSE;
-      break;
+        bHandled = FALSE;
+        lRes = FALSE;
+        break;
     }
     return lRes;
 }
@@ -171,6 +212,40 @@ void RedisDataUI::OnClick( TNotifyUI& msg )
         OnCommit(msg);
     }
 
+}
+
+void RedisDataUI::OnItemDBClick(TNotifyUI &msg)
+{
+    CDuiString name = msg.pSender->GetClass();
+    CTreeNodeUI        treeNodeUI;
+    if (name != treeNodeUI.GetClass())
+    {
+        return;
+    }
+
+    CTreeNodeUI* pActiveNode = dynamic_cast<CTreeNodeUI*>(msg.pSender);
+    if (!pActiveNode) return;
+
+    if (m_bIsKeyRender) return;
+
+    /// éå¶å­èŠ‚ç‚¹å¹¶æœªåŠ è½½å­èŠ‚ç‚¹ï¼Œåˆ™åŠ è½½å­èŠ‚ç‚¹
+    if (pActiveNode->GetTag() != 0 && !pActiveNode->IsHasChild()) {
+        if (m_Thread.isRunning()) {
+            UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
+            return;
+        }        
+        m_pAssistNode = pActiveNode;
+        m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroudWorkForRenderLevel));
+        try
+        {
+            m_Thread.start(*m_pWork);
+        }
+        catch (std::exception& ex)
+        {
+            (void)(ex);
+        }
+        return;
+    } 
 }
 
 void RedisDataUI::OnItemClick( TNotifyUI &msg )
@@ -201,8 +276,8 @@ void RedisDataUI::OnMenuWakeup( TNotifyUI &msg )
 
     bool needMenu = false;
     STRINGorID res(_T(""));
-    /// ¸¸½Úµã
-    if (pTreeNodeUI->GetTag() > 0)
+    /// çˆ¶èŠ‚ç‚¹
+    if (pTreeNodeUI->GetParentNode() == m_pRootNode)
     {
         STRINGorID xml(_T("DBOperatorMenu.xml"));
         res = xml;
@@ -228,21 +303,32 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
 {
     CTreeNodeUI* pActiveNode = dynamic_cast<CTreeNodeUI*>(msg.pSender);
     if (!pActiveNode) return;
-    /// ·ÇÒ¶×Ó½Úµã²»´¦Àí 
-    if (pActiveNode->IsHasChild()) return ;
-    /// Ê×²ãdb½Úµã
-    if (pActiveNode->GetTag() > 0) return;
+
     if (m_Thread.isRunning())
     {
-         UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
-         return ;
+        UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
+        return ;
+    }
+
+    /// é¦–å±‚dbèŠ‚ç‚¹
+    if (pActiveNode->GetParentNode() == m_pRootNode) return;
+
+    /// éå¶å­èŠ‚ç‚¹å¹¶å·²åŠ è½½å­èŠ‚ç‚¹
+    if (pActiveNode->GetTag() != 0 && pActiveNode->IsHasChild()) {
+        return ;
+    }
+
+    if (pActiveNode->GetTag() != 0)
+    {
+        return;
     }
 
     int dbNum = -1;
     CTreeNodeUI* pDBNode = pActiveNode->GetParentNode();
+
     while (pDBNode)
     {
-        if (pDBNode->GetTag()>0)
+        if (pDBNode->GetParentNode() == m_pRootNode)
         {
             dbNum = pDBNode->GetTag()-1;
             break;
@@ -268,23 +354,18 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
 void RedisDataUI::OnItemActiveForList(  TNotifyUI &msg  )
 {
     CListTextElementUI* pListElement = dynamic_cast<CListTextElementUI*>(msg.pSender);
-    ///LPCTSTR pstr;
-    ///if ((pstr = pListElement->GetText(1)) == NULL)
-    ///{
-    ///   pstr = pListElement->GetText(0);
-    ///}
-    ///std::string text = Base::CharacterSet::UnicodeToANSI(pstr);
+    if (pListElement == NULL) return;
     
     std::size_t curPage = atoi(Base::CharacterSet::UnicodeToANSI(m_pPageCur->GetText().GetData()).c_str());
     
     int curCel = m_pList->GetItemIndex(pListElement);
-    /// why ? ĞĞÊı²»¶Ô
+    /// why ? è¡Œæ•°ä¸å¯¹
     ///std::size_t curIndex = m_pList->GetCurSel();
     int realIndex = (curPage-1)*m_PageSize + curCel;
     int colIdx = m_pList->GetHeader()->GetCount() > 1 ? 1 : 0 ;
     string myValue = GetResult().Value(realIndex, colIdx);
     CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
-    /// ÌØÊâµÄÊı¾İ
+    /// ç‰¹æ®Šçš„æ•°æ®
     if (myValue.size() !=0 && myDuiStr.GetLength()==0)
     {
         TryHexFormat(myValue);
@@ -354,7 +435,7 @@ void RedisDataUI::OnCommit(TNotifyUI& msg)
     std::string newValue = Base::CharacterSet::UnicodeToANSI(m_pRichEdit->GetText().GetData()); 
     if (!RedisClient::GetInstance().UpdateData(key, oldValue, newValue, idx, field))
     {       
-        /// todo ´Ë´¦Ó¦¸ÃÌáÊ¾´íÎóÏêÇé
+        /// todo æ­¤å¤„åº”è¯¥æç¤ºé”™è¯¯è¯¦æƒ…
         UserMessageBox(GetHWND(), 10031, RedisClient::GetInstance().GetLastError().GetData() , MB_ICONERROR);
         return;
     }
@@ -379,6 +460,8 @@ void RedisDataUI::DoPaginateWork()
 
 void RedisDataUI::DoRefreshKeysWork()
 {
+    if (m_Thread.isRunning()) return;
+
     m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroundWorkForRefreshKeys));
     try
     {
@@ -393,6 +476,8 @@ void RedisDataUI::DoRefreshKeysWork()
 
 void RedisDataUI::DoRefreshValuesWork()
 {
+    if (m_Thread.isRunning()) return;
+
     m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroundWorkForRefreshValues));
     try
     {
@@ -416,77 +501,148 @@ RedisResult& RedisDataUI::GetResult()
     return m_RedisData.result;
 }
 
+void RedisDataUI::BackgroudWorkForRenderLevel(void)
+{
+    /// åœ¨OnKeyAdd pNode->GetFolderButton()->Selected(true) ä¼šè‡ªåŠ¨è§¦å‘dbclickäº‹ä»¶ æ‰€ä»¥æ­¤å¤„è¦å±è”½è‡ªåŠ¨äº§ç”Ÿçš„
+    int dbNum = 0;
+  
+    /// åŠ è½½é¦–å±‚ 
+    if (m_pAssistNode->GetParentNode() == m_pRootNode)
+    {
+        dbNum = m_pAssistNode->GetTag() - 1;
+        TkeyTree::const_iterator treeit = m_oKeyRoot[dbNum].begin();
+        TkeyTree::const_iterator treeitend = m_oKeyRoot[dbNum].end();
+        for (; treeit != treeitend; ++treeit)
+        {
+            if (treeit->second != NULL)  continue;
+
+            std::string theValue = treeit->first;
+            CTreeNodeUI* pPNode = m_pAssistNode;
+
+            CTreeNodeUI* pnode = NewNode(theValue, treeit->second == NULL);
+            pnode->SetTag(treeit->second == NULL ? 0 : 1);
+            TreeKeyContactData* pData = new TreeKeyContactData;
+            pData->pPNode = pPNode;
+            pData->pNode = pnode;
+            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        }
+        treeit = m_oKeyRoot[dbNum].begin();
+        for (; treeit != treeitend; ++treeit)
+        {
+            if (treeit->second == NULL) continue;
+            std::string theValue = treeit->first;
+            CTreeNodeUI* pPNode = m_pAssistNode;
+
+            CTreeNodeUI* pnode = NewNode(theValue, treeit->second == NULL);
+            pnode->SetTag(treeit->second == NULL ? 0 : 1);
+            TreeKeyContactData* pData = new TreeKeyContactData;
+            pData->pPNode = pPNode;
+            pData->pNode = pnode;
+            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        }
+    } else 
+    {
+        CTreeNodeUI* pPNode = m_pAssistNode;
+        std::vector<string> vec;
+        while (pPNode)
+        {
+            if (pPNode->GetParentNode() == m_pRootNode)
+            {
+                dbNum = pPNode->GetTag() - 1;
+                break;
+            }
+            std::string key = Base::CharacterSet::UnicodeToANSI(pPNode->GetItemText().GetData());
+            vec.push_back(key);
+            pPNode = pPNode->GetParentNode();
+        }
+        TkeyTree *item = &m_oKeyRoot[dbNum];
+        for (int idx = vec.size() -1; idx >=0 ; --idx) 
+        {
+            item = static_cast<TkeyTree*>(item->find(vec[idx])->second);
+        }
+        TkeyTree::const_iterator it = item->begin();
+        TkeyTree::const_iterator itend = item->end();
+        /// å…ˆåŠ è½½å¶å­èŠ‚ç‚¹
+        for ( ; it != itend; ++it) 
+        {
+            if (it->second != NULL)  continue;
+
+            CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
+            /// å¦‚æœæ˜¯å¶å­èŠ‚ç‚¹ï¼Œåˆ™tagä¸º0
+            pnode->SetTag(it->second == NULL ? 0 : 1);
+            TreeKeyContactData* pData = new TreeKeyContactData;
+            pData->pPNode = m_pAssistNode;
+            pData->pNode = pnode;
+            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        }
+        /// åŠ è½½ç›®å½•èŠ‚ç‚¹
+        it = item->begin();
+        for ( ; it != itend; ++it) 
+        {
+            if (it->second == NULL) continue;
+            CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
+            /// å¦‚æœæ˜¯å¶å­èŠ‚ç‚¹ï¼Œåˆ™tagä¸º0
+            pnode->SetTag(it->second == NULL ? 0 : 1);
+            TreeKeyContactData* pData = new TreeKeyContactData;
+            pData->pPNode = m_pAssistNode;
+            pData->pNode = pnode;
+            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        }
+    }
+    /// è¯¥å±‚åŠ è½½å®Œæˆ,é€šçŸ¥å…è®¸å±•å¼€èŠ‚ç‚¹
+    ::PostMessage(GetHWND(), WM_USER_TREEVERBOSE, NULL, NULL);
+}
+
 void RedisDataUI::BackgroundWorkForRefreshKeys(void)
 {
     if (!RedisClient::GetInstance().IsConnected()) return;
 
-    CTreeNodeUI* pParentNode = static_cast<CTreeNodeUI*>(GetPaintMgr()->FindControl(kKeysTreeName));
+    CTreeNodeUI* pParentNode = m_pRootNode;
+    
     for (int nodeIdx=0; nodeIdx<pParentNode->GetCountChild(); ++nodeIdx)
     {
         CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(nodeIdx);
         
         if (m_UpdateDbs.find(nodeIdx) == m_UpdateDbs.end()) continue;
+
         DelChildNode(pKeyNode);
         if (!RedisClient::GetInstance().SelectDB(nodeIdx)) continue;
-        
+        /// é‡æ–°å¡«å……dbsize
+        long long dbsize =  RedisClient::GetInstance().DbSize();;
+        CDuiString theIndex;
+        theIndex.Format(_T("%d (%lld)"), nodeIdx, dbsize);
+        CDuiString newTitle = pParentNode->GetItemText();
+        newTitle.Replace(_T("$"), theIndex.GetData());
+        pKeyNode->SetItemText(newTitle);
+
         RedisClient::TSeqArrayResults results;
-        //results.sort();
-        if (!RedisClient::GetInstance().keys(results)) return;
+ 
+        if (!RedisClient::GetInstance().keys("*", results)) return;
         RedisClient::TSeqArrayResults::const_iterator it    = results.begin();
         RedisClient::TSeqArrayResults::const_iterator itend = results.end();
-
-        for (; it!=itend; ++it)
+        m_oKeyRoot[nodeIdx].clear();
+        ReleaseObject(nodeIdx);
+        for (; it != itend; ++it)
         {
             std::string theValue = *it;
-            CTreeNodeUI* pPNode = pKeyNode;
-            /*
-            if (results.size() > 10000) {
-                TreeKeyContactData* pData = new TreeKeyContactData;
-                pData->pPNode = pPNode;
-                pData->pNode = NewNode(theValue, true);
-                ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
-                m_oEventKey.wait();
-                continue;
-            }
-            */
             Base::String::TSeqStr seq;
             Base::String::Split(theValue, ":", seq);
             seq[seq.size()-1] = theValue;
-
-            for (std::size_t idx=0; idx<seq.size()-1; ++idx)
+            TkeyTree* curnode = &m_oKeyRoot[nodeIdx];
+            for (std::size_t idx=0; idx < seq.size()-1; ++idx)
             {
-                CDuiString duiStr = Base::CharacterSet::ANSIToUnicode(seq[idx]).c_str();
-                bool hasFind = false;
-                for (int j=0; j<pPNode->GetCountChild(); ++j)
-                {
-                    CTreeNodeUI* pTempNode = pPNode->GetChildNode(j);
-                    if (pTempNode->GetItemText() == duiStr && pTempNode->IsHasChild())
-                    {
-                        pPNode = pTempNode;
-                        hasFind = true;
-                        break;
-                    }
-                }
-                if (hasFind)
-                {
-                    continue;
-                }
-                else 
-                {
-                    CTreeNodeUI* pnode = NewNode(seq[idx]);
-                    TreeKeyContactData* pData = new TreeKeyContactData;
-                    pData->pPNode = pPNode;
-                    pData->pNode = pnode;
-                    ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
-                    m_oEventKey.wait();
-                    pPNode = pnode;
+                TkeyTree::iterator it = curnode->find(seq[idx]);
+                if (it == curnode->end()) {
+                    TkeyTree *item = new TkeyTree;	
+                    m_oObjPool[nodeIdx].push_back(item);
+                    curnode->insert(std::pair<std::string, void*>(seq[idx], item));
+                    curnode = item;
+                } else {
+                    curnode = static_cast<TkeyTree *>(it->second);
                 }
             }
-            TreeKeyContactData* pData = new TreeKeyContactData;
-            pData->pPNode = pPNode;
-            pData->pNode = NewNode(theValue, true);
-            ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
-            m_oEventKey.wait();
+            TkeyTree *item = NULL;	
+            curnode->insert(std::pair<std::string, void*>(seq[seq.size()-1], item));
         }
     }
 }
@@ -499,7 +655,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
     key = Base::CharacterSet::UnicodeToANSI(pKeyEdit->GetText().GetData());
     if (!RedisClient::GetInstance().Exists(key))
     {
-        /// Èç¹û¸Ã¼üÒÑ¾­²»´æÔÚ£¬ÔòÌáÊ¾ÓÃ»§ÖØĞÂ¼ÓÔØ
+        /// å¦‚æœè¯¥é”®å·²ç»ä¸å­˜åœ¨ï¼Œåˆ™æç¤ºç”¨æˆ·é‡æ–°åŠ è½½
        ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, 10030, NULL);
        return;
     }
@@ -507,8 +663,9 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
 
     if (!RedisClient::GetInstance().GetData(key, type, GetResult())) return;
     m_RedisData.type = Base::CharacterSet::ANSIToUnicode(type).c_str();
-    m_RedisData.size.Format(_T("%u"),GetResult().RowSize() );
-    /// Ô¤ÏÈÏÔÊ¾Êı¾İÀàĞÍµÈĞÅÏ¢
+    m_RedisData.size.Format(_T("%u"), GetResult().RowSize() );
+    m_RedisData.ttl.Format(_T("%lld"), RedisClient::GetInstance().TTL(key));
+    /// é¢„å…ˆæ˜¾ç¤ºæ•°æ®ç±»å‹ç­‰ä¿¡æ¯
     ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, NULL, NULL);
 
     for (std::size_t idx=0; idx<GetResult().ColumnSize(); ++idx)
@@ -521,7 +678,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
         pHeaderItem->SetSepImage(_T("file='list_header_sep.png'"));
         pHeaderItem->SetSepWidth(1);
 
-        /// listÔÚ²åÈëÖµÊ±»á¸ù¾İlistheadÀ´×÷ÏìÓ¦ÅĞ¶Ï£¬ËùÒÔĞèÒªÔÚheadÍêÈ«updateºóÔÙ²åÈëÖµ
+        /// liståœ¨æ’å…¥å€¼æ—¶ä¼šæ ¹æ®listheadæ¥ä½œå“åº”åˆ¤æ–­ï¼Œæ‰€ä»¥éœ€è¦åœ¨headå®Œå…¨updateåå†æ’å…¥å€¼
         LPARAM lparam = 0;
         if (idx+1 == GetResult().ColumnSize()) lparam = 1; 
         ::PostMessage(GetHWND(), WM_USER_DATAADD, (WPARAM)pHeaderItem, lparam);
@@ -537,7 +694,7 @@ void RedisDataUI::SetPageValues( )
     const std::size_t cur = atoi(pageStr.c_str());
     if (cur<=0 || cur>GetMaxPage())
     {
-      return ;
+        return ;
     }
 
     std::size_t maxIndex = cur*pagesize>GetResult().RowSize() ? GetResult().RowSize(): cur*pagesize;
@@ -551,14 +708,14 @@ void RedisDataUI::SetPageValues( )
         {
             string myValue = GetResult().Value(idx, colidx);
             CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
-            /// ÌØÊâµÄÊı¾İ
+            /// ç‰¹æ®Šçš„æ•°æ®
             if (myValue.size() !=0 && myDuiStr.GetLength()==0)
             {
                 TryHexFormat(myValue);
                 myDuiStr  = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
             }
 
-            /// Êı¾İ¹ı³¤£¬²»ÏÔÊ¾È«²¿£¬·ñÔò»álistÍÏ¶¯¿¨¶Ù
+            /// æ•°æ®è¿‡é•¿ï¼Œä¸æ˜¾ç¤ºå…¨éƒ¨ï¼Œå¦åˆ™ä¼šlistæ‹–åŠ¨å¡é¡¿
             if (myDuiStr.GetLength() > 50) 
             {
                 myDuiStr = myDuiStr.Left(50);
@@ -585,12 +742,14 @@ LRESULT RedisDataUI::OnKeyAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
     std::auto_ptr<TreeKeyContactData> pData(reinterpret_cast<TreeKeyContactData*>(wParam));
     CTreeNodeUI* pPNode = pData->pPNode;
     CTreeNodeUI* pNode  = pData->pNode;
-    pPNode->AddChildNode(pNode);    
-    /// ÇúÏß¾È¹ú£¬TreeViewÄ¬ÈÏ²»Õ¹¿ª½Úµã
-    pPNode->GetFolderButton()->Selected(true);
-    pPNode->GetTreeView()->SetItemExpand(false, pPNode);
-    pPNode->NeedUpdate();
-    m_oEventKey.set();
+
+    m_bIsKeyRender = true;
+    if (pNode->GetTag() != 0)
+    {
+        pNode->GetFolderButton()->Selected(true);
+    }
+    pPNode->AddChildNode(pNode);
+    m_bIsKeyRender = false;
     return TRUE;
 }
 
@@ -600,7 +759,7 @@ LRESULT RedisDataUI::OnKeyDel( HWND hwnd, WPARAM wParam, LPARAM lParam )
     CTreeNodeUI* pPNode;
     CDuiString a = pNode->GetItemText();
     std::string key = Base::CharacterSet::UnicodeToANSI(pNode->GetItemText().GetData());
-    /// ÔİÊ±ÓÃÍ¬²½·½·¨É¾³ı£¬´óÊı¾İÊ±»áÓĞ¿¨¶Ù
+    /// æš‚æ—¶ç”¨åŒæ­¥æ–¹æ³•åˆ é™¤ï¼Œå¤§æ•°æ®æ—¶ä¼šæœ‰å¡é¡¿
     if (!RedisClient::GetInstance().DelKey(key)) return FALSE;
     while (pNode)
     {
@@ -609,6 +768,15 @@ LRESULT RedisDataUI::OnKeyDel( HWND hwnd, WPARAM wParam, LPARAM lParam )
         pPNode->Remove(pNode);
         pNode = pPNode;
     }
+    return TRUE;
+}
+
+LRESULT RedisDataUI::OnKeyVerbose(HWND hwnd, WPARAM wParam, LPARAM lParam)
+{
+    m_bIsKeyRender = true;
+    m_pAssistNode->GetFolderButton()->Selected(false);
+    m_pAssistNode->GetFolderButton()->SetEnabled(true);
+    m_bIsKeyRender = false;
     return TRUE;
 }
 
@@ -622,13 +790,14 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
     m_pKeyEdit->SetText(m_RedisData.key.GetData());
     m_PTypeEdit->SetText(m_RedisData.type.GetData());
     m_pDataSizeEdit->SetText(m_RedisData.size.GetData());
+    m_pTTLEdit->SetText(m_RedisData.ttl.GetData());
     m_pRichEdit->SetText(kDefaultText);    
-    /// Èç¹ûÊÇµ¥ÔªËØ(Èçstring)£¬ÔòÒ»²¢Ö±½Ó¸üĞÂµ½¸»ÎÄ±¾¿òÄÚ 
+    /// å¦‚æœæ˜¯å•å…ƒç´ (å¦‚string)ï¼Œåˆ™ä¸€å¹¶ç›´æ¥æ›´æ–°åˆ°å¯Œæ–‡æœ¬æ¡†å†… 
     if (GetResult().RowSize() == 1 && GetResult().ColumnSize()==1)
     {
         string myValue = GetResult().Value(0, 0);
         CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
-        /// ÌØÊâµÄÊı¾İ
+        /// ç‰¹æ®Šçš„æ•°æ®
         if (myValue.size() !=0 && myDuiStr.GetLength()==0)
         {
             TryHexFormat(myValue);
@@ -640,7 +809,7 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
 
     if (GetResult().RowSize() > m_PageSize)
     {
-        /// ÉèÖÃ×ÜÒ³Êı
+        /// è®¾ç½®æ€»é¡µæ•°
         CDuiString totalpageStr;
         totalpageStr.Format(_T("%u"), GetMaxPage());
         m_pPageTotal->SetText(totalpageStr.GetData());
@@ -662,6 +831,14 @@ bool RedisDataUI::OnMenuClick( void* param )
     {
         m_UpdateDbs.clear();
         m_UpdateDbs.insert(m_pAssistNode->GetTag() - 1);
+        CTreeNodeUI* pParentNode = m_pRootNode;
+        CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(m_pAssistNode->GetTag() - 1);
+        /// åŒæ­¥åˆ é™¤ï¼Œæ•°æ®é‡å¤§æ—¶ä¼šå¡é¡¿
+        DelChildNode(pKeyNode);
+        m_bIsKeyRender = true;
+        pKeyNode->GetFolderButton()->Selected(true);
+        pKeyNode->GetFolderButton()->SetEnabled(false);
+        m_bIsKeyRender = false;
         DoRefreshKeysWork();
     }
     else if (name == kKeyOperatorDelMenuName)
@@ -675,16 +852,16 @@ void RedisDataUI::SetRichEditText(const std::string& text)
 {
     enum DataFomat
     {
-      kAutoFomat = 0,
-      kNormalFormat = 1,
-      kJsonFormat = 2,
-      kXMLFormat = 3,
-      kHexFormat = 4
+        kAutoFomat = 0,
+        kNormalFormat = 1,
+        kJsonFormat = 2,
+        kXMLFormat = 3,
+        kHexFormat = 4
     };
     std::string styleText = text;
     int curSel = m_pComboFormat->GetCurSel();
 
-    /// Ã»±ØÒªÓÃÃæÏò¶ÔÏóµÄÉè¼ÆÄ£Ê½£¬Ö±½Óif else¸ã¶¨£¬¼òµ¥Ö±½Ó
+    /// å¿…è¦æ—¶é‡æ„
     if ( curSel == kAutoFomat )
     {
         if (TryJsonFomat(styleText) || TryXMLFormat(styleText)) {} 
@@ -738,6 +915,20 @@ bool RedisDataUI::TryHexFormat( std::string& text )
     return true;
 }
 
+void RedisDataUI::ReleaseObject(std::size_t idx)
+{
+    if (m_oObjPool.size() > idx) 
+    {
+        std::list<TkeyTree*>::const_iterator it = m_oObjPool[idx].begin();
+        std::list<TkeyTree*>::const_iterator itend = m_oObjPool[idx].end();
+        for ( ; it != itend; ++it)
+        {
+            delete (TkeyTree*)*it;
+        }
+        m_oObjPool[idx].clear();
+    }
+}
+
 CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
 {
     CTreeNodeUI* pNodeTmp = new CTreeNodeUI;
@@ -755,9 +946,9 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
     else 
     {
         pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='tree_expand.png' source='0,0,16,16'\" normalimage=\"file='tree_expand.png' source='16,0,32,16'\""));
-        pNodeTmp->SetAttribute(_T("itemattr"), _T("bkimage=\"file='TreeStandard.png' source='112,0,128,16' dest='5,3,21,19'\" valign=\"left\" font=\"5\" textpadding=\"25,3,0,0\""));
-    }
-    
+        pNodeTmp->SetAttribute(_T("itemattr"), _T("bkimage=\"file='TreeStandard.png' source='112,0,128,16' dest='5,3,21,19'\" valign=\"left\" font=\"5\" textpadding=\"25,3,0,0\""));		
+    }    
+    pNodeTmp->GetFolderButton()->SetEnabled(false);
     // if (isLeaf) pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
     // else pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,0,128,16'\" normalimage=\"file='TreeStandard.png' source='112,16,128,32'\""));
     return pNodeTmp;
@@ -765,16 +956,7 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
 
  void RedisDataUI::DelChildNode( CTreeNodeUI* pNode )
  {
-     /// nm,ÓÃÕâÖÖ·½Ê½¶¼É¾²»µô£¬µğ´úÂë
-     //pNodelist->SetDelayedDestroy(false);
-     //pNodelist->RemoveAll();
-     //int cs = pNodelist->GetCountChild();
-     //for (int i=0; i<cs; ++i)
-     //{
-     //    pNodelist->Remove(pNodelist->GetChildNode(i));
-     //}
-     //cs = pNodelist->GetCountChild();
-     /// É¾³ıËùÓĞ½Úµã
+     /// åˆ é™¤æ‰€æœ‰èŠ‚ç‚¹
      CStdPtrArray myArray = pNode->GetTreeNodes();
      for (int i=0; i<myArray.GetSize(); ++i)
      {

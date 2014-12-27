@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include <sstream>
 #include "Base/CharacterSet.h"
 #include "RedisInfoUI.h"
@@ -17,7 +17,7 @@ DUI_END_MESSAGE_MAP()
 RedisInfoUI::RedisInfoUI( const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm),m_bIsRefresh(false)
 {
     CDialogBuilder builder;
-    CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); // ÕâÀï±ØĞë´«Èëm_PaintManager£¬²»È»×ÓXML²»ÄÜÊ¹ÓÃÄ¬ÈÏ¹ö¶¯ÌõµÈĞÅÏ¢¡£
+    CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); // è¿™é‡Œå¿…é¡»ä¼ å…¥m_PaintManagerï¼Œä¸ç„¶å­XMLä¸èƒ½ä½¿ç”¨é»˜è®¤æ»šåŠ¨æ¡ç­‰ä¿¡æ¯ã€‚
     if( pContainer ) {
         this->Add(pContainer);
     }
@@ -129,7 +129,7 @@ void RedisInfoUI::BackgroundWork()
     {       
         RefreshInfo();
 
-        /// ±ãÓÚ¿ìËÙÏìÓ¦
+        /// ä¾¿äºå¿«é€Ÿå“åº”
         for (int i=0; m_bIsRefresh && i<sleepTime/10; ++i)
         {
             Base::Thread::sleep(10);
