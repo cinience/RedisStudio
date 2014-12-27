@@ -8,7 +8,7 @@
     2. Kernel is MSOpen hiredis, GUILIB is duilib
     3. Support official Redis 2.6 2.7 2.8 new..
 
-![UI](https://raw.githubusercontent.com/cinience/RedisStudio/master/package/redis.png "RedisStudio UI")
+![UI](https://raw.githubusercontent.com/cinience/RedisStudio/master/docs/redis.png "RedisStudio UI")
 
 ## Supported platforms
 
