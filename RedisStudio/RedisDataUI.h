@@ -144,11 +144,12 @@ private:
 
     bool             m_bIsKeyRender; 
 
+    CDuiString       m_sCurRedisName;
     static const std::size_t m_PageSize = 100;
     std::vector<std::list<TkeyTree*>> m_oObjPool;
     std::vector<TkeyTree>         m_oKeyRoot;
     CTreeNodeUI*     m_pRootNode;
-    CTreeNodeUI*     m_pAssistNode;  /// 辅助key tree右键菜单，该值为当前点击右键的节点
+    CTreeNodeUI*     m_pAssistNode;  
     RedisDataStruct  m_RedisData;
     Base::Thread     m_Thread;
     std::set<int>    m_UpdateDbs;

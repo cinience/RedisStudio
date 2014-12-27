@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+﻿#include "StdAfx.h"
 #include "Http.h"
 
 #include <winsock2.h>
@@ -48,7 +48,7 @@ Http::Response Http::post(const std::string& path, const std::string& data)
     string response;
     int resp_leng;
     Response res;
-	res.status = -1;
+    res.status = -1;
 
     char buffer[1024];
     struct sockaddr_in serveraddr;
@@ -104,21 +104,21 @@ Http::Response Http::post(const std::string& path, const std::string& data)
     //disconnect
     closesocket(sock);
 
-	String::TSeqStr seq;
-	String::Split(response, "\n", seq);
-	if (seq.size() == 0) {
-		res.status = -1;
-		res.data = "response data is wrong";
-		return res;
-	}
-	String::TSeqStr hdrseq;
-	String::Split(seq[0], " ", hdrseq);
-	if (hdrseq.size() > 1) {
-		res.status = atoi(hdrseq[1].c_str());
-	}
-	if (res.status == 200) {
-		res.data = seq[seq.size()-1];
-	}
+    String::TSeqStr seq;
+    String::Split(response, "\n", seq);
+    if (seq.size() == 0) {
+        res.status = -1;
+        res.data = "response data is wrong";
+        return res;
+    }
+    String::TSeqStr hdrseq;
+    String::Split(seq[0], " ", hdrseq);
+    if (hdrseq.size() > 1) {
+        res.status = atoi(hdrseq[1].c_str());
+    }
+    if (res.status == 200) {
+        res.data = seq[seq.size()-1];
+    }
     return res;
 }
 

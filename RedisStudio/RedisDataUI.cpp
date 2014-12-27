@@ -103,6 +103,14 @@ CDuiString RedisDataUI::GetVirtualwndName()
 
 void RedisDataUI::RefreshWnd()
 {
+    CDuiString redisName = RedisClient::GetInstance().GetName();
+    /// 用户是否已经连接其它server
+    if (redisName != m_sCurRedisName) 
+    {
+        m_sCurRedisName = redisName;
+        m_UpdateDbs.clear();
+    } 
+
     if (!m_UpdateDbs.empty()) {
         return;
     }
@@ -119,32 +127,32 @@ void RedisDataUI::RefreshWnd()
     m_oObjPool.clear();
     for (int i=0; i<databases; ++i)
     {
-      int databases = RedisClient::GetInstance().SelectDB(i);
-      long long dbsize =  RedisClient::GetInstance().DbSize();
-      m_UpdateDbs.insert(i);
-      CDuiString theIndex;
-      theIndex.Format(_T("%d (%lld)"), i, dbsize);
-      CDuiString newTitle = oldTitle;
-      newTitle.Replace(_T("$"), theIndex.GetData());
-      CTreeNodeUI* pNode = new CTreeNodeUI();
+        int databases = RedisClient::GetInstance().SelectDB(i);
+        long long dbsize =  RedisClient::GetInstance().DbSize();
+        m_UpdateDbs.insert(i);
+        CDuiString theIndex;
+        theIndex.Format(_T("%d (%lld)"), i, dbsize);
+        CDuiString newTitle = oldTitle;
+        newTitle.Replace(_T("$"), theIndex.GetData());
+        CTreeNodeUI* pNode = new CTreeNodeUI();
       
-      pNode->SetItemText(newTitle);
-      //pNode->SetBkImage(pNodelist->GetBkImage());
-      pNode->SetFixedHeight(20);
-      pNode->SetContextMenuUsed(true);
+        pNode->SetItemText(newTitle);
+        //pNode->SetBkImage(pNodelist->GetBkImage());
+        pNode->SetFixedHeight(20);
+        pNode->SetContextMenuUsed(true);
 
-      //pNode->SetIndex(myIdx--);
-      /// 此处用tag先代替treelevel(还未实现)
+        //pNode->SetIndex(myIdx--);
+        /// 此处用tag先代替treelevel(还未实现)
       
-      pNode->SetTag(i+1);
-      pNode->SetAttribute(_T("itemattr"), _T("valign=\"vcenter\" font=\"5\" textpadding=\"5,3,0,0\""));
-      pNode->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='1_close.png' source='0,0,0,0'\" normalimage=\"file='1_open.png' source='0,0,0,0'\""));
-      /// 设置为收缩并禁用
-      m_bIsKeyRender = true;
-      pNode->GetFolderButton()->Selected(true);
-      pNode->GetFolderButton()->SetEnabled(false);
-      m_bIsKeyRender = false;
-      pKeyNode->AddChildNode(pNode);
+        pNode->SetTag(i+1);
+        pNode->SetAttribute(_T("itemattr"), _T("valign=\"vcenter\" font=\"5\" textpadding=\"5,3,0,0\""));
+        pNode->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='1_close.png' source='0,0,0,0'\" normalimage=\"file='1_open.png' source='0,0,0,0'\""));
+        /// 设置为收缩并禁用
+        m_bIsKeyRender = true;
+        pNode->GetFolderButton()->Selected(true);
+        pNode->GetFolderButton()->SetEnabled(false);
+        m_bIsKeyRender = false;
+        pKeyNode->AddChildNode(pNode);
     }
     m_oObjPool.resize(databases);
     m_oKeyRoot.resize(databases);
@@ -166,24 +174,24 @@ LRESULT RedisDataUI::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPara
     switch (uMsg)
     {
     case WM_USER_DATAADD:
-      lRes = OnDataAdd(GetHWND(), wParam, lParam);
-      break;
+        lRes = OnDataAdd(GetHWND(), wParam, lParam);
+        break;
     case WM_USER_TREEADD:
-      lRes = OnKeyAdd(GetHWND(), wParam, lParam);
-      break;
+        lRes = OnKeyAdd(GetHWND(), wParam, lParam);
+        break;
     case WM_USER_TREEVERBOSE:
-      lRes = OnKeyVerbose(GetHWND(), wParam, lParam);
-      break;
+        lRes = OnKeyVerbose(GetHWND(), wParam, lParam);
+        break;
     case WM_USER_DATAVERBOSE:
-      lRes = OnDataVerbose(GetHWND(), wParam, lParam);
-      break;
+        lRes = OnDataVerbose(GetHWND(), wParam, lParam);
+        break;
     case WM_USER_MENU_KEYDEL:
-      lRes = OnKeyDel(GetHWND(), wParam, lParam);
-      break;
+        lRes = OnKeyDel(GetHWND(), wParam, lParam);
+        break;
     default:
-      bHandled = FALSE;
-      lRes = FALSE;
-      break;
+        bHandled = FALSE;
+        lRes = FALSE;
+        break;
     }
     return lRes;
 }
@@ -225,8 +233,7 @@ void RedisDataUI::OnItemDBClick(TNotifyUI &msg)
         if (m_Thread.isRunning()) {
             UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
             return;
-        }
-        
+        }        
         m_pAssistNode = pActiveNode;
         m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroudWorkForRenderLevel));
         try
@@ -235,7 +242,6 @@ void RedisDataUI::OnItemDBClick(TNotifyUI &msg)
         }
         catch (std::exception& ex)
         {
-            /// who care ?
             (void)(ex);
         }
         return;

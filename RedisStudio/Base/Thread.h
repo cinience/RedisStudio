@@ -1,4 +1,4 @@
-#ifndef Base_Thread_INCLUDED
+﻿#ifndef Base_Thread_INCLUDED
 #define Base_Thread_INCLUDED
 
 #include <Windows.h>

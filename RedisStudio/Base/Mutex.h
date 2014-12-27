@@ -1,4 +1,4 @@
-#ifndef Base_ScopedMutex_INCLUDED
+﻿#ifndef Base_ScopedMutex_INCLUDED
 #define Base_ScopedMutex_INCLUDED
 
 #include "ScopedLock.h"

@@ -1,4 +1,4 @@
-#ifndef Base_Http_INCLUDED
+﻿#ifndef Base_Http_INCLUDED
 #define Base_Http_INCLUDED
 
 #include "ScopedLock.h"

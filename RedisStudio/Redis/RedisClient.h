@@ -11,7 +11,6 @@
 
 typedef void (* callback)(const CDuiString& );
 
-
 class RedisResult;
 
 /// 恶心的单例，有空重构 

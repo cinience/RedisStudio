@@ -1,4 +1,4 @@
-#ifndef Base_Event_INCLUDED
+﻿#ifndef Base_Event_INCLUDED
 #define Base_Event_INCLUDED
 
 #include <Windows.h>

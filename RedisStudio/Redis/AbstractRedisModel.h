@@ -17,8 +17,6 @@ public:
         int idx = 0,
         const std::string& field="") = 0;
 
-
-
     RedisClient* GetClient()
     {
         return m_pClient;

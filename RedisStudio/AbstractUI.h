@@ -26,7 +26,7 @@ public:
         return 0;
     }
 
-    // 设置窗口句柄
+    /// 设置窗口句柄
     inline void SetHWND(HWND hwnd)
     {
         m_hWnd = hwnd;

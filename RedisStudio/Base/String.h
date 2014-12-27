@@ -1,4 +1,4 @@
-#ifndef Base_String_INCLUDED
+﻿#ifndef Base_String_INCLUDED
 #define Base_String_INCLUDED
 
 #include <string>
