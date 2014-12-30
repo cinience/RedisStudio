@@ -59,7 +59,7 @@ IDI_ICON1               ICON                    "..\\Skin\\icon.ico"
 // IDR_ZIP_SKIN
 //
 
-IDR_ZIP_SKIN            ZIPRES                  "..\\Skin\\skin-en.zip"
+IDR_ZIP_SKIN            ZIPRES                  "..\\Skin\\skin.zip"
 #endif    // 中文(简体，中国) resources
 /////////////////////////////////////////////////////////////////////////////
 

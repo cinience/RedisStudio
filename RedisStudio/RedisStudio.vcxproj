@@ -141,10 +141,14 @@
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>md "$(SolutionDir)bin/skin"
-xcopy "$(SolutionDir)Skin/skin-en" "$(SolutionDir)bin/skin" /s /e /k /y
-del "$(SolutionDir)bin\skin\*.psd"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>cd $(SolutionDir)Skin\skin-en
+if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(SolutionDir)Skin\skin.zip *
+</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -197,10 +201,14 @@ del "$(SolutionDir)bin\skin\*.psd"</Command>
       <OutputFile>$(IntDir)$(ProjectName).bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
-      <Command>md "$(SolutionDir)bin/skin"
-xcopy "$(SolutionDir)Skin/skin-en" "$(SolutionDir)bin/skin" /s /e /k /y
-del "$(SolutionDir)bin\skin\*.psd"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>cd $(SolutionDir)Skin\skin-en
+if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(SolutionDir)Skin\skin.zip *
+</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='UnicodeDebug|Win32'">
     <Midl>
