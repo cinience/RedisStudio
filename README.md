@@ -1,7 +1,7 @@
 #RedisStudio (Redis GUI Client)
 
 ## Download
-[Let's Go](https://github.com/cinience/RedisStudio/releases)  
+[![GitHub release](https://img.shields.io/github/release/cinience/RedisStudio.svg?style=flat-square)](https://github.com/cinience/RedisStudio/releases) 
   
 ## Introduction
     1. Redis Studio is Redis GUI Client，support Windows xp, windows 7, windows 8
