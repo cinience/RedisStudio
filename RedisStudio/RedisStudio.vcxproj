@@ -358,7 +358,6 @@ del "$(SolutionDir)bin\skin\*.psd"</Command>
     <ClInclude Include="DuiEx\UIMenu.h" />
     <ClInclude Include="MainFrameWhd.h" />
     <ClInclude Include="MessageBoxWhd.h" />
-    <ClInclude Include="RedisClient.h" />
     <ClInclude Include="RedisConfigUI.h" />
     <ClInclude Include="RedisDataUI.h" />
     <ClInclude Include="RedisHelpUI.h" />

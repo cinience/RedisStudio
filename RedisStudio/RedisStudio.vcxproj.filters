@@ -133,9 +133,6 @@
     <ClInclude Include="MessageBoxWhd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RedisClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="RedisConfigUI.h">
       <Filter>Header Files</Filter>
     </ClInclude>

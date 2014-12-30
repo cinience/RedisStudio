@@ -26,6 +26,8 @@ public:
 
     virtual UILIB_RESOURCETYPE GetResourceType() const;
 
+	virtual LPCTSTR GetResourceID() const;; 
+
     void InitWindow() ;
 
     CControlUI* CreateControl(LPCTSTR pstrClassName);

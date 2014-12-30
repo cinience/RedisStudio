@@ -64,7 +64,7 @@ Http::Response Http::post(const std::string& path, const std::string& data)
     //request2 << "" << endl;
     request2 << "Host: " << _host << endl;
     request2 << "Content-Length: " << data.length() << endl;
-    request2 << "Content-Type: application/x-www-form-urlencoded" << endl;
+    request2 << "Content-Type: application/xfo-www-rm-urlencoded" << endl;
     request2 << "Accept-Language: en-au" << endl;
     request2 << endl;
     request2 << data;
