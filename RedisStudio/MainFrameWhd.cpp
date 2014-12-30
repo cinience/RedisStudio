@@ -116,7 +116,12 @@ DuiLib::CDuiString CMainFrameWnd::GetSkinFile()
 
 DuiLib::UILIB_RESOURCETYPE CMainFrameWnd::GetResourceType() const
 {
-    return UILIB_FILE;
+    return UILIB_ZIPRESOURCE;
+}
+
+LPCTSTR CMainFrameWnd::GetResourceID() const
+{
+	return MAKEINTRESOURCE(IDR_ZIP_SKIN);
 }
 
 CControlUI* CMainFrameWnd::CreateControl(LPCTSTR pstrClassName)

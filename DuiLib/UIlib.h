@@ -27,6 +27,13 @@
 // NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+#define UILIB_API 
+#pragma comment(lib,"oledlg.lib")
+#pragma comment(lib,"winmm.lib")
+#pragma comment(lib,"comctl32.lib") 
+#pragma comment(lib,"Riched20.lib")
+
+#if 0
 #if defined(UILIB_EXPORTS)
 #if defined(_MSC_VER)
 #define UILIB_API __declspec(dllexport)
@@ -38,6 +45,7 @@
 #define UILIB_API __declspec(dllimport)
 #else
 #define UILIB_API 
+#endif
 #endif
 #endif
 
