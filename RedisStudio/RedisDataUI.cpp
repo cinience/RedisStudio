@@ -1,7 +1,8 @@
 ﻿#include "stdafx.h"
+#include "UserMessage.h"
 #include "RedisDataUI.h"
 #include "Base/String.h"
-#include "UserMessage.h"
+#include "Base/Util.h"
 #include "Base/CharacterSet.h"
 #include "Redis/RedisResult.h"
 #include "Redis/RedisClient.h"
@@ -674,7 +675,15 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
     if (!RedisClient::GetInstance().GetData(key, type, GetResult())) return;
     m_RedisData.type = Base::CharacterSet::ANSIToUnicode(type).c_str();
     m_RedisData.size.Format(_T("%u"), GetResult().RowSize() );
-    m_RedisData.ttl.Format(_T("%lld"), RedisClient::GetInstance().TTL(key));
+    long long ttl = RedisClient::GetInstance().TTL(key);
+    m_RedisData.ttl.Format(_T("%lld"), ttl);
+    if (ttl > 0) 
+    {
+        m_RedisData.ttl.Append(_T(" "));
+        m_RedisData.ttl.Append(_T("("));
+        m_RedisData.ttl.Append(Base::CharacterSet::ANSIToUnicode(Base::Util::HumanReadableTimeDuration(ttl)).c_str());	
+        m_RedisData.ttl.Append(_T(")"));
+    } 
     /// 预先显示数据类型等信息
     ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, NULL, NULL);
 

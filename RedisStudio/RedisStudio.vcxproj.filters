@@ -116,6 +116,9 @@
     <ClCompile Include="Base\Http.cpp">
       <Filter>Source Files\Base</Filter>
     </ClCompile>
+    <ClCompile Include="Base\Util.cpp">
+      <Filter>Source Files\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AbstractUI.h">
@@ -221,6 +224,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Base\Http.h">
+      <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Util.h">
       <Filter>Header Files\Base</Filter>
     </ClInclude>
   </ItemGroup>
