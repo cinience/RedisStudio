@@ -517,6 +517,8 @@ void RedisDataUI::BackgroudWorkForRenderLevel(void)
             if (treeit->second != NULL)  continue;
 
             std::string theValue = treeit->first;
+            /// 叶子节点删除默认前缀@
+            theValue.erase(theValue.begin());
             CTreeNodeUI* pPNode = m_pAssistNode;
 
             CTreeNodeUI* pnode = NewNode(theValue, treeit->second == NULL);
@@ -540,7 +542,8 @@ void RedisDataUI::BackgroudWorkForRenderLevel(void)
             pData->pNode = pnode;
             ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
         }
-    } else 
+    } 
+    else 
     {
         CTreeNodeUI* pPNode = m_pAssistNode;
         std::vector<string> vec;
@@ -566,8 +569,10 @@ void RedisDataUI::BackgroudWorkForRenderLevel(void)
         for ( ; it != itend; ++it) 
         {
             if (it->second != NULL)  continue;
-
-            CTreeNodeUI* pnode = NewNode(it->first, it->second == NULL);
+            std::string theValue = it->first;
+            /// 叶子节点删除默认前缀@
+            theValue.erase(theValue.begin());
+            CTreeNodeUI* pnode = NewNode(theValue, it->second == NULL);
             /// 如果是叶子节点，则tag为0
             pnode->SetTag(it->second == NULL ? 0 : 1);
             TreeKeyContactData* pData = new TreeKeyContactData;
@@ -627,13 +632,18 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
             std::string theValue = *it;
             Base::String::TSeqStr seq;
             Base::String::Split(theValue, ":", seq);
-            seq[seq.size()-1] = theValue;
+            /// 叶子节点可能出现和目录节点同名，所以默认所有叶子节点加前缀@
+            /*  eg:
+             *   user 
+             *   user:a
+             */
+            seq[seq.size()-1] = "@"+theValue;
             TkeyTree* curnode = &m_oKeyRoot[nodeIdx];
             for (std::size_t idx=0; idx < seq.size()-1; ++idx)
             {
                 TkeyTree::iterator it = curnode->find(seq[idx]);
                 if (it == curnode->end()) {
-                    TkeyTree *item = new TkeyTree;	
+                    TkeyTree *item = new TkeyTree;
                     m_oObjPool[nodeIdx].push_back(item);
                     curnode->insert(std::pair<std::string, void*>(seq[idx], item));
                     curnode = item;
