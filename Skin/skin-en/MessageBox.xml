@@ -29,7 +29,7 @@
       <Label name="lbl_msg_10030" visible="false" inset="8,2,2,0" text="The key doesn't exist, Please reload." height="32"/>
       <Label name="lbl_msg_10031" visible="false" inset="8,2,2,0" text="Failed to update the data." height="32"/>   
       
-      <Label name="lbl_msg_20000" visible="false" inset="8,2,2,0" text="A new version of RedisStudio is available." height="32"/>   
+      <Label name="lbl_msg_20000" visible="false" inset="8,2,2,0" text="A new version $ of RedisStudio is available." height="32"/>   
       <Label name="lbl_msg_20001" visible="false" inset="8,2,2,0" text="In development!" height="32"/>  
       <Label name="lbl_msg_20002" visible="false" inset="8,2,2,0" text="Please click to select the item." height="32"/>  
       <Label name="lbl_msg_20003" visible="false" inset="8,2,2,0" text="save conf failed.(Insufficient permissions?)" height="32"/>

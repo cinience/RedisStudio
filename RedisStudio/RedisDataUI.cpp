@@ -52,7 +52,8 @@ RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):Abstra
 {
     CDialogBuilder builder;
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
-    if( pContainer ) {
+    if( pContainer ) 
+    {
         this->Add(pContainer);
     }
     else 
@@ -162,7 +163,8 @@ void RedisDataUI::RefreshWnd()
 
 bool RedisDataUI::CanChange() 
 {
-    if (m_Thread.isRunning()) {
+    if (m_Thread.isRunning()) 
+    {
         return false;
     }
     return true;
@@ -230,8 +232,10 @@ void RedisDataUI::OnItemDBClick(TNotifyUI &msg)
     if (m_bIsKeyRender) return;
 
     /// 非叶子节点并未加载子节点，则加载子节点
-    if (pActiveNode->GetTag() != 0 && !pActiveNode->IsHasChild()) {
-        if (m_Thread.isRunning()) {
+    if (pActiveNode->GetTag() != 0 && !pActiveNode->IsHasChild()) 
+    {
+        if (m_Thread.isRunning()) 
+        {
             UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
             return;
         }        
@@ -681,7 +685,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
     {
         m_RedisData.ttl.Append(_T(" "));
         m_RedisData.ttl.Append(_T("("));
-        m_RedisData.ttl.Append(Base::CharacterSet::ANSIToUnicode(Base::Util::HumanReadableTimeDuration(ttl)).c_str());	
+        m_RedisData.ttl.Append(Base::CharacterSet::ANSIToUnicode(Base::Util::convertHumanTimeDuration(ttl)).c_str());	
         m_RedisData.ttl.Append(_T(")"));
     } 
     /// 预先显示数据类型等信息
@@ -982,3 +986,4 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
          pNode->RemoveAt((CTreeNodeUI*)myArray[i]);
      }
  }
+ 

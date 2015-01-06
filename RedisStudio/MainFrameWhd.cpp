@@ -16,6 +16,12 @@
 
 #include "Base/Http.h"
 #include "Base/CharacterSet.h"
+#include "Base/Util.h"
+
+#include "rapidjson/document.h"     // rapidjson's DOM-style API
+#include "rapidjson/prettywriter.h"    // for stringify JSON
+#include "rapidjson/stringbuffer.h"
+using namespace rapidjson;
 
 DUI_BEGIN_MESSAGE_MAP(CMainFrameWnd, WindowImplBase)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
@@ -121,7 +127,7 @@ DuiLib::UILIB_RESOURCETYPE CMainFrameWnd::GetResourceType() const
 
 LPCTSTR CMainFrameWnd::GetResourceID() const
 {
-	return MAKEINTRESOURCE(IDR_ZIP_SKIN);
+    return MAKEINTRESOURCE(IDR_ZIP_SKIN);
 }
 
 CControlUI* CMainFrameWnd::CreateControl(LPCTSTR pstrClassName)
@@ -320,21 +326,57 @@ LRESULT CMainFrameWnd::OnConnecting( HWND hwnd, WPARAM wParam, LPARAM lParam )
 
 LRESULT CMainFrameWnd::OnUpdate(HWND hwnd, WPARAM wParam, LPARAM lParam)
 {
-    UserMessageBox(GetHWND(), 20000, NULL, MB_ICONINFORMATION);
-    ::ShellExecute(NULL, NULL, _T("https://github.com/cinience/RedisStudio/releases"), NULL, NULL, NULL); 
+    std::string *data = (std::string*) (wParam);
+    StringStream ss(data->c_str());
+    Document document;
+    if (document.ParseStream<0>(ss).HasParseError())
+    {
+        delete data; 
+        return TRUE;
+    }
+    bool needNotice = false;
+    if (document.HasMember("Notice")) 
+    {
+        needNotice = document["Notice"].GetBool();
+    }
+    if (needNotice) 
+    {
+        std::string version;
+        if (document.HasMember("Version")) 
+        {
+            version = document["Version"].GetString();
+        }
+        if (version > VERSION) {
+            UserMessageBox(GetHWND(), 20000, Base::CharacterSet::ANSIToUnicode(version).c_str(), MB_ICONINFORMATION);
+            //::ShellExecute(NULL, NULL, _T("https://github.com/cinience/RedisStudio/releases"), NULL, NULL, NULL); 
+        }
+    }
+    delete data;
     return TRUE;
 }
 
 DWORD WINAPI CMainFrameWnd::BackgroundWork( LPVOID lpParameter )
 {
+    std::string code = Base::Util::getPCID();
+    StringBuffer buffer;
+    PrettyWriter<StringBuffer> writer(buffer);
+    writer.StartObject();
+    writer.String("Version");
+    writer.String(VERSION);
+
+    writer.String("MCode");
+    writer.String(code.c_str());
+
+    writer.EndObject();
     Base::Http http("hiredis.com", 80);
     Base::Http::Response rep = {0, ""};
     if (http.ping()) {
-        rep = http.post("/redisstudio/version", "");
+        rep = http.post("/redisstudio/version", buffer.GetString());
     }
 
-    if (rep.status == 200 && rep.data.size() > 2 && rep.data != VERSION) {
-        ::PostMessage(m_hwnd, WM_USER_UPDATE, (WPARAM)NULL, NULL);
+    if (rep.status == 200 && rep.data.size() > 0) {
+        std::string *data = new std::string(rep.data);
+        ::PostMessage(m_hwnd, WM_USER_UPDATE, (WPARAM)data, NULL);
     }
     return 0;
 }
@@ -376,8 +418,3 @@ LRESULT CMainFrameWnd::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPa
     }
     return lRes;
 }
-
-
-
-
-

@@ -50,7 +50,7 @@ Http::Response Http::post(const std::string& path, const std::string& data)
     Response res;
     res.status = -1;
 
-    char buffer[1024];
+    char buffer[1024] = {0};
     struct sockaddr_in serveraddr;
     int sock;
     
@@ -64,8 +64,7 @@ Http::Response Http::post(const std::string& path, const std::string& data)
     //request2 << "" << endl;
     request2 << "Host: " << _host << endl;
     request2 << "Content-Length: " << data.length() << endl;
-    request2 << "Content-Type: application/xfo-www-rm-urlencoded" << endl;
-    request2 << "Accept-Language: en-au" << endl;
+    request2 << "Content-Type: application/json;charset=utf-8" << endl;
     request2 << endl;
     request2 << data;
     request = request2.str();
@@ -117,7 +116,8 @@ Http::Response Http::post(const std::string& path, const std::string& data)
         res.status = atoi(hdrseq[1].c_str());
     }
     if (res.status == 200) {
-        res.data = seq[seq.size()-1];
+        char *p = strstr(buffer, "\r\n\r\n") + 4;
+        res.data = p;
     }
     return res;
 }
