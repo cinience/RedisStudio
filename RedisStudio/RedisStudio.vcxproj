@@ -311,6 +311,7 @@ if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(Soluti
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DBClient.cpp" />
     <ClCompile Include="Base\CharacterSet.cpp" />
     <ClCompile Include="Base\Event.cpp" />
     <ClCompile Include="Base\Http.cpp" />
@@ -322,6 +323,7 @@ if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(Soluti
     <ClCompile Include="ConnInfoSubWhd.cpp" />
     <ClCompile Include="ConnInfoUI.cpp" />
     <ClCompile Include="DuiEx\UIMenu.cpp" />
+    <ClCompile Include="Environment.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MainFrameWhd.cpp" />
     <ClCompile Include="MessageBoxWhd.cpp" />
@@ -338,6 +340,15 @@ if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(Soluti
     <ClCompile Include="Redis\RedisSetModel.cpp" />
     <ClCompile Include="Redis\RedisStringModel.cpp" />
     <ClCompile Include="Redis\RedisZSetModel.cpp" />
+    <ClCompile Include="SSDB\bytes.cpp" />
+    <ClCompile Include="SSDB\link.cpp" />
+    <ClCompile Include="SSDB\SSDBClient.cpp" />
+    <ClCompile Include="SSDB\SSDBHashModel.cpp" />
+    <ClCompile Include="SSDB\SSDBModelFactory.cpp" />
+    <ClCompile Include="SSDB\SSDBQueueModel.cpp" />
+    <ClCompile Include="SSDB\SSDBStringModel.cpp" />
+    <ClCompile Include="SSDB\SSDBZSetModel.cpp" />
+    <ClCompile Include="SSDB\SSDB_impl.cpp" />
     <ClCompile Include="StdAfx.cpp">
       <PreprocessorDefinitions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -351,6 +362,7 @@ if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(Soluti
     <ClCompile Include="UserMessage.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DBClient.h" />
     <ClInclude Include="AbstractUI.h" />
     <ClInclude Include="Base\CharacterSet.h" />
     <ClInclude Include="Base\Event.h" />
@@ -366,6 +378,7 @@ if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(Soluti
     <ClInclude Include="ConnInfoUI.h" />
     <ClInclude Include="DuiEx\ObserverBase.h" />
     <ClInclude Include="DuiEx\UIMenu.h" />
+    <ClInclude Include="Environment.h" />
     <ClInclude Include="MainFrameWhd.h" />
     <ClInclude Include="MessageBoxWhd.h" />
     <ClInclude Include="RedisConfigUI.h" />
@@ -383,6 +396,18 @@ if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(Soluti
     <ClInclude Include="Redis\RedisStringModel.h" />
     <ClInclude Include="Redis\RedisZSetModel.h" />
     <ClInclude Include="Redis\ScopedRedisReply.h" />
+    <ClInclude Include="SSDB\AbstractSSDBModel.h" />
+    <ClInclude Include="SSDB\bytes.h" />
+    <ClInclude Include="SSDB\link.h" />
+    <ClInclude Include="SSDB\SSDB.h" />
+    <ClInclude Include="SSDB\SSDBClient.h" />
+    <ClInclude Include="SSDB\SSDBHashModel.h" />
+    <ClInclude Include="SSDB\SSDBModelFactory.h" />
+    <ClInclude Include="SSDB\SSDBQueueModel.h" />
+    <ClInclude Include="SSDB\SSDBStringModel.h" />
+    <ClInclude Include="SSDB\SSDBZSetModel.h" />
+    <ClInclude Include="SSDB\SSDB_impl.h" />
+    <ClInclude Include="SSDB\strings.h" />
     <ClInclude Include="StdAfx.h" />
     <ClInclude Include="UserMessage.h" />
     <ClInclude Include="resource.h" />

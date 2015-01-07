@@ -5,7 +5,7 @@ DUI_BEGIN_MESSAGE_MAP(RedisHelpUI, CNotifyPump)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
 DUI_END_MESSAGE_MAP()
 
-RedisHelpUI::RedisHelpUI(const CDuiString& strXML, CPaintManagerUI* pm) : AbstraceUI(pm)
+RedisHelpUI::RedisHelpUI(const CDuiString& strXML, CPaintManagerUI* pm, Environment* env) : AbstraceUI(pm, env)
 {
     CDialogBuilder builder;
     // 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息。

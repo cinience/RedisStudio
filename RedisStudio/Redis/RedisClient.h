@@ -8,31 +8,20 @@
 #include "../Base/Mutex.h"
 #include "ScopedRedisReply.h"
 #include "RedisModelFactory.h"
-
-typedef void (* callback)(const CDuiString& );
+#include "../DBClient.h"
 
 class RedisResult;
-
-/// 恶心的单例，有空重构 
-class RedisClient
+ 
+class RedisClient : public DBClient
 {
-public:
-    typedef std::list<std::string> TSeqArrayResults;
-    typedef std::map<std::string, std::string> TDicConfig;
 public:
     RedisClient();
 
     ~RedisClient();
 
-    static RedisClient& GetInstance();
-
-    void SetServerInfo(const CDuiString& name, const string& ip, int port,const string& auth);
-
-    bool Connect();
+    bool Connect(const std::string& ip, int port, const std::string& auth);
 
     bool IsConnected();
-
-    void NeedReConnect();
 
     void Quit();
 
@@ -72,28 +61,12 @@ public:
 
     redisReply* Command(const char* fmt, ...);
 
-    void SetLastError(const std::string& err);
-
-    CDuiString GetLastError();
-
-    CDuiString GetName();
-public:
-    void SetDisConnectCallback(callback fn)
-    {
-        m_fnDisConnect = fn;
-    }
-
 private:
     redisContext* m_pClient;
     bool          m_bReConnect;
-    CDuiString    m_strName;
-    string        m_strIP;
-    int           m_iPort;
-    string        m_strAuth;
     int           m_Databases;
-    CDuiString    m_StrErr;
     bool          m_isConnected;
-    callback      m_fnDisConnect;
+    //callback      m_fnDisConnect;
     Base::Mutex         m_mutex;
     std::auto_ptr<RedisModelFactory> m_ModelFactory;
     

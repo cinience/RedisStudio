@@ -23,6 +23,7 @@
 #include <string.h>
 #include "win32fixes.h"
 
+RtlGenRandomFunc RtlGenRandom;
 
 /* Redefined here to avoid redis.h so it can be used in other projects */
 #define REDIS_NOTUSED(V) ((void) V)

@@ -11,7 +11,7 @@ class CTreeView;
 class RedisInfoUI : public AbstraceUI
 {
 public:
-    RedisInfoUI(const CDuiString& strXML, CPaintManagerUI* pm);
+    RedisInfoUI(const CDuiString& strXML, CPaintManagerUI* pm, Environment* env);
 
     ~RedisInfoUI();
 

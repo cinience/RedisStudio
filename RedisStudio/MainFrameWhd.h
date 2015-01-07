@@ -4,6 +4,8 @@
 #include <exdisp.h>
 #include <comdef.h>
 
+#include "Environment.h"
+
 class ConnInfoUI;
 class RedisInfoUI;
 
@@ -77,6 +79,7 @@ private:
     CTextUI* m_pVersionControl;
 
     CStdStringPtrMap m_TabContainer;
+	Environment m_pEnv;
 };
 
 

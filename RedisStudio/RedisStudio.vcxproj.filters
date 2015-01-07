@@ -30,6 +30,12 @@
     <Filter Include="Source Files\Redis">
       <UniqueIdentifier>{697f197a-6e73-41bf-895d-ffdfabe56a90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SSDB">
+      <UniqueIdentifier>{f8a7eddf-7c28-42a9-bf51-11648fa469fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SSDB">
+      <UniqueIdentifier>{e809e3dc-45d6-4f07-a223-4692fe994c3b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ConnInfoSubWhd.cpp">
@@ -118,6 +124,39 @@
     </ClCompile>
     <ClCompile Include="Base\Util.cpp">
       <Filter>Source Files\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="SSDB\SSDB_impl.cpp">
+      <Filter>Source Files\SSDB</Filter>
+    </ClCompile>
+    <ClCompile Include="SSDB\link.cpp">
+      <Filter>Source Files\SSDB</Filter>
+    </ClCompile>
+    <ClCompile Include="SSDB\bytes.cpp">
+      <Filter>Source Files\SSDB</Filter>
+    </ClCompile>
+    <ClCompile Include="DBClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Environment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SSDB\SSDBClient.cpp">
+      <Filter>Source Files\SSDB</Filter>
+    </ClCompile>
+    <ClCompile Include="SSDB\SSDBHashModel.cpp">
+      <Filter>Source Files\SSDB</Filter>
+    </ClCompile>
+    <ClCompile Include="SSDB\SSDBModelFactory.cpp">
+      <Filter>Source Files\SSDB</Filter>
+    </ClCompile>
+    <ClCompile Include="SSDB\SSDBQueueModel.cpp">
+      <Filter>Source Files\SSDB</Filter>
+    </ClCompile>
+    <ClCompile Include="SSDB\SSDBStringModel.cpp">
+      <Filter>Source Files\SSDB</Filter>
+    </ClCompile>
+    <ClCompile Include="SSDB\SSDBZSetModel.cpp">
+      <Filter>Source Files\SSDB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -228,6 +267,48 @@
     </ClInclude>
     <ClInclude Include="Base\Util.h">
       <Filter>Header Files\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\bytes.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\link.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\SSDB.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\SSDB_impl.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\strings.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="DBClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Environment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\SSDBClient.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\AbstractSSDBModel.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\SSDBHashModel.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\SSDBModelFactory.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\SSDBQueueModel.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\SSDBStringModel.h">
+      <Filter>Header Files\SSDB</Filter>
+    </ClInclude>
+    <ClInclude Include="SSDB\SSDBZSetModel.h">
+      <Filter>Header Files\SSDB</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

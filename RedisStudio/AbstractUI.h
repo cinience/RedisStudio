@@ -1,9 +1,11 @@
 ﻿#pragma once
 
+#include "Environment.h"
+
 class AbstraceUI : public CContainerUI, public CNotifyPump
 {
 public:
-    AbstraceUI(CPaintManagerUI* pm):m_hWnd(NULL),m_pPaintManager(pm){};
+    AbstraceUI(CPaintManagerUI* pm, Environment* env):m_hWnd(NULL),m_pPaintManager(pm),m_pEnv(env){};
 
     virtual ~AbstraceUI(){};
 
@@ -41,7 +43,13 @@ public:
     {
         return m_pPaintManager;
     }
+
+	inline Environment* Env()
+	{
+		return m_pEnv;
+	}
 private:
     CPaintManagerUI* m_pPaintManager;
+	Environment* m_pEnv;
     HWND    m_hWnd;
 };

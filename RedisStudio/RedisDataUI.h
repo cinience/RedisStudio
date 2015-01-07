@@ -37,7 +37,7 @@ public:
         RedisResult result;
     };
 
-    RedisDataUI(const CDuiString& strXML, CPaintManagerUI* pm);
+    RedisDataUI(const CDuiString& strXML, CPaintManagerUI* pm, Environment* env);
 
     ~RedisDataUI();
 

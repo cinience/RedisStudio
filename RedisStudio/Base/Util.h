@@ -9,9 +9,9 @@ namespace Base {
 class Util {
 
 public:
-    static std::string convertHumanTimeDuration(long long seconds);
+    static std::string ConvertHumanTimeDuration(long long seconds);
 
-    static std::string getPCID(); 
+    static std::string GetUniqueMachineID(); 
     };
 
 } // namespace Base

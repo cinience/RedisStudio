@@ -7,6 +7,8 @@
 #include "rapidjson/document.h"     // rapidjson's DOM-style API
 #include "rapidjson/prettywriter.h"    // for stringify JSON
 #include "rapidjson/filestream.h"   // wrapper of C stream for prettywriter as output
+
+#include "DBClient.h"
 using namespace rapidjson;
 
 DUI_BEGIN_MESSAGE_MAP(ConnInfoUI, CNotifyPump)
@@ -17,9 +19,8 @@ DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE,OnItemActive)
 DUI_END_MESSAGE_MAP()
 
 static const char* const kConfigFilePath = "Config.json" ;
-bool ConnInfoUI::m_isConecting = false;
 
-ConnInfoUI::ConnInfoUI(const CDuiString& strXML,CPaintManagerUI* pm):AbstraceUI(pm)
+ConnInfoUI::ConnInfoUI(const CDuiString& strXML,CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env)
 {
     CDialogBuilder builder;
     /// 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息
@@ -191,17 +192,19 @@ void ConnInfoUI::OnItemClick( TNotifyUI &msg )
 
 void ConnInfoUI::OnItemActive( TNotifyUI &msg )
 {
-    if (m_isConecting)
+    if (m_Thread.isRunning())
     {
         UserMessageBox(GetHWND(), 10013, NULL, MB_ICONINFORMATION);
         return ;
     }
     int idx = m_pListUI->GetCurSel();
-    CDuiString* s = new CDuiString(Base::CharacterSet::ANSIToUnicode(m_dicServerInfo[kServerNameIndex][idx]).c_str());
+    CDuiString name = CDuiString(Base::CharacterSet::ANSIToUnicode(m_dicServerInfo[kServerNameIndex][idx]).c_str());
     std::string ip = m_dicServerInfo[kServerIpIndex][idx];
     int port = atoi(m_dicServerInfo[kServerPortIndex][idx].c_str());
     std::string auth = m_dicServerInfo[kServerAuthIndex][idx];
-    RedisClient::GetInstance().SetServerInfo(*s, ip, port, auth);
+	Env()->SetDBName(name);
+	Env()->SetDBServerInfo(ip, port, auth);
+    //RedisClient::GetInstance().SetServerInfo(*s, ip, port, auth);
     DoConnect();
 }
 
@@ -263,31 +266,36 @@ void ConnInfoUI::OnRfhConnInfo(TNotifyUI& msg)
 
 void ConnInfoUI::DoConnect()
 {
-    m_isConecting = true;
-    DWORD dwThreadID = 0;
-    HANDLE hThread = CreateThread(NULL, 0, &ConnInfoUI::BackgroundWork, GetHWND(),  0, &dwThreadID);
+	if (m_Thread.isRunning()) return;
+
+	m_pWork.reset(new Base::RunnableAdapter<ConnInfoUI>(*this, &ConnInfoUI::BackgroundWork));
+	try
+	{
+		m_Thread.start(*m_pWork);
+	}
+	catch (std::exception& ex)
+	{
+		/// who care ?
+		(void)(ex);
+	}
 }
 
-
-DWORD WINAPI ConnInfoUI::BackgroundWork( LPVOID lpParameter )
+void ConnInfoUI::BackgroundWork( void )
 {
-    HWND hwnd = (HWND) lpParameter;
-    RedisClient& obj = RedisClient::GetInstance();
-    CDuiString* s = new CDuiString(obj.GetName());
-    ::PostMessage(hwnd, WM_USER_CONNECTING, (WPARAM)s, NULL);
-    s = new CDuiString(obj.GetName());
-    obj.Connect();
-    
-    if (obj.IsConnected())
-    {
-        ::PostMessage(hwnd, WM_USER_CONNECTED, (WPARAM)s, NULL);
+    CDuiString* s = new CDuiString(Env()->GetDBName());
+
+    ::PostMessage(GetHWND(), WM_USER_CONNECTING, (WPARAM)s, NULL);
+    s = new CDuiString(Env()->GetDBName());
+
+    DBClient *cli = DBClient::Create(Env()->GetDBIP(), Env()->GetDBPort(), Env()->GetDBPasswd());
+	if (cli && cli->IsConnected())
+	{
+		Env()->SetDBClient(cli);
+        ::PostMessage(GetHWND(), WM_USER_CONNECTED, (WPARAM)s, NULL);
     }
     else 
     {
+		Env()->SetDBClient(NULL);
         delete s;
-        //*s = obj.GetLastError();
-        //::PostMessage(hwnd, WM_USER_UNCONNECT, (WPARAM)NULL, NULL);
     }
-    m_isConecting = false;
-    return 0;
 }

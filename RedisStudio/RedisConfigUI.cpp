@@ -10,7 +10,7 @@ DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMCLICK,OnItemClick)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE,OnItemActive)
 DUI_END_MESSAGE_MAP()
 
-RedisConfigUI::RedisConfigUI(const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm)
+RedisConfigUI::RedisConfigUI(const CDuiString& strXML, CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env)
 {    
     CDialogBuilder builder;
     // 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息。
@@ -58,7 +58,8 @@ void RedisConfigUI::OnClick(TNotifyUI& msg)
     }
     else if (msg.pSender->GetName() == _T("btn_config_sync"))
     {
-        RedisClient::GetInstance().ReWriteConfig();
+		Env()->GetDBClient()->ReWriteConfig();
+        //RedisClient::GetInstance().ReWriteConfig();
     }
 }
 
@@ -79,13 +80,15 @@ void RedisConfigUI::OnItemActive( TNotifyUI &msg )
 
 bool RedisConfigUI::GetConfig()
 {
-    if (!RedisClient::GetInstance().GetConfig(m_dicConfig)) return false;
+    //if (!RedisClient::GetInstance().GetConfig(m_dicConfig)) return false;
+	if (!Env()->GetDBClient()->GetConfig(m_dicConfig)) return false;
     return true;
 }
 
 bool RedisConfigUI::SetConfig(const RedisClient::TDicConfig& config)
 {
-    return RedisClient::GetInstance().SetConfig(config);
+    //return RedisClient::GetInstance().SetConfig(config);
+	return Env()->GetDBClient()->SetConfig(config);
 }
 
 void RedisConfigUI::DoFillData()

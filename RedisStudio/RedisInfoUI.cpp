@@ -14,7 +14,7 @@ DUI_ON_MSGTYPE(DUI_MSGTYPE_SELECTCHANGED,OnSelectChanged)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMCLICK,OnItemClick)
 DUI_END_MESSAGE_MAP()
 
-RedisInfoUI::RedisInfoUI( const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm),m_bIsRefresh(false)
+RedisInfoUI::RedisInfoUI( const CDuiString& strXML, CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env),m_bIsRefresh(false)
 {
     CDialogBuilder builder;
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); // 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息。
@@ -112,10 +112,11 @@ void RedisInfoUI::DoRefreshWork()
 
 void RedisInfoUI::RefreshInfo()
 {
-    if (!RedisClient::GetInstance().IsConnected()) return;
+	DBClient* cli = Env()->GetDBClient();
+    if (!cli->IsConnected()) return;
 
     string info ;
-    if (!RedisClient::GetInstance().Info(info)) return;
+    if (!cli->Info(info)) return;
 
     if (info.empty()) return;
     std::string* pInfo = new std::string(info);

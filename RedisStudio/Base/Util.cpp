@@ -6,7 +6,7 @@
 
 namespace Base {
 
-std::string Util::convertHumanTimeDuration(long long seconds)
+std::string Util::ConvertHumanTimeDuration(long long seconds)
 {
     std::stringstream sb;
     if (seconds == 0) {
@@ -43,7 +43,7 @@ std::string Util::convertHumanTimeDuration(long long seconds)
     return sb.str();
 }
 
-std::string Util::getPCID()
+std::string Util::GetUniqueMachineID()
 {
     BYTE szSystemInfo[4096] = {0}; 
     UINT uSystemInfoLen = 0; 

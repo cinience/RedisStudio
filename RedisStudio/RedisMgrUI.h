@@ -5,7 +5,7 @@
 class RedisMgrUI : public AbstraceUI
 {
 public:
-    RedisMgrUI(const CDuiString& strXML, CPaintManagerUI* pm);
+    RedisMgrUI(const CDuiString& strXML, CPaintManagerUI* pm, Environment* env);
 
     ~RedisMgrUI(void);
 

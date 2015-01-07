@@ -7,10 +7,13 @@
 #include "AbstractUI.h"
 #include "hiredis/hiredis.h"
 
+#include "Base/Thread.h"
+#include "Base/RunnableAdapter.h"
+
 class ConnInfoUI : public AbstraceUI,public IListCallbackUI 
 {    
 public:
-    ConnInfoUI(const CDuiString& strXML, CPaintManagerUI* pm);
+    ConnInfoUI(const CDuiString& strXML, CPaintManagerUI* pm, Environment* env);
 
     void Initialize();
 
@@ -53,9 +56,11 @@ private:
 
     CListUI* m_pListUI;
 
+	Base::Thread     m_Thread;
+	std::auto_ptr< Base::RunnableAdapter<ConnInfoUI> > m_pWork;
+
 public:
-    static DWORD WINAPI BackgroundWork(LPVOID lpParameter);
-    static bool m_isConecting;
+    void BackgroundWork(void);
 
 public:
     static const int kServerNameIndex = 0;

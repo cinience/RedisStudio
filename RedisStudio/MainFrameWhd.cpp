@@ -49,7 +49,8 @@ void CMainFrameWnd::InitWindow()
     SetIcon(IDI_ICON1);
 
     m_hwnd = GetHWND();
-    RedisClient::GetInstance().SetDisConnectCallback(&CMainFrameWnd::OndisConnectCallback);
+    //RedisClient::GetInstance().SetDisConnectCallback(&CMainFrameWnd::OndisConnectCallback);
+
     m_pCloseBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("closebtn")));
     m_pMaxBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("maxbtn")));
     m_pRestoreBtn = static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("restorebtn")));
@@ -135,36 +136,36 @@ CControlUI* CMainFrameWnd::CreateControl(LPCTSTR pstrClassName)
     CDuiString     strXML;
     CDialogBuilder builder;
     AbstraceUI* p = NULL;
-
+	
     if (_tcsicmp(pstrClassName, _T("ConnInfo")) == 0)
     {
         strXML = _T("ConnInfo.xml");
-        p = new ConnInfoUI(strXML, &m_PaintManager);
+        p = new ConnInfoUI(strXML, &m_PaintManager, &m_pEnv);
     }
     else if (_tcsicmp(pstrClassName, _T("RedisInfo")) == 0)
     {
         strXML = _T("RedisInfo.xml");
-        p = new RedisInfoUI(strXML, &m_PaintManager);
+        p = new RedisInfoUI(strXML, &m_PaintManager, &m_pEnv);
     }
     else if (_tcsicmp(pstrClassName, _T("RedisData")) == 0)
     {
         strXML = _T("RedisData.xml");
-        p = new RedisDataUI(strXML, &m_PaintManager);
+        p = new RedisDataUI(strXML, &m_PaintManager, &m_pEnv);
     }
     else if (_tcsicmp(pstrClassName, _T("RedisConfig")) == 0)
     {
         strXML = _T("RedisConfig.xml");
-        p = new RedisConfigUI(strXML, &m_PaintManager);
+        p = new RedisConfigUI(strXML, &m_PaintManager, &m_pEnv);
     }
     else if (_tcsicmp(pstrClassName, _T("RedisMgr")) == 0)
     {
         strXML = _T("RedisMgr.xml");
-        p = new RedisMgrUI(strXML, &m_PaintManager);
+        p = new RedisMgrUI(strXML, &m_PaintManager, &m_pEnv);
     }
     else if (_tcsicmp(pstrClassName, _T("RedisHelp")) == 0)
     {
         strXML = _T("RedisHelp.xml");
-        p = new RedisHelpUI(strXML, &m_PaintManager);
+        p = new RedisHelpUI(strXML, &m_PaintManager, &m_pEnv);
     }
     //if (! strXML.IsEmpty())
     //{
@@ -227,8 +228,9 @@ void CMainFrameWnd::OnSelectChanged( TNotifyUI &msg )
     CTabLayoutUI* pControl = static_cast<CTabLayoutUI*>(m_PaintManager.FindControl(_T("switch")));
     
     if (name != _T("ConnInfo") &&
-        name != _T("RedisHelp") &&
-        !RedisClient::GetInstance().IsConnected())
+        name != _T("RedisHelp") &&(
+		!m_pEnv.GetDBClient() ||
+        !m_pEnv.GetDBClient()->IsConnected()))
     {
         pControl->SelectItem(0);
         COptionUI* pBut = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("btn_ConnInfo")));
@@ -357,7 +359,7 @@ LRESULT CMainFrameWnd::OnUpdate(HWND hwnd, WPARAM wParam, LPARAM lParam)
 
 DWORD WINAPI CMainFrameWnd::BackgroundWork( LPVOID lpParameter )
 {
-    std::string code = Base::Util::getPCID();
+    std::string code = Base::Util::GetUniqueMachineID();
     StringBuffer buffer;
     PrettyWriter<StringBuffer> writer(buffer);
     writer.StartObject();

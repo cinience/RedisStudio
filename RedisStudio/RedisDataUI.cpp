@@ -48,7 +48,7 @@ DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE, OnItemActive)
 DUI_END_MESSAGE_MAP()
 
 
-RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm ):AbstraceUI(pm),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false)
+RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false)
 {
     CDialogBuilder builder;
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
@@ -105,7 +105,8 @@ CDuiString RedisDataUI::GetVirtualwndName()
 
 void RedisDataUI::RefreshWnd()
 {
-    CDuiString redisName = RedisClient::GetInstance().GetName();
+    //CDuiString redisName = RedisClient::GetInstance().GetName();
+	CDuiString redisName = Env()->GetDBName();
     /// 用户是否已经连接其它server
     if (redisName != m_sCurRedisName) 
     {
@@ -119,7 +120,8 @@ void RedisDataUI::RefreshWnd()
     CTreeNodeUI* pKeyNode = m_pRootNode;
     static CDuiString oldTitle = pKeyNode->GetItemText();
     DelChildNode(pKeyNode);
-    int databases = RedisClient::GetInstance().DatabasesNum();
+    //int databases = RedisClient::GetInstance().DatabasesNum();
+	int  databases = Env()->GetDBClient()->DatabasesNum();
     m_UpdateDbs.clear();
     m_oKeyRoot.clear();
     for (std::size_t idx = 0; idx < m_oObjPool.size(); ++idx)
@@ -129,8 +131,11 @@ void RedisDataUI::RefreshWnd()
     m_oObjPool.clear();
     for (int i=0; i<databases; ++i)
     {
-        int databases = RedisClient::GetInstance().SelectDB(i);
-        long long dbsize =  RedisClient::GetInstance().DbSize();
+     //   int databases = RedisClient::GetInstance().SelectDB(i);
+     //   long long dbsize =  RedisClient::GetInstance().DbSize();
+		int databases = Env()->GetDBClient()->SelectDB(i);
+		long long dbsize = Env()->GetDBClient()->DbSize();
+
         m_UpdateDbs.insert(i);
         CDuiString theIndex;
         theIndex.Format(_T("%d (%lld)"), i, dbsize);
@@ -438,10 +443,12 @@ void RedisDataUI::OnCommit(TNotifyUI& msg)
         oldValue = Base::CharacterSet::UnicodeToANSI(textElement->GetText(1));
     }
     std::string newValue = Base::CharacterSet::UnicodeToANSI(m_pRichEdit->GetText().GetData()); 
-    if (!RedisClient::GetInstance().UpdateData(key, oldValue, newValue, idx, field))
+    //if (!RedisClient::GetInstance().UpdateData(key, oldValue, newValue, idx, field))
+	if (Env()->GetDBClient() && Env()->GetDBClient()->UpdateData(key, oldValue, newValue, idx, field))
     {       
         /// todo 此处应该提示错误详情
-        UserMessageBox(GetHWND(), 10031, RedisClient::GetInstance().GetLastError().GetData() , MB_ICONERROR);
+		CDuiString err(Base::CharacterSet::ANSIToUnicode(Env()->GetDBClient()->GetLastError()).c_str());
+        UserMessageBox(GetHWND(), 10031, err, MB_ICONERROR);
         return;
     }
 
@@ -605,10 +612,13 @@ void RedisDataUI::BackgroudWorkForRenderLevel(void)
 
 void RedisDataUI::BackgroundWorkForRefreshKeys(void)
 {
-    if (!RedisClient::GetInstance().IsConnected()) return;
+	if (!Env()->GetDBClient() || !Env()->GetDBClient()->IsConnected()) return ;
+    //if (!RedisClient::GetInstance().IsConnected()) return;
 
     CTreeNodeUI* pParentNode = m_pRootNode;
     
+	DBClient* cli = Env()->GetDBClient();
+
     for (int nodeIdx=0; nodeIdx<pParentNode->GetCountChild(); ++nodeIdx)
     {
         CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(nodeIdx);
@@ -616,9 +626,10 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
         if (m_UpdateDbs.find(nodeIdx) == m_UpdateDbs.end()) continue;
 
         DelChildNode(pKeyNode);
-        if (!RedisClient::GetInstance().SelectDB(nodeIdx)) continue;
+        //if (!RedisClient::GetInstance().SelectDB(nodeIdx)) continue;
+		if (!cli->SelectDB(nodeIdx)) continue;
         /// 重新填充dbsize
-        long long dbsize =  RedisClient::GetInstance().DbSize();;
+        long long dbsize =  cli->DbSize();
         CDuiString theIndex;
         theIndex.Format(_T("%d (%lld)"), nodeIdx, dbsize);
         CDuiString newTitle = pParentNode->GetItemText();
@@ -627,7 +638,9 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
 
         RedisClient::TSeqArrayResults results;
  
-        if (!RedisClient::GetInstance().keys("*", results)) return;
+        //if (!RedisClient::GetInstance().keys("*", results)) return;
+		if (!cli->keys("*", results)) return;
+
         RedisClient::TSeqArrayResults::const_iterator it    = results.begin();
         RedisClient::TSeqArrayResults::const_iterator itend = results.end();
         m_oKeyRoot[nodeIdx].clear();
@@ -664,11 +677,12 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
 
 void RedisDataUI::BackgroundWorkForRefreshValues(void)
 {
-    RedisClient::GetInstance().SelectDB(m_RedisData.db);
+	DBClient* cli = Env()->GetDBClient();
+    cli->SelectDB(m_RedisData.db);
     std::string key, type;
     CEditUI*     pKeyEdit = static_cast<CEditUI*>(GetPaintMgr()->FindControl(kKeyEditName));
     key = Base::CharacterSet::UnicodeToANSI(pKeyEdit->GetText().GetData());
-    if (!RedisClient::GetInstance().Exists(key))
+    if (!cli->Exists(key))
     {
         /// 如果该键已经不存在，则提示用户重新加载
        ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, 10030, NULL);
@@ -676,16 +690,16 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
     }
     m_RedisData.key = Base::CharacterSet::ANSIToUnicode(key).c_str();
 
-    if (!RedisClient::GetInstance().GetData(key, type, GetResult())) return;
+    if (!cli->GetData(key, type, GetResult())) return;
     m_RedisData.type = Base::CharacterSet::ANSIToUnicode(type).c_str();
     m_RedisData.size.Format(_T("%u"), GetResult().RowSize() );
-    long long ttl = RedisClient::GetInstance().TTL(key);
+    long long ttl = cli->TTL(key);
     m_RedisData.ttl.Format(_T("%lld"), ttl);
     if (ttl > 0) 
     {
         m_RedisData.ttl.Append(_T(" "));
         m_RedisData.ttl.Append(_T("("));
-        m_RedisData.ttl.Append(Base::CharacterSet::ANSIToUnicode(Base::Util::convertHumanTimeDuration(ttl)).c_str());	
+        m_RedisData.ttl.Append(Base::CharacterSet::ANSIToUnicode(Base::Util::ConvertHumanTimeDuration(ttl)).c_str());	
         m_RedisData.ttl.Append(_T(")"));
     } 
     /// 预先显示数据类型等信息
@@ -783,7 +797,8 @@ LRESULT RedisDataUI::OnKeyDel( HWND hwnd, WPARAM wParam, LPARAM lParam )
     CDuiString a = pNode->GetItemText();
     std::string key = Base::CharacterSet::UnicodeToANSI(pNode->GetItemText().GetData());
     /// 暂时用同步方法删除，大数据时会有卡顿
-    if (!RedisClient::GetInstance().DelKey(key)) return FALSE;
+	DBClient* cli = Env()->GetDBClient();
+    if (!cli->DelKey(key)) return FALSE;
     while (pNode)
     {
         if (pNode->IsHasChild() || pNode->GetTag()>0) break;

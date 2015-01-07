@@ -7,8 +7,7 @@
 
 RedisClient::RedisClient() : m_bReConnect(true),m_isConnected(false),
 m_pClient(NULL)
-{
-    m_ModelFactory.reset(new RedisModelFactory(this));
+{    
 }
 
 
@@ -17,39 +16,24 @@ RedisClient::~RedisClient()
     
 }
 
-RedisClient& RedisClient::GetInstance()
-{
-    static RedisClient client;
-    return client;
-}
-
-void RedisClient::SetServerInfo( const CDuiString& name, const string& ip, int port,const string& auth )
-{
-    m_strName = name;
-    m_strIP = ip;
-    m_iPort = port;
-    m_strAuth = auth;
-}
-
-bool RedisClient::Connect()
+bool RedisClient::Connect(const std::string& ip, int port, const std::string& auth)
 {
     if (IsConnected())
     {
         Quit();
     }
-    if (m_strName.IsEmpty()) return false;
     struct timeval timeout = { 5, 500000 }; 
-    m_pClient = redisConnectWithTimeout((char*)m_strIP.c_str(), 
-        m_iPort, 
+    m_pClient = redisConnectWithTimeout((char*)ip.c_str(), 
+        port, 
         timeout);
     if (m_pClient->err) {        
         SetLastError(m_pClient->errstr);
-        m_fnDisConnect(GetLastError());
+        //m_fnDisConnect(GetLastError());
         return false;
     }
-    if (!m_strAuth.empty())
+    if (!auth.empty())
     {
-        redisReply* reply = Command("AUTH %s", m_strAuth.c_str());
+        redisReply* reply = Command("AUTH %s", auth.c_str());
         if (!(reply && reply->type==REDIS_REPLY_STATUS))
         {
             SetLastError(reply->str);
@@ -57,25 +41,14 @@ bool RedisClient::Connect()
         }
     }
     m_isConnected = true;
-    if (m_isConnected && DatabasesNum(m_Databases)) return true;
+    //if (m_isConnected && DatabasesNum(m_Databases)) return true;
     return false;
 }
 
 
 bool RedisClient::IsConnected()
 {
-    //redisReply* reply = Command("ping");
-    //if (reply->type == REDIS_REPLY_STATUS)
-    //{
-    //    return true;
-    //}
-    //return false;
     return m_isConnected;
-}
-
-void RedisClient::NeedReConnect()
-{
-    m_bReConnect = true;
 }
 
 
@@ -92,6 +65,11 @@ bool RedisClient::Info(std::string& results)
         retVal = true;
         results = reply->str;
     }
+	else if (reply->type == REDIS_REPLY_STATUS)
+	{
+		/// ssdb 返回正常状态
+		retVal = true;
+	}
     freeReplyObject(reply);
 
     return retVal;
@@ -177,27 +155,12 @@ redisReply* RedisClient::Command( const char* fmt, ... )
     if (reply==NULL)
     {
         if (reply != NULL) {
-             m_fnDisConnect(GetLastError());
+             //m_fnDisConnect(GetLastError());
         }
         m_isConnected = false;
     }
 
     return reply;
-}
-
-void RedisClient::SetLastError( const std::string& err )
-{
-    m_StrErr = Base::CharacterSet::ANSIToUnicode(err).c_str();
-}
-
-DuiLib::CDuiString RedisClient::GetLastError()
-{
-    return m_StrErr;
-}
-
-DuiLib::CDuiString RedisClient::GetName()
-{
-    return m_strName;
 }
 
 bool RedisClient::DatabasesNum(int& num)
@@ -329,6 +292,7 @@ bool RedisClient::GetData( const std::string& key, std::string& type, RedisResul
     if (!Type(key, type)) return false;
 
     if (type == "none") return false;
+	m_ModelFactory.reset(new RedisModelFactory(this));
     return m_ModelFactory->GetRedisModel(type)->GetData(key, results);
 }
 
@@ -353,5 +317,6 @@ bool RedisClient::UpdateData( const std::string& key,
     if (!Type(key, type)) return false;
 
     if (type == "none") return false;
+	m_ModelFactory.reset(new RedisModelFactory(this));
     return m_ModelFactory->GetRedisModel(type)->UpdateData(key, oldValue, newValue, idx, field);
 }
