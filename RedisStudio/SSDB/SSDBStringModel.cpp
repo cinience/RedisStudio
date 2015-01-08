@@ -18,7 +18,11 @@ bool SSDBStringModel::GetData( const std::string& key, RedisResult& results )
 		myvalue = val;
 		return true;
 	}
-    return false;
+	else 
+	{
+		return false;
+	}
+    return true;
 }
 
 bool SSDBStringModel::UpdateData( const std::string& key, 

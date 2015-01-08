@@ -198,6 +198,8 @@ bool RedisClient::DatabasesNum(int& num)
 
 int RedisClient::DatabasesNum()
 {
+	m_Databases = 0;
+	DatabasesNum(m_Databases);
     return m_Databases;
 }
 

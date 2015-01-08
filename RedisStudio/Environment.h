@@ -4,6 +4,8 @@ class DBClient;
 
 class Environment {
 public:
+	Environment();
+
 	void SetDBClient(DBClient* cli);
 
 	void SetDBServerInfo(const std::string& addr, int port, const std::string& auth="");

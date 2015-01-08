@@ -9,7 +9,7 @@
 SSDBModelFactory::SSDBModelFactory(ssdb::Client* client)
 {
     Register("string", new SSDBStringModel(client));
-    Register("queue",   new SSDBQueueModel(client));
+    Register("queue",  new SSDBQueueModel(client));
     Register("zset",   new SSDBZSetModel(client));
     Register("hash",   new SSDBHashModel(client));
 }

@@ -146,8 +146,7 @@
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>cd $(SolutionDir)Skin\skin-en
-if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(SolutionDir)Skin\skin.zip *
-</Command>
+$(SolutionDir)tools\zip.exe -r $(SolutionDir)Skin\skin.zip *</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

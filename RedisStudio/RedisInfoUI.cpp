@@ -113,6 +113,8 @@ void RedisInfoUI::DoRefreshWork()
 void RedisInfoUI::RefreshInfo()
 {
 	DBClient* cli = Env()->GetDBClient();
+	if (cli == NULL) return;
+
     if (!cli->IsConnected()) return;
 
     string info ;

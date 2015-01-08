@@ -1,6 +1,12 @@
 ﻿#include "StdAfx.h"
 #include "Environment.h"
 
+
+Environment::Environment():m_DbClient(NULL)
+{
+
+}
+
 void Environment::SetDBClient(DBClient* cli)
 {
 	m_DbClient = cli;

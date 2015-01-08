@@ -9,8 +9,7 @@
 
 
 SSDBClient::SSDBClient() : m_Client(NULL),m_isConnected(false)
-{
-    //m_ModelFactory.reset(new RedisModelFactory(this));
+{  
 }
 
 
@@ -62,7 +61,6 @@ bool SSDBClient::Info(std::string& results)
 
 bool SSDBClient::keys(const std::string& matchstr, TSeqArrayResults& results)
 {
-    //bool retVal = false;
 	int keyNum = 20000;
 	std::string key ;
 	/// SSDB的key可以重复
