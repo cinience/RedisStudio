@@ -9,6 +9,8 @@ class AbstractRedisModel
 public:
     AbstractRedisModel(RedisClient* client) : m_pClient(client) {}
 
+    virtual ~AbstractRedisModel() {}
+
     virtual bool GetData(const std::string& key, RedisResult& results) =  0;
 
     virtual bool UpdateData(const std::string& key, 

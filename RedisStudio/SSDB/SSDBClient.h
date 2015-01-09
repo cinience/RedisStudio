@@ -59,13 +59,12 @@ public:
 
     bool DelKey(const std::string& key);
 
-	std::string RealKey(const std::string& key);
+    std::string RealKey(const std::string& key);
 
 private:
+    ssdb::Client* m_Client;
 
-	ssdb::Client* m_Client;
-
-	std::map<std::string, std::string> m_Keys;
+    std::map<std::string, std::string> m_Keys;
     string        m_strIP;
     int           m_iPort;
     string        m_strAuth;
@@ -73,8 +72,7 @@ private:
     bool          m_isConnected;
     
     Base::Mutex         m_mutex;
-    std::auto_ptr<SSDBModelFactory> m_ModelFactory;
-    
+    std::auto_ptr<SSDBModelFactory> m_ModelFactory; 
 };
 
 #endif

@@ -65,11 +65,11 @@ bool RedisClient::Info(std::string& results)
         retVal = true;
         results = reply->str;
     }
-	else if (reply->type == REDIS_REPLY_STATUS)
-	{
-		/// ssdb 返回正常状态
-		retVal = true;
-	}
+    else if (reply->type == REDIS_REPLY_STATUS)
+    {
+        /// ssdb 返回正常状态
+        retVal = true;
+    }
     freeReplyObject(reply);
 
     return retVal;
@@ -198,8 +198,8 @@ bool RedisClient::DatabasesNum(int& num)
 
 int RedisClient::DatabasesNum()
 {
-	m_Databases = 0;
-	DatabasesNum(m_Databases);
+    m_Databases = 0;
+    DatabasesNum(m_Databases);
     return m_Databases;
 }
 
@@ -294,7 +294,7 @@ bool RedisClient::GetData( const std::string& key, std::string& type, RedisResul
     if (!Type(key, type)) return false;
 
     if (type == "none") return false;
-	m_ModelFactory.reset(new RedisModelFactory(this));
+    m_ModelFactory.reset(new RedisModelFactory(this));
     return m_ModelFactory->GetRedisModel(type)->GetData(key, results);
 }
 
@@ -319,6 +319,6 @@ bool RedisClient::UpdateData( const std::string& key,
     if (!Type(key, type)) return false;
 
     if (type == "none") return false;
-	m_ModelFactory.reset(new RedisModelFactory(this));
+    m_ModelFactory.reset(new RedisModelFactory(this));
     return m_ModelFactory->GetRedisModel(type)->UpdateData(key, oldValue, newValue, idx, field);
 }

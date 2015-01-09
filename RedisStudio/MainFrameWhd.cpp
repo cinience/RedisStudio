@@ -136,7 +136,7 @@ CControlUI* CMainFrameWnd::CreateControl(LPCTSTR pstrClassName)
     CDuiString     strXML;
     CDialogBuilder builder;
     AbstraceUI* p = NULL;
-	
+    
     if (_tcsicmp(pstrClassName, _T("ConnInfo")) == 0)
     {
         strXML = _T("ConnInfo.xml");
@@ -226,11 +226,11 @@ void CMainFrameWnd::OnSelectChanged( TNotifyUI &msg )
     CDuiString name = msg.pSender->GetName();
     name.Replace(_T("btn_"), _T(""));
     CTabLayoutUI* pControl = static_cast<CTabLayoutUI*>(m_PaintManager.FindControl(_T("switch")));
-    
+    DBClient* cli = m_pEnv.GetDBClient();
     if (name != _T("ConnInfo") &&
         name != _T("RedisHelp") &&(
-		!m_pEnv.GetDBClient() ||
-        !m_pEnv.GetDBClient()->IsConnected()))
+        !cli ||
+        !cli->IsConnected()))
     {
         pControl->SelectItem(0);
         COptionUI* pBut = static_cast<COptionUI*>(m_PaintManager.FindControl(_T("btn_ConnInfo")));
@@ -251,13 +251,15 @@ void CMainFrameWnd::OnSelectChanged( TNotifyUI &msg )
     }
     if (p == NULL) return;
 
-    if (pLastTab != NULL && p != pLastTab && !pLastTab->CanChange()) {
+    if (pLastTab != NULL && p != pLastTab && !pLastTab->CanChange()) 
+    {
         if (pLastButton) pLastButton->Selected(true);
         UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
         return;
     }
     
-    if (p && p!=pLastTab) {
+    if (p && p!=pLastTab) 
+    {
         p->RefreshWnd();
         pControl->SelectItem(p->GetIndex());
         pLastTab = p;
@@ -290,7 +292,7 @@ LRESULT CMainFrameWnd::OnConnected( HWND hwnd, WPARAM wParam, LPARAM lParam )
     delete s;
     m_pConnectControl->SetText(newText);
     // m_pConnectControl->SetVisible(true);
-    /*m_pConnectControl->NeedUpdate();*/
+    // m_pConnectControl->NeedUpdate();
    
     m_pLayConnect->SetVisible(true);
     m_pLayConnecting->SetVisible(false);
@@ -348,7 +350,8 @@ LRESULT CMainFrameWnd::OnUpdate(HWND hwnd, WPARAM wParam, LPARAM lParam)
         {
             version = document["Version"].GetString();
         }
-        if (version > VERSION) {
+        if (version > VERSION) 
+        {
             UserMessageBox(GetHWND(), 20000, Base::CharacterSet::ANSIToUnicode(version).c_str(), MB_ICONINFORMATION);
             //::ShellExecute(NULL, NULL, _T("https://github.com/cinience/RedisStudio/releases"), NULL, NULL, NULL); 
         }
@@ -372,11 +375,13 @@ DWORD WINAPI CMainFrameWnd::BackgroundWork( LPVOID lpParameter )
     writer.EndObject();
     Base::Http http("hiredis.com", 80);
     Base::Http::Response rep = {0, ""};
-    if (http.ping()) {
+    if (http.ping()) 
+    {
         rep = http.post("/redisstudio/version", buffer.GetString());
     }
 
-    if (rep.status == 200 && rep.data.size() > 0) {
+    if (rep.status == 200 && rep.data.size() > 0) 
+    {
         std::string *data = new std::string(rep.data);
         ::PostMessage(m_hwnd, WM_USER_UPDATE, (WPARAM)data, NULL);
     }

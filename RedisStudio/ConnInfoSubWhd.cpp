@@ -200,4 +200,3 @@ bool ConnInfoSubWhd::OnAltInfo()
     dicObj[ConnInfoUI::kServerAuthIndex][m_celIdx] = auth;
     return true;
 }
-

@@ -11,6 +11,8 @@ class AbstractSSDBModel
 public:
     AbstractSSDBModel(ssdb::Client* client) : m_pClient(client) {}
 
+    ~AbstractSSDBModel() {}
+
     virtual bool GetData(const std::string& key, RedisResult& results) =  0;
 
     virtual bool UpdateData(const std::string& key, 

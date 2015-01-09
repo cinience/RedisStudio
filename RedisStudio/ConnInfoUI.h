@@ -56,8 +56,8 @@ private:
 
     CListUI* m_pListUI;
 
-	Base::Thread     m_Thread;
-	std::auto_ptr< Base::RunnableAdapter<ConnInfoUI> > m_pWork;
+    Base::Thread     m_Thread;
+    std::auto_ptr< Base::RunnableAdapter<ConnInfoUI> > m_pWork;
 
 public:
     void BackgroundWork(void);

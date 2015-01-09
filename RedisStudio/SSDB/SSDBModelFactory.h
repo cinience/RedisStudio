@@ -3,7 +3,7 @@
 #include <map>
 
 namespace ssdb {
-	class Client;
+    class Client;
 }
 class AbstractSSDBModel;
 

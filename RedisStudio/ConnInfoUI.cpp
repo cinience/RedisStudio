@@ -25,7 +25,8 @@ ConnInfoUI::ConnInfoUI(const CDuiString& strXML,CPaintManagerUI* pm, Environment
     CDialogBuilder builder;
     /// 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
-    if( pContainer ) {
+    if( pContainer ) 
+    {
         this->Add(pContainer);
     }
     else {
@@ -146,7 +147,8 @@ LPCTSTR ConnInfoUI::GetItemText( CControlUI* pControl, int iIndex, int iSubItem 
 {
     const std::string& str = m_dicServerInfo[iSubItem][iIndex];
     
-    if (iSubItem == 3 && !str.empty()) {
+    if (iSubItem == 3 && !str.empty()) 
+    {
         CDuiString authStr;
         for (std::size_t idx=0; idx<str.size(); ++idx) 
         {
@@ -202,9 +204,14 @@ void ConnInfoUI::OnItemActive( TNotifyUI &msg )
     std::string ip = m_dicServerInfo[kServerIpIndex][idx];
     int port = atoi(m_dicServerInfo[kServerPortIndex][idx].c_str());
     std::string auth = m_dicServerInfo[kServerAuthIndex][idx];
-	Env()->SetDBName(name);
-	Env()->SetDBServerInfo(ip, port, auth);
-    //RedisClient::GetInstance().SetServerInfo(*s, ip, port, auth);
+    DBClient* cli = Env()->GetDBClient();
+    if (cli) 
+    {
+        delete cli;
+        Env()->SetDBClient(NULL);
+    }
+    Env()->SetDBName(name);
+    Env()->SetDBServerInfo(ip, port, auth);
     DoConnect();
 }
 
@@ -266,18 +273,18 @@ void ConnInfoUI::OnRfhConnInfo(TNotifyUI& msg)
 
 void ConnInfoUI::DoConnect()
 {
-	if (m_Thread.isRunning()) return;
+    if (m_Thread.isRunning()) return;
 
-	m_pWork.reset(new Base::RunnableAdapter<ConnInfoUI>(*this, &ConnInfoUI::BackgroundWork));
-	try
-	{
-		m_Thread.start(*m_pWork);
-	}
-	catch (std::exception& ex)
-	{
-		/// who care ?
-		(void)(ex);
-	}
+    m_pWork.reset(new Base::RunnableAdapter<ConnInfoUI>(*this, &ConnInfoUI::BackgroundWork));
+    try
+    {
+        m_Thread.start(*m_pWork);
+    }
+    catch (std::exception& ex)
+    {
+        /// who care ?
+        (void)(ex);
+    }
 }
 
 void ConnInfoUI::BackgroundWork( void )
@@ -288,14 +295,14 @@ void ConnInfoUI::BackgroundWork( void )
     s = new CDuiString(Env()->GetDBName());
 
     DBClient *cli = DBClient::Create(Env()->GetDBIP(), Env()->GetDBPort(), Env()->GetDBPasswd());
-	if (cli && cli->IsConnected())
-	{
-		Env()->SetDBClient(cli);
+    if (cli && cli->IsConnected())
+    {
+        Env()->SetDBClient(cli);
         ::PostMessage(GetHWND(), WM_USER_CONNECTED, (WPARAM)s, NULL);
     }
     else 
     {
-		Env()->SetDBClient(NULL);
+        Env()->SetDBClient(NULL);
         delete s;
     }
 }

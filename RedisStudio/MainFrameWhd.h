@@ -28,7 +28,7 @@ public:
 
     virtual UILIB_RESOURCETYPE GetResourceType() const;
 
-	virtual LPCTSTR GetResourceID() const;; 
+    virtual LPCTSTR GetResourceID() const;; 
 
     void InitWindow() ;
 
@@ -79,7 +79,5 @@ private:
     CTextUI* m_pVersionControl;
 
     CStdStringPtrMap m_TabContainer;
-	Environment m_pEnv;
+    Environment m_pEnv;
 };
-
-

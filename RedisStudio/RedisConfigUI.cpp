@@ -87,8 +87,7 @@ bool RedisConfigUI::GetConfig()
 
 bool RedisConfigUI::SetConfig(const RedisClient::TDicConfig& config)
 {
-    //return RedisClient::GetInstance().SetConfig(config);
-	return Env()->GetDBClient()->SetConfig(config);
+    return Env()->GetDBClient()->SetConfig(config);
 }
 
 void RedisConfigUI::DoFillData()

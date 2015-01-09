@@ -9,19 +9,19 @@ SSDBStringModel::SSDBStringModel(ssdb::Client* client ) : AbstractSSDBModel(clie
 
 bool SSDBStringModel::GetData( const std::string& key, RedisResult& results )
 {
-	std::string val;
-	if (GetClient()->get(key, &val).ok()) 
-	{
-		results.NewColumn("Value");
-		results.NewRow();
-		string& myvalue = results.Value(results.RowSize()-1, 0);
-		myvalue = val;
-		return true;
-	}
-	else 
-	{
-		return false;
-	}
+    std::string val;
+    if (GetClient()->get(key, &val).ok()) 
+    {
+        results.NewColumn("Value");
+        results.NewRow();
+        string& myvalue = results.Value(results.RowSize()-1, 0);
+        myvalue = val;
+        return true;
+    }
+    else 
+    {
+        return false;
+    }
     return true;
 }
 

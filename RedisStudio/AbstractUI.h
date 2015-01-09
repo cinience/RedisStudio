@@ -44,12 +44,12 @@ public:
         return m_pPaintManager;
     }
 
-	inline Environment* Env()
-	{
-		return m_pEnv;
-	}
+    inline Environment* Env()
+    {
+        return m_pEnv;
+    }
 private:
     CPaintManagerUI* m_pPaintManager;
-	Environment* m_pEnv;
+    Environment* m_pEnv;
     HWND    m_hWnd;
 };

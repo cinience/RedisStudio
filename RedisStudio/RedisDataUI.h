@@ -100,11 +100,15 @@ private:
     RedisResult& GetResult();
 
 public:
+    void    DoRefreshDBWork();
+
     void    DoPaginateWork();
 
     void    DoRefreshKeysWork();
 
     void    DoRefreshValuesWork();
+
+    void    BackgroundWorkForRefreshDB(void);
 
     void    BackgroudWorkForRenderLevel(void);
 
@@ -154,5 +158,4 @@ private:
     Base::Thread     m_Thread;
     std::set<int>    m_UpdateDbs;
     std::auto_ptr< Base::RunnableAdapter<RedisDataUI> > m_pWork;
-    
 };

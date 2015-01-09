@@ -17,7 +17,7 @@ class RedisClient : public DBClient
 public:
     RedisClient();
 
-    ~RedisClient();
+     ~RedisClient();
 
     bool Connect(const std::string& ip, int port, const std::string& auth);
 
@@ -66,7 +66,6 @@ private:
     bool          m_bReConnect;
     int           m_Databases;
     bool          m_isConnected;
-    //callback      m_fnDisConnect;
     Base::Mutex         m_mutex;
     std::auto_ptr<RedisModelFactory> m_ModelFactory;
     
