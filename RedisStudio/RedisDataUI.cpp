@@ -37,8 +37,6 @@ static const TCHAR* kDataFomatName= _T("redisdata_format_combo");
 static const TCHAR* kDBOperatorReloadMenuName = _T("menu_keys_reload");
 static const TCHAR* kKeyOperatorDelMenuName   = _T("menu_key_del");
 
-
-
 DUI_BEGIN_MESSAGE_MAP(RedisDataUI, CNotifyPump)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK, OnClick)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMDBCLICK, OnItemDBClick)
@@ -47,12 +45,11 @@ DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMRCLICK, OnMenuWakeup)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE, OnItemActive)
 DUI_END_MESSAGE_MAP()
 
-
-RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false)
+RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false),m_oEventDB(false)
 {
     CDialogBuilder builder;
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
-    if( pContainer ) 
+    if (pContainer) 
     {
         this->Add(pContainer);
     }
@@ -140,6 +137,9 @@ LRESULT RedisDataUI::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPara
     LRESULT lRes = TRUE; 
     switch (uMsg)
     {
+	case WM_USER_DBADD:
+		lRes = OnDBAdd(GetHWND(), wParam, lParam);
+		break;
     case WM_USER_DATAADD:
         lRes = OnDataAdd(GetHWND(), wParam, lParam);
         break;
@@ -530,11 +530,11 @@ void RedisDataUI::BackgroundWorkForRefreshDB(void)
         TreeKeyContactData* pData = new TreeKeyContactData;
         pData->pPNode = pKeyNode;
         pData->pNode = pNode;
-        ::PostMessage(GetHWND(), WM_USER_TREEADD, (WPARAM)pData, NULL);
+        ::PostMessage(GetHWND(), WM_USER_DBADD, (WPARAM)pData, NULL);
+		m_oEventDB.wait();
     }
     m_oObjPool.resize(databases);
     m_oKeyRoot.resize(databases);
-    /// 加载key
     BackgroundWorkForRefreshKeys();
 }
 
@@ -794,6 +794,13 @@ LRESULT RedisDataUI::OnDataAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
     m_pList->NeedUpdate();
     if (lParam != NULL) m_oEventListHeader.set();
     return TRUE;
+}
+
+LRESULT RedisDataUI::OnDBAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
+{
+    OnKeyAdd(hwnd, wParam, lParam);
+	m_oEventDB.set();
+	return TRUE;
 }
 
 LRESULT RedisDataUI::OnKeyAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )

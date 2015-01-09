@@ -37,7 +37,6 @@ void RedisInfoUI::Initialize()
     m_RefreshStop  = static_cast<CButtonUI*>(GetPaintMgr()->FindControl(kKeyStopButtonName));    
 }
 
-
 int RedisInfoUI::GetIndex()
 {
     return 1;

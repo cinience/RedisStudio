@@ -2,10 +2,8 @@
 #include "Environment.h"
 #include "DBClient.h"
 
-
 Environment::Environment():m_DbClient(NULL)
 {
-
 }
 
 Environment::~Environment()

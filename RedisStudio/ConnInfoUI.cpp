@@ -25,7 +25,7 @@ ConnInfoUI::ConnInfoUI(const CDuiString& strXML,CPaintManagerUI* pm, Environment
     CDialogBuilder builder;
     /// 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
-    if( pContainer ) 
+    if (pContainer) 
     {
         this->Add(pContainer);
     }
@@ -107,8 +107,6 @@ bool ConnInfoUI::LoadConfig( const std::string& path )
 bool ConnInfoUI::SaveConfig( const std::string& path )
 {
     std::size_t theSize = m_dicServerInfo[kServerNameIndex].size();
-    //Json::Value serverConfig;
-    //Json::Value rootConfig;
 
     FILE* fp = fopen(kConfigFilePath, "w+");
     if (!fp) 

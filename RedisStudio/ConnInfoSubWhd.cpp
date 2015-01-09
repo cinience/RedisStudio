@@ -5,7 +5,6 @@
 #include "Base/CharacterSet.h"
 #include "UserMessage.h"
 
-
 DUI_BEGIN_MESSAGE_MAP(ConnInfoSubWhd, WindowImplBase)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_CLICK,OnClick)
 DUI_END_MESSAGE_MAP()
@@ -49,25 +48,20 @@ void ConnInfoSubWhd::InitWindow()
     *m_needApply = false;
 }
 
-
-
 LPCTSTR ConnInfoSubWhd::GetWindowClassName() const
 {
     return _T("UIConnInfoSubWhd");
 }
-
 
 UINT ConnInfoSubWhd::GetClassStyle() const
 {
     return UI_CLASSSTYLE_DIALOG;
 }
 
-
 void ConnInfoSubWhd::OnFinalMessage( HWND hWnd)
 {
     delete this;
 }
-
 
 DuiLib::UILIB_RESOURCETYPE ConnInfoSubWhd::GetResourceType() const
 {

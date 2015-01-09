@@ -73,7 +73,10 @@ public:
 
     void    OnCommit(TNotifyUI& msg);
 
+
     LRESULT OnDataAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
+
+	LRESULT OnDBAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
     LRESULT OnKeyAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
@@ -145,6 +148,7 @@ private:
 
     Base::Event      m_oEventListHeader;
     Base::Event      m_oEventKey;
+	Base::Event      m_oEventDB;
 
     bool             m_bIsKeyRender; 
 

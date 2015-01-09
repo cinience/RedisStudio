@@ -10,7 +10,8 @@ RedisMgrUI::RedisMgrUI(const CDuiString& strXML, CPaintManagerUI* pm, Environmen
     CDialogBuilder builder;
     /// 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息。
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
-    if( pContainer ) {
+    if( pContainer ) 
+    {
         this->Add(pContainer);
     }
     else {
