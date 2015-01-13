@@ -45,7 +45,7 @@ DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMRCLICK, OnMenuWakeup)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE, OnItemActive)
 DUI_END_MESSAGE_MAP()
 
-RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false),m_oEventDB(false)
+RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false),m_oEventDB(false),m_pLastDBCli(NULL)
 {
     CDialogBuilder builder;
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
@@ -102,13 +102,11 @@ CDuiString RedisDataUI::GetVirtualwndName()
 
 void RedisDataUI::RefreshWnd()
 {
-    CDuiString redisName = Env()->GetDBName();
-    /// 用户是否已经连接其它server
-    if (redisName != m_sCurRedisName) 
+    if (m_pLastDBCli != Env()->GetDBClient() && Env()->GetDBClient())
     {
-        m_sCurRedisName = redisName;
-        m_UpdateDbs.clear();
-    } 
+        m_pLastDBCli = Env()->GetDBClient();
+         m_UpdateDbs.clear();
+    }
 
     if (!m_UpdateDbs.empty()) 
     {
@@ -137,9 +135,9 @@ LRESULT RedisDataUI::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPara
     LRESULT lRes = TRUE; 
     switch (uMsg)
     {
-	case WM_USER_DBADD:
-		lRes = OnDBAdd(GetHWND(), wParam, lParam);
-		break;
+    case WM_USER_DBADD:
+        lRes = OnDBAdd(GetHWND(), wParam, lParam);
+        break;
     case WM_USER_DATAADD:
         lRes = OnDataAdd(GetHWND(), wParam, lParam);
         break;
@@ -495,13 +493,14 @@ void RedisDataUI::BackgroundWorkForRefreshDB(void)
     CTreeNodeUI* pKeyNode = m_pRootNode;
     static CDuiString oldTitle = pKeyNode->GetItemText();
 
-    int  databases = Env()->GetDBClient()->DatabasesNum();
+    DBClient* cli = Env()->GetDBClient();
+    if (cli == NULL) return;
+
+    int  databases = cli->DatabasesNum();
     for (int i=0; i<databases; ++i)
     {
-        //   int databases = RedisClient::GetInstance().SelectDB(i);
-        //   long long dbsize =  RedisClient::GetInstance().DbSize();
-        int databases = Env()->GetDBClient()->SelectDB(i);
-        long long dbsize = Env()->GetDBClient()->DbSize();
+        cli->SelectDB(i);
+        long long dbsize = cli->DbSize();
 
         m_UpdateDbs.insert(i);
         CDuiString theIndex;
@@ -531,10 +530,11 @@ void RedisDataUI::BackgroundWorkForRefreshDB(void)
         pData->pPNode = pKeyNode;
         pData->pNode = pNode;
         ::PostMessage(GetHWND(), WM_USER_DBADD, (WPARAM)pData, NULL);
-		m_oEventDB.wait();
+        m_oEventDB.wait();
     }
     m_oObjPool.resize(databases);
     m_oKeyRoot.resize(databases);
+    Base::Thread::sleep(200);
     BackgroundWorkForRefreshKeys();
 }
 
@@ -799,8 +799,8 @@ LRESULT RedisDataUI::OnDataAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
 LRESULT RedisDataUI::OnDBAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
 {
     OnKeyAdd(hwnd, wParam, lParam);
-	m_oEventDB.set();
-	return TRUE;
+    m_oEventDB.set();
+    return TRUE;
 }
 
 LRESULT RedisDataUI::OnKeyAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )

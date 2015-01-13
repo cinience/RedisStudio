@@ -6,7 +6,7 @@
 #include <map>
 #include "AbstractUI.h"
 #include "hiredis/hiredis.h"
-
+#include "Base/Event.h"
 #include "Base/Thread.h"
 #include "Base/RunnableAdapter.h"
 
@@ -57,6 +57,7 @@ private:
     CListUI* m_pListUI;
 
     Base::Thread     m_Thread;
+    Base::Event      m_Event;
     std::auto_ptr< Base::RunnableAdapter<ConnInfoUI> > m_pWork;
 
 public:

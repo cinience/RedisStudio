@@ -413,10 +413,10 @@ if not exist $(SolutionDir)Skin\skin.zip $(SolutionDir)tools\zip.exe -r $(Soluti
     <ClInclude Include="Version.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="icon.ico" />
+    <ResourceCompile Include="RedisStudio.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="RedisStudio.rc" />
+    <None Include="..\Skin\skin.zip" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -312,13 +312,11 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="icon.ico">
-      <Filter>Resource Files</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="RedisStudio.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Skin\skin.zip" />
   </ItemGroup>
 </Project>

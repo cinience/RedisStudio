@@ -21,6 +21,8 @@ public:
 
     virtual bool Connect(const std::string& ip, int port, const std::string& auth) = 0;
 
+    virtual bool Ping() = 0;
+
     virtual bool IsConnected() = 0;
 
     virtual void Quit() = 0;
@@ -69,5 +71,4 @@ protected:
 private:
     std::string m_Error;
     std::string m_DBType;
-
 };

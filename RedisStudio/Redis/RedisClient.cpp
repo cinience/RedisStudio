@@ -34,7 +34,7 @@ bool RedisClient::Connect(const std::string& ip, int port, const std::string& au
     if (!auth.empty())
     {
         redisReply* reply = Command("AUTH %s", auth.c_str());
-        if (!(reply && reply->type==REDIS_REPLY_STATUS))
+        if (!(reply && reply->type == REDIS_REPLY_STATUS))
         {
             SetLastError(reply->str);
             return false;
@@ -45,12 +45,20 @@ bool RedisClient::Connect(const std::string& ip, int port, const std::string& au
     return false;
 }
 
+bool RedisClient::Ping()
+{
+    ScopedRedisReply reply(Command("ping"));
+    if (!reply.IsNull() && reply->type == REDIS_REPLY_STATUS) 
+    {
+        return true;
+    }
+    return false;
+}
 
 bool RedisClient::IsConnected()
 {
     return m_isConnected;
 }
-
 
 bool RedisClient::Info(std::string& results)
 {

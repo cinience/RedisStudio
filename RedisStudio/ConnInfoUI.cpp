@@ -20,7 +20,7 @@ DUI_END_MESSAGE_MAP()
 
 static const char* const kConfigFilePath = "Config.json" ;
 
-ConnInfoUI::ConnInfoUI(const CDuiString& strXML,CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env)
+ConnInfoUI::ConnInfoUI(const CDuiString& strXML,CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env),m_Event(false)
 {
     CDialogBuilder builder;
     /// 这里必须传入m_PaintManager，不然子XML不能使用默认滚动条等信息
@@ -192,16 +192,23 @@ void ConnInfoUI::OnItemClick( TNotifyUI &msg )
 
 void ConnInfoUI::OnItemActive( TNotifyUI &msg )
 {
-    if (m_Thread.isRunning())
-    {
-        UserMessageBox(GetHWND(), 10013, NULL, MB_ICONINFORMATION);
-        return ;
-    }
     int idx = m_pListUI->GetCurSel();
     CDuiString name = CDuiString(Base::CharacterSet::ANSIToUnicode(m_dicServerInfo[kServerNameIndex][idx]).c_str());
     std::string ip = m_dicServerInfo[kServerIpIndex][idx];
     int port = atoi(m_dicServerInfo[kServerPortIndex][idx].c_str());
     std::string auth = m_dicServerInfo[kServerAuthIndex][idx];
+    
+
+    if (m_Thread.isRunning()) 
+    {
+        m_Event.set();
+    }
+
+    while (m_Thread.isRunning()) 
+    {
+        Base::Thread::sleep(100);
+    }
+
     DBClient* cli = Env()->GetDBClient();
     if (cli) 
     {
@@ -288,19 +295,32 @@ void ConnInfoUI::DoConnect()
 void ConnInfoUI::BackgroundWork( void )
 {
     CDuiString* s = new CDuiString(Env()->GetDBName());
-
     ::PostMessage(GetHWND(), WM_USER_CONNECTING, (WPARAM)s, NULL);
-    s = new CDuiString(Env()->GetDBName());
+
+    
 
     DBClient *cli = DBClient::Create(Env()->GetDBIP(), Env()->GetDBPort(), Env()->GetDBPasswd());
     if (cli && cli->IsConnected())
     {
         Env()->SetDBClient(cli);
+        s = new CDuiString(Env()->GetDBName());
         ::PostMessage(GetHWND(), WM_USER_CONNECTED, (WPARAM)s, NULL);
     }
     else 
     {
+        s = new CDuiString(Env()->GetDBName());
+        ::PostMessage(GetHWND(), WM_USER_UNCONNECT, (WPARAM)s, NULL);
         Env()->SetDBClient(NULL);
-        delete s;
+        return;
+    }
+
+    while (!m_Event.wait(5000)) 
+    {
+        if (!cli->Ping()) 
+        {
+             s = new CDuiString(Env()->GetDBName());
+            ::PostMessage(GetHWND(), WM_USER_UNCONNECT, (WPARAM)s, NULL);
+            break;
+        }
     }
 }

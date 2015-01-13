@@ -25,9 +25,9 @@ public:
     std::string GetDBPasswd();
 
 private:
-    CDuiString m_DbName;
+    CDuiString  m_DbName;
     std::string m_sIP;
     int         m_iPort;
     std::string m_sAuth;
-    DBClient*  m_DbClient;
+    DBClient*   m_DbClient;
 };

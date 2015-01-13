@@ -20,6 +20,7 @@ SSDBClient::~SSDBClient()
 
 bool SSDBClient::Connect(const std::string& ip, int port, const std::string& auth)
 {
+    Base::Mutex::ScopedLock scopedLock(m_mutex);
     m_isConnected = false;
     m_Client = ssdb::Client::connect(ip.c_str(), port);
     if (!m_Client) return false;
@@ -48,6 +49,13 @@ bool SSDBClient::Connect(const std::string& ip, int port, const std::string& aut
 }
 
 
+bool SSDBClient::Ping()
+{
+    Base::Mutex::ScopedLock scopedLock(m_mutex);
+    ssdb::Status status = m_Client->request("ping");
+    return status.ok();
+}
+
 bool SSDBClient::IsConnected()
 {
     return m_isConnected;
@@ -63,8 +71,9 @@ bool SSDBClient::Info(std::string& results)
 
 bool SSDBClient::keys(const std::string& matchstr, TSeqArrayResults& results)
 {
+    Base::Mutex::ScopedLock scopedLock(m_mutex);
     int keyNum = 20000;
-
+    
     m_Keys.clear();
     std::string key ;
     /// SSDB的key可以重复
@@ -103,8 +112,9 @@ bool SSDBClient::keys(const std::string& matchstr, TSeqArrayResults& results)
         m_Keys[key] = "queue"; 
         results.push_back(key);
     }
+
     results.sort();
-    
+
     return true;
 }
 
@@ -121,6 +131,7 @@ bool SSDBClient::Type(const std::string& key, string& type)
 
 long long SSDBClient::TTL(const std::string& key)
 {
+    Base::Mutex::ScopedLock scopedLock(m_mutex);
     long long ttl = 0;
     const std::vector<std::string>* rsp = m_Client->request("ttl", RealKey(key));
     ssdb::Status status(rsp);
@@ -133,6 +144,7 @@ long long SSDBClient::TTL(const std::string& key)
 
 void SSDBClient::Quit()
 {
+	Base::Mutex::ScopedLock scopedLock(m_mutex);
     m_isConnected = false;
 }
 
@@ -176,6 +188,7 @@ bool SSDBClient::ReWriteConfig()
 
 bool SSDBClient::GetData( const std::string& key, std::string& type, RedisResult& results )
 {
+    Base::Mutex::ScopedLock scopedLock(m_mutex);
     if (!Type(key, type)) return false;
 
     std::string realKey = RealKey(key);
@@ -186,6 +199,7 @@ bool SSDBClient::GetData( const std::string& key, std::string& type, RedisResult
 
 bool SSDBClient::DelKey( const std::string& key )
 {
+    Base::Mutex::ScopedLock scopedLock(m_mutex);
     std::string realKey = RealKey(key);
     std::string type;
     if (!Type(key, type)) return false;
@@ -216,6 +230,8 @@ bool SSDBClient::UpdateData( const std::string& key,
                               int idx,
                               const std::string& field)
 {
+    Base::Mutex::ScopedLock scopedLock(m_mutex);
+
     return true;
 }
 

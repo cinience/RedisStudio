@@ -76,7 +76,7 @@ public:
 
     LRESULT OnDataAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
-	LRESULT OnDBAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
+    LRESULT OnDBAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
     LRESULT OnKeyAdd(HWND hwnd, WPARAM wParam, LPARAM lParam);
 
@@ -148,11 +148,10 @@ private:
 
     Base::Event      m_oEventListHeader;
     Base::Event      m_oEventKey;
-	Base::Event      m_oEventDB;
+    Base::Event      m_oEventDB;
 
     bool             m_bIsKeyRender; 
 
-    CDuiString       m_sCurRedisName;
     static const std::size_t m_PageSize = 100;
     std::vector<std::list<TkeyTree*>> m_oObjPool;
     std::vector<TkeyTree>         m_oKeyRoot;
@@ -162,4 +161,6 @@ private:
     Base::Thread     m_Thread;
     std::set<int>    m_UpdateDbs;
     std::auto_ptr< Base::RunnableAdapter<RedisDataUI> > m_pWork;
+
+    DBClient*       m_pLastDBCli;
 };

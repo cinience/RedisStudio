@@ -21,6 +21,8 @@ public:
 
     bool Connect(const std::string& ip, int port, const std::string& auth);
 
+    bool Ping();
+
     bool IsConnected();
 
     void Quit();
@@ -68,7 +70,6 @@ private:
     bool          m_isConnected;
     Base::Mutex         m_mutex;
     std::auto_ptr<RedisModelFactory> m_ModelFactory;
-    
 };
 
 #endif

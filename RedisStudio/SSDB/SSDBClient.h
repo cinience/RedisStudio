@@ -21,6 +21,8 @@ public:
 
     bool Connect(const std::string& ip, int port, const std::string& auth);
 
+    bool Ping();
+
     bool IsConnected();
 
     void Quit();

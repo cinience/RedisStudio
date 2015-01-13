@@ -56,7 +56,7 @@ IDI_ICON1               ICON                    "..\\Skin\\icon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// IDR_ZIP_SKIN
+// ZIPRES
 //
 
 IDR_ZIP_SKIN            ZIPRES                  "..\\Skin\\skin.zip"
