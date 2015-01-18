@@ -49,6 +49,6 @@ private:
     CButtonUI*       m_RefreshStop;
     CTreeNodeUI*     m_pServerInfoNode;
     bool             m_bIsRefresh;
-    Base::Thread     m_Thread;
+    Base::Thread     m_oThread;
     std::auto_ptr< Base::RunnableAdapter<RedisInfoUI> > m_pWork;
 };

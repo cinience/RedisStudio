@@ -78,6 +78,6 @@ private:
     CTextUI* m_pConnectingControl ;
     CTextUI* m_pVersionControl;
 
-    CStdStringPtrMap m_TabContainer;
+    CStdStringPtrMap m_oTabContainer;
     Environment m_pEnv;
 };

@@ -38,9 +38,9 @@ CMainFrameWnd::CMainFrameWnd()
 
 CMainFrameWnd::~CMainFrameWnd()
 {
-    for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
+    for (int idx=0; idx<m_oTabContainer.GetSize(); ++idx)
     {
-        RemoveVirtualWnd(m_TabContainer[idx]);
+        RemoveVirtualWnd(m_oTabContainer[idx]);
     }
 }
 
@@ -70,16 +70,16 @@ void CMainFrameWnd::InitWindow()
     theMsg.Replace(_T("$version"), _T(VERSION));
     m_pVersionControl->SetText(theMsg);
 
-    for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
+    for (int idx=0; idx<m_oTabContainer.GetSize(); ++idx)
     {
-        AbstraceUI* p = (AbstraceUI*)m_TabContainer.Find(m_TabContainer[idx]);
+        AbstraceUI* p = (AbstraceUI*)m_oTabContainer.Find(m_oTabContainer[idx]);
         p->Initialize();
 
     }
     /// 刷新默认窗口加载数据
-    for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
+    for (int idx=0; idx<m_oTabContainer.GetSize(); ++idx)
     {
-        AbstraceUI* p = (AbstraceUI*)m_TabContainer.Find(m_TabContainer[idx]);
+        AbstraceUI* p = (AbstraceUI*)m_oTabContainer.Find(m_oTabContainer[idx]);
         if (p->GetIndex() == 0)
         {
           p->RefreshWnd();
@@ -177,7 +177,7 @@ CControlUI* CMainFrameWnd::CreateControl(LPCTSTR pstrClassName)
     {
         AddVirtualWnd(p->GetVirtualwndName(), p);
         p->SetHWND(GetHWND());
-        m_TabContainer.Set(p->GetVirtualwndName(), p);
+        m_oTabContainer.Set(p->GetVirtualwndName(), p);
         return p;
     }
     return NULL;
@@ -242,11 +242,11 @@ void CMainFrameWnd::OnSelectChanged( TNotifyUI &msg )
     static AbstraceUI* pLastTab = NULL;
     AbstraceUI* p = NULL;
     /// 除了tab的按钮的消息外，还有其它消息，所以此处只判断tab相关的消息
-    for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
+    for (int idx=0; idx<m_oTabContainer.GetSize(); ++idx)
     {
-        if (name == m_TabContainer[idx])
+        if (name == m_oTabContainer[idx])
         {
-            p = (AbstraceUI*)m_TabContainer.Find(name);
+            p = (AbstraceUI*)m_oTabContainer.Find(name);
         }
     }
     if (p == NULL) return;
@@ -417,9 +417,9 @@ LRESULT CMainFrameWnd::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPa
     }
     if (!bHandled)
     {
-        for (int idx=0; idx<m_TabContainer.GetSize(); ++idx)
+        for (int idx=0; idx<m_oTabContainer.GetSize(); ++idx)
         {
-            AbstraceUI* p = (AbstraceUI*)m_TabContainer.Find(m_TabContainer[idx]);
+            AbstraceUI* p = (AbstraceUI*)m_oTabContainer.Find(m_oTabContainer[idx]);
             p->HandleCustomMessage(uMsg, wParam, lParam, bHandled);
         }
     }

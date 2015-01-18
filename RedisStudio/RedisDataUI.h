@@ -152,15 +152,14 @@ private:
 
     bool             m_bIsKeyRender; 
 
-    static const std::size_t m_PageSize = 100;
+    static const std::size_t          m_iPageSize = 100;
     std::vector<std::list<TkeyTree*>> m_oObjPool;
-    std::vector<TkeyTree>         m_oKeyRoot;
+    std::vector<TkeyTree>             m_oKeyRoot;
     CTreeNodeUI*     m_pRootNode;
     CTreeNodeUI*     m_pAssistNode;  
-    RedisDataStruct  m_RedisData;
-    Base::Thread     m_Thread;
-    std::set<int>    m_UpdateDbs;
+    RedisDataStruct  m_oRedisData;
+    Base::Thread     m_oThread;
+    std::set<int>    m_setUpdateDbs;
     std::auto_ptr< Base::RunnableAdapter<RedisDataUI> > m_pWork;
-
-    DBClient*       m_pLastDBCli;
+    int              m_iDBIdx;
 };

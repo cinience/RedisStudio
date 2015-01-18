@@ -66,10 +66,10 @@ public:
 private:
     redisContext* m_pClient;
     bool          m_bReConnect;
-    int           m_Databases;
-    bool          m_isConnected;
-    Base::Mutex         m_mutex;
-    std::auto_ptr<RedisModelFactory> m_ModelFactory;
+    int           m_iDatabases;
+    bool          m_bConnected;
+    Base::Mutex         m_oMutex;
+    std::auto_ptr<RedisModelFactory> m_pModelFactory;
 };
 
 #endif

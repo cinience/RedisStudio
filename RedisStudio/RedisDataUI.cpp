@@ -45,7 +45,7 @@ DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMRCLICK, OnMenuWakeup)
 DUI_ON_MSGTYPE(DUI_MSGTYPE_ITEMACTIVATE, OnItemActive)
 DUI_END_MESSAGE_MAP()
 
-RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false),m_oEventDB(false),m_pLastDBCli(NULL)
+RedisDataUI::RedisDataUI( const CDuiString& strXML, CPaintManagerUI* pm, Environment* env):AbstraceUI(pm, env),m_oEventListHeader(true),m_oEventKey(true),m_bIsKeyRender(false),m_oEventDB(false),m_iDBIdx(0)
 {
     CDialogBuilder builder;
     CControlUI* pContainer = builder.Create(strXML.GetData(), NULL, NULL, GetPaintMgr(), NULL); 
@@ -102,19 +102,20 @@ CDuiString RedisDataUI::GetVirtualwndName()
 
 void RedisDataUI::RefreshWnd()
 {
-    if (m_pLastDBCli != Env()->GetDBClient() && Env()->GetDBClient())
+    DBClient* cli = Env()->GetDBClient();
+    if (!cli) return;
+    if (m_iDBIdx != Env()->GetDBIdx())
     {
-        m_pLastDBCli = Env()->GetDBClient();
-         m_UpdateDbs.clear();
+         m_setUpdateDbs.clear();
+         m_iDBIdx = Env()->GetDBIdx();
     }
 
-    if (!m_UpdateDbs.empty()) 
+    if (!m_setUpdateDbs.empty()) 
     {
         return;
     }
     DelChildNode(m_pRootNode);
-    
-    m_UpdateDbs.clear();
+    m_setUpdateDbs.clear();
     m_oKeyRoot.clear();
     
     DoRefreshDBWork();
@@ -122,7 +123,7 @@ void RedisDataUI::RefreshWnd()
 
 bool RedisDataUI::CanChange() 
 {
-    if (m_Thread.isRunning()) 
+    if (m_oThread.isRunning()) 
     {
         return false;
     }
@@ -163,7 +164,7 @@ LRESULT RedisDataUI::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lPara
 
 void RedisDataUI::OnClick( TNotifyUI& msg )
 {
-    if (m_Thread.isRunning()) return;
+    if (m_oThread.isRunning()) return;
 
     if (msg.pSender == m_pPageFinal ||
       msg.pSender == m_pPageLast  ||
@@ -196,7 +197,7 @@ void RedisDataUI::OnItemDBClick(TNotifyUI &msg)
     /// 非叶子节点并未加载子节点，则加载子节点
     if (pActiveNode->GetTag() != 0 && !pActiveNode->IsHasChild()) 
     {
-        if (m_Thread.isRunning()) 
+        if (m_oThread.isRunning()) 
         {
             UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
             return;
@@ -205,7 +206,7 @@ void RedisDataUI::OnItemDBClick(TNotifyUI &msg)
         m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroudWorkForRenderLevel));
         try
         {
-            m_Thread.start(*m_pWork);
+            m_oThread.start(*m_pWork);
         }
         catch (std::exception& ex)
         {
@@ -271,7 +272,7 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
     CTreeNodeUI* pActiveNode = dynamic_cast<CTreeNodeUI*>(msg.pSender);
     if (!pActiveNode) return;
 
-    if (m_Thread.isRunning())
+    if (m_oThread.isRunning())
     {
         UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
         return ;
@@ -303,7 +304,7 @@ void RedisDataUI::OnItemActiveForTree( TNotifyUI &msg )
         pDBNode = pDBNode->GetParentNode();
     }
     if (dbNum < 0) return ;
-    m_RedisData.db = dbNum;
+    m_oRedisData.db = dbNum;
     GetResult().Clear();    
     std::string key = Base::CharacterSet::UnicodeToANSI(pActiveNode->GetItemText().GetData());
     m_pKeyEdit->SetText(Base::CharacterSet::ANSIToUnicode(key).c_str());
@@ -328,7 +329,7 @@ void RedisDataUI::OnItemActiveForList(  TNotifyUI &msg  )
     int curCel = m_pList->GetItemIndex(pListElement);
     /// why ? 行数不对
     ///std::size_t curIndex = m_pList->GetCurSel();
-    int realIndex = (curPage-1)*m_PageSize + curCel;
+    int realIndex = (curPage-1)*m_iPageSize + curCel;
     int colIdx = m_pList->GetHeader()->GetCount() > 1 ? 1 : 0 ;
     string myValue = GetResult().Value(realIndex, colIdx);
     CDuiString myDuiStr = Base::CharacterSet::UTF8ToUnicode(myValue).c_str();
@@ -390,7 +391,7 @@ void RedisDataUI::OnCommit(TNotifyUI& msg)
     CListTextElementUI* textElement = dynamic_cast<CListTextElementUI*>(m_pList->GetItemAt(m_pList->GetCurSel()));
     std::string curPageStr = Base::CharacterSet::UnicodeToANSI(m_pPageCur->GetText().GetData());
     int curPage = atoi(curPageStr.c_str());
-    int idx = (curPage-1)*m_PageSize + m_pList->GetCurSel();
+    int idx = (curPage-1)*m_iPageSize + m_pList->GetCurSel();
     std::string key = Base::CharacterSet::UnicodeToANSI(m_pKeyEdit->GetText().GetData()); 
     std::string oldValue = Base::CharacterSet::UnicodeToANSI(textElement->GetText(0));
     std::string field;
@@ -418,7 +419,7 @@ void RedisDataUI::DoRefreshDBWork()
     m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroundWorkForRefreshDB));
     try
     {
-        m_Thread.start(*m_pWork);
+        m_oThread.start(*m_pWork);
     }
     catch (std::exception& ex)
     {
@@ -431,7 +432,7 @@ void RedisDataUI::DoPaginateWork()
     m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::SetPageValues));
     try
     {
-        m_Thread.start(*m_pWork);
+        m_oThread.start(*m_pWork);
     }
     catch (std::exception& ex)
     {
@@ -442,12 +443,12 @@ void RedisDataUI::DoPaginateWork()
 
 void RedisDataUI::DoRefreshKeysWork()
 {
-    if (m_Thread.isRunning()) return;
+    if (m_oThread.isRunning()) return;
 
     m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroundWorkForRefreshKeys));
     try
     {
-        m_Thread.start(*m_pWork);
+        m_oThread.start(*m_pWork);
     }
     catch (std::exception& ex)
     {
@@ -458,12 +459,12 @@ void RedisDataUI::DoRefreshKeysWork()
 
 void RedisDataUI::DoRefreshValuesWork()
 {
-    if (m_Thread.isRunning()) return;
+    if (m_oThread.isRunning()) return;
 
     m_pWork.reset(new Base::RunnableAdapter<RedisDataUI>(*this, &RedisDataUI::BackgroundWorkForRefreshValues));
     try
     {
-        m_Thread.start(*m_pWork);
+        m_oThread.start(*m_pWork);
     }
     catch (std::exception& ex)
     {
@@ -474,13 +475,13 @@ void RedisDataUI::DoRefreshValuesWork()
 
 std::size_t RedisDataUI::GetMaxPage()
 {
-    std::size_t maxPage = GetResult().RowSize()%m_PageSize ? (GetResult().RowSize()/m_PageSize)+1 : GetResult().RowSize()/m_PageSize;
+    std::size_t maxPage = GetResult().RowSize()%m_iPageSize ? (GetResult().RowSize()/m_iPageSize)+1 : GetResult().RowSize()/m_iPageSize;
     return maxPage;
 }
 
 RedisResult& RedisDataUI::GetResult()
 {
-    return m_RedisData.result;
+    return m_oRedisData.result;
 }
 
 void RedisDataUI::BackgroundWorkForRefreshDB(void)
@@ -502,7 +503,7 @@ void RedisDataUI::BackgroundWorkForRefreshDB(void)
         cli->SelectDB(i);
         long long dbsize = cli->DbSize();
 
-        m_UpdateDbs.insert(i);
+        m_setUpdateDbs.insert(i);
         CDuiString theIndex;
         theIndex.Format(_T("%d (%lld)"), i, dbsize);
         CDuiString newTitle = oldTitle;
@@ -530,11 +531,10 @@ void RedisDataUI::BackgroundWorkForRefreshDB(void)
         pData->pPNode = pKeyNode;
         pData->pNode = pNode;
         ::PostMessage(GetHWND(), WM_USER_DBADD, (WPARAM)pData, NULL);
-        m_oEventDB.wait();
+        //m_oEventDB.wait();
     }
     m_oObjPool.resize(databases);
     m_oKeyRoot.resize(databases);
-    Base::Thread::sleep(200);
     BackgroundWorkForRefreshKeys();
 }
 
@@ -641,12 +641,16 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
     if (!cli || !cli->IsConnected()) return ;
 
     CTreeNodeUI* pParentNode = m_pRootNode;
+    while (pParentNode->GetCountChild() != m_oObjPool.size()) 
+    {
+        Base::Thread::sleep(100);
+    }
     
     for (int nodeIdx=0; nodeIdx<pParentNode->GetCountChild(); ++nodeIdx)
     {
         CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(nodeIdx);
         
-        if (m_UpdateDbs.find(nodeIdx) == m_UpdateDbs.end()) continue;
+        if (m_setUpdateDbs.find(nodeIdx) == m_setUpdateDbs.end()) continue;
 
         DelChildNode(pKeyNode);
 
@@ -700,7 +704,7 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
 void RedisDataUI::BackgroundWorkForRefreshValues(void)
 {
     DBClient* cli = Env()->GetDBClient();
-    cli->SelectDB(m_RedisData.db);
+    cli->SelectDB(m_oRedisData.db);
     std::string key, type;
     CEditUI*     pKeyEdit = static_cast<CEditUI*>(GetPaintMgr()->FindControl(kKeyEditName));
     key = Base::CharacterSet::UnicodeToANSI(pKeyEdit->GetText().GetData());
@@ -710,19 +714,19 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
        ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, 10030, NULL);
        return;
     }
-    m_RedisData.key = Base::CharacterSet::ANSIToUnicode(key).c_str();
+    m_oRedisData.key = Base::CharacterSet::ANSIToUnicode(key).c_str();
 
     if (!cli->GetData(key, type, GetResult())) return;
-    m_RedisData.type = Base::CharacterSet::ANSIToUnicode(type).c_str();
-    m_RedisData.size.Format(_T("%u"), GetResult().RowSize() );
+    m_oRedisData.type = Base::CharacterSet::ANSIToUnicode(type).c_str();
+    m_oRedisData.size.Format(_T("%u"), GetResult().RowSize() );
     long long ttl = cli->TTL(key);
-    m_RedisData.ttl.Format(_T("%lld"), ttl);
+    m_oRedisData.ttl.Format(_T("%lld"), ttl);
     if (ttl > 0) 
     {
-        m_RedisData.ttl.Append(_T(" "));
-        m_RedisData.ttl.Append(_T("("));
-        m_RedisData.ttl.Append(Base::CharacterSet::ANSIToUnicode(Base::Util::ConvertHumanTimeDuration(ttl)).c_str());	
-        m_RedisData.ttl.Append(_T(")"));
+        m_oRedisData.ttl.Append(_T(" "));
+        m_oRedisData.ttl.Append(_T("("));
+        m_oRedisData.ttl.Append(Base::CharacterSet::ANSIToUnicode(Base::Util::ConvertHumanTimeDuration(ttl)).c_str());	
+        m_oRedisData.ttl.Append(_T(")"));
     } 
     /// 预先显示数据类型等信息
     ::PostMessage(GetHWND(), WM_USER_DATAVERBOSE, NULL, NULL);
@@ -748,7 +752,7 @@ void RedisDataUI::BackgroundWorkForRefreshValues(void)
 
 void RedisDataUI::SetPageValues( )
 {
-    const std::size_t pagesize = m_PageSize;
+    const std::size_t pagesize = m_iPageSize;
     std::string pageStr = Base::CharacterSet::UnicodeToANSI(m_pPageCur->GetText().GetData());
     const std::size_t cur = atoi(pageStr.c_str());
     if (cur<=0 || cur>GetMaxPage())
@@ -797,7 +801,7 @@ LRESULT RedisDataUI::OnDataAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
 }
 
 LRESULT RedisDataUI::OnDBAdd( HWND hwnd, WPARAM wParam, LPARAM lParam )
-{
+{   
     OnKeyAdd(hwnd, wParam, lParam);
     m_oEventDB.set();
     return TRUE;
@@ -854,10 +858,10 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
         UserMessageBox(GetHWND(), 10030, NULL, MB_ICONERROR);
         return FALSE;
     }
-    m_pKeyEdit->SetText(m_RedisData.key.GetData());
-    m_PTypeEdit->SetText(m_RedisData.type.GetData());
-    m_pDataSizeEdit->SetText(m_RedisData.size.GetData());
-    m_pTTLEdit->SetText(m_RedisData.ttl.GetData());
+    m_pKeyEdit->SetText(m_oRedisData.key.GetData());
+    m_PTypeEdit->SetText(m_oRedisData.type.GetData());
+    m_pDataSizeEdit->SetText(m_oRedisData.size.GetData());
+    m_pTTLEdit->SetText(m_oRedisData.ttl.GetData());
     m_pRichEdit->SetText(kDefaultText);    
     /// 如果是单元素(如string)，则一并直接更新到富文本框内 
     if (GetResult().RowSize() == 1 && GetResult().ColumnSize()==1)
@@ -874,7 +878,7 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
         SetRichEditText(text);
     }
 
-    if (GetResult().RowSize() > m_PageSize)
+    if (GetResult().RowSize() > m_iPageSize)
     {
         /// 设置总页数
         CDuiString totalpageStr;
@@ -887,7 +891,7 @@ LRESULT RedisDataUI::OnDataVerbose( HWND hwnd, WPARAM wParam, LPARAM lParam )
 
 bool RedisDataUI::OnMenuClick( void* param )
 {
-    if (m_Thread.isRunning())
+    if (m_oThread.isRunning())
     {
          UserMessageBox(GetHWND(), 10012, NULL, MB_ICONINFORMATION);
          return false;
@@ -896,8 +900,8 @@ bool RedisDataUI::OnMenuClick( void* param )
     CDuiString name = pTEventUI->pSender->GetName();
     if (name == kDBOperatorReloadMenuName)
     {
-        m_UpdateDbs.clear();
-        m_UpdateDbs.insert(m_pAssistNode->GetTag() - 1);
+        m_setUpdateDbs.clear();
+        m_setUpdateDbs.insert(m_pAssistNode->GetTag() - 1);
         CTreeNodeUI* pParentNode = m_pRootNode;
         CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(m_pAssistNode->GetTag() - 1);
         /// 同步删除，数据量大时会卡顿

@@ -45,13 +45,13 @@ public:
     bool OnAltInfo();
 
 private:
-    bool*                         m_needApply;
+    bool*                         m_bNeedApply;
     TDicTables*                   m_pdicServerInfo;
 
     CEditUI*                      m_pEditName;
     CEditUI*                      m_pEditHost;
     CEditUI*                      m_pEditPort;
     CEditUI*                      m_pEditAuth;
-    int                           m_celIdx;
-    OperatorType                  m_type;
+    int                           m_iCelIdx;
+    OperatorType                  m_eType;
 };

@@ -49,7 +49,7 @@ CDuiString RedisInfoUI::GetVirtualwndName()
 
 void RedisInfoUI::RefreshWnd()
 {
-    if (!m_Thread.isRunning()) DoRefreshWork();
+    if (!m_oThread.isRunning()) DoRefreshWork();
 }
 
 LRESULT RedisInfoUI::HandleCustomMessage( UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled )
@@ -100,7 +100,7 @@ void RedisInfoUI::DoRefreshWork()
     m_pWork.reset(new Base::RunnableAdapter<RedisInfoUI>(*this, &RedisInfoUI::BackgroundWork));
     try
     {
-         m_Thread.start(*m_pWork);
+         m_oThread.start(*m_pWork);
     }
     catch (std::exception& ex)
     {

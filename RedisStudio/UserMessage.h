@@ -10,9 +10,10 @@
 #define WM_USER_INFOUPDATE        WM_USER + 15     // info get 
 
 
-#define WM_USER_DBADD             WM_USER + 20     // 
-#define WM_USER_TREEADD           WM_USER + 21     // 
-#define WM_USER_DATAADD           WM_USER + 22     // 
+
+#define WM_USER_TREEADD           WM_USER + 20     // 
+#define WM_USER_DATAADD           WM_USER + 21     // 
+#define WM_USER_DBADD             WM_USER + 22     // 
 
 #define WM_USER_TREEVERBOSE       WM_USER + 30
 #define WM_USER_DATAVERBOSE       WM_USER + 31

@@ -35,6 +35,26 @@ ConnInfoUI::ConnInfoUI(const CDuiString& strXML,CPaintManagerUI* pm, Environment
     }
 }
 
+ConnInfoUI::~ConnInfoUI()
+{
+    if (m_Thread.isRunning()) 
+    {
+        m_Event.set();
+    }
+
+    while (m_Thread.isRunning()) 
+    {
+        Base::Thread::sleep(100);
+    }
+
+    DBClient* cli = Env()->GetDBClient();
+    if (cli) 
+    {
+        delete cli;
+        Env()->SetDBClient(NULL);
+    }
+}
+
 void ConnInfoUI::Initialize()
 {
     m_pRfhBtn = static_cast<CButtonUI*>(GetPaintMgr()->FindControl(_T("btn_conn_rfh")));
@@ -296,8 +316,6 @@ void ConnInfoUI::BackgroundWork( void )
 {
     CDuiString* s = new CDuiString(Env()->GetDBName());
     ::PostMessage(GetHWND(), WM_USER_CONNECTING, (WPARAM)s, NULL);
-
-    
 
     DBClient *cli = DBClient::Create(Env()->GetDBIP(), Env()->GetDBPort(), Env()->GetDBPasswd());
     if (cli && cli->IsConnected())

@@ -13,9 +13,9 @@ ConnInfoSubWhd::ConnInfoSubWhd(TDicTables* pDic, bool &needApply, OperatorType t
 {
     ASSERT(pDic);
     m_pdicServerInfo = pDic;
-    m_celIdx = celIdx;
-    m_type = type;
-    m_needApply = &needApply;
+    m_iCelIdx = celIdx;
+    m_eType = type;
+    m_bNeedApply = &needApply;
 }
 
 ConnInfoSubWhd::~ConnInfoSubWhd(void)
@@ -31,21 +31,21 @@ void ConnInfoSubWhd::InitWindow()
     m_pEditAuth = static_cast<CEditUI*>(m_PaintManager.FindControl(_T("edt_server_passwd")));
     CLabelUI* pLabelAdd =  static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_conn_add")));
     CLabelUI* pLabelAlt =  static_cast<CLabelUI*>(m_PaintManager.FindControl(_T("lab_conn_alt")));
-    if (m_type == Type_Add)
+    if (m_eType == Type_Add)
     {
         pLabelAdd->SetVisible(true);
         pLabelAlt->SetVisible(false);
     }
     else 
     {
-        m_pEditName->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerNameIndex][m_celIdx]).c_str());
-        m_pEditHost->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerIpIndex][m_celIdx]).c_str());
-        m_pEditPort->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerPortIndex][m_celIdx]).c_str());
-        m_pEditAuth->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerAuthIndex][m_celIdx]).c_str());
+        m_pEditName->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerNameIndex][m_iCelIdx]).c_str());
+        m_pEditHost->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerIpIndex][m_iCelIdx]).c_str());
+        m_pEditPort->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerPortIndex][m_iCelIdx]).c_str());
+        m_pEditAuth->SetText(Base::CharacterSet::ANSIToUnicode(dicObj[ConnInfoUI::kServerAuthIndex][m_iCelIdx]).c_str());
         pLabelAdd->SetVisible(false);
         pLabelAlt->SetVisible(true);
     }
-    *m_needApply = false;
+    *m_bNeedApply = false;
 }
 
 LPCTSTR ConnInfoSubWhd::GetWindowClassName() const
@@ -88,13 +88,13 @@ void ConnInfoSubWhd::OnClick( TNotifyUI& msg )
     if(msg.pSender->GetName() == _T("btn_conn_cancel"))
     {
         Close();
-        *m_needApply = false;
+        *m_bNeedApply = false;
         return; 
     }
     else if (msg.pSender->GetName() == _T("btn_conn_save"))
     {
         bool retVal = false;
-        if (m_type == Type_Add)
+        if (m_eType == Type_Add)
         {
             retVal = OnAddInfo();
         }
@@ -104,11 +104,11 @@ void ConnInfoSubWhd::OnClick( TNotifyUI& msg )
         }    
         if (retVal) 
         {
-            *m_needApply = true;
+            *m_bNeedApply = true;
         } 
         else 
         {
-            *m_needApply = false;
+            *m_bNeedApply = false;
         }
         Close();
     }
@@ -182,15 +182,15 @@ bool ConnInfoSubWhd::OnAltInfo()
     TDicTables& dicObj = *m_pdicServerInfo;
     for (std::size_t idx=0; idx<dicObj[ConnInfoUI::kServerNameIndex].size(); ++idx)
     {
-        if (dicObj[ConnInfoUI::kServerNameIndex][idx] == name && idx!=m_celIdx)
+        if (dicObj[ConnInfoUI::kServerNameIndex][idx] == name && idx!=m_iCelIdx)
         {
             UserMessageBox(GetHWND(), 10015, NULL, MB_ICONWARNING);
             return false;
         }
     }
-    dicObj[ConnInfoUI::kServerNameIndex][m_celIdx] = name;
-    dicObj[ConnInfoUI::kServerIpIndex][m_celIdx] = ip;
-    dicObj[ConnInfoUI::kServerPortIndex][m_celIdx] = port;
-    dicObj[ConnInfoUI::kServerAuthIndex][m_celIdx] = auth;
+    dicObj[ConnInfoUI::kServerNameIndex][m_iCelIdx] = name;
+    dicObj[ConnInfoUI::kServerIpIndex][m_iCelIdx] = ip;
+    dicObj[ConnInfoUI::kServerPortIndex][m_iCelIdx] = port;
+    dicObj[ConnInfoUI::kServerAuthIndex][m_iCelIdx] = auth;
     return true;
 }

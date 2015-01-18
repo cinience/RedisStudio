@@ -5,7 +5,7 @@
 #include "RedisResult.h"
 #include "AbstractRedisModel.h"
 
-RedisClient::RedisClient() : m_bReConnect(true),m_isConnected(false),
+RedisClient::RedisClient() : m_bReConnect(true),m_bConnected(false),
 m_pClient(NULL)
 {    
 }
@@ -40,7 +40,7 @@ bool RedisClient::Connect(const std::string& ip, int port, const std::string& au
             return false;
         }
     }
-    m_isConnected = true;
+    m_bConnected = true;
     //if (m_isConnected && DatabasesNum(m_Databases)) return true;
     return false;
 }
@@ -57,7 +57,7 @@ bool RedisClient::Ping()
 
 bool RedisClient::IsConnected()
 {
-    return m_isConnected;
+    return m_bConnected;
 }
 
 bool RedisClient::Info(std::string& results)
@@ -144,13 +144,13 @@ long long RedisClient::TTL(const std::string& key)
 void RedisClient::Quit()
 {
     Command("quit");
-    m_isConnected = false;
+    m_bConnected = false;
 }
 
 redisReply* RedisClient::Command( const char* fmt, ... )
 {
     if (!m_pClient) NULL;
-    Base::Mutex::ScopedLock scopedLock(m_mutex);
+    Base::Mutex::ScopedLock scopedLock(m_oMutex);
     redisReply* reply = NULL;
     va_list ap;
     va_start(ap, fmt);
@@ -165,7 +165,7 @@ redisReply* RedisClient::Command( const char* fmt, ... )
         if (reply != NULL) {
              //m_fnDisConnect(GetLastError());
         }
-        m_isConnected = false;
+        m_bConnected = false;
     }
 
     return reply;
@@ -206,9 +206,9 @@ bool RedisClient::DatabasesNum(int& num)
 
 int RedisClient::DatabasesNum()
 {
-    m_Databases = 0;
-    DatabasesNum(m_Databases);
-    return m_Databases;
+    m_iDatabases = 0;
+    DatabasesNum(m_iDatabases);
+    return m_iDatabases;
 }
 
 bool RedisClient::SelectDB( int dbindex )
@@ -302,8 +302,8 @@ bool RedisClient::GetData( const std::string& key, std::string& type, RedisResul
     if (!Type(key, type)) return false;
 
     if (type == "none") return false;
-    m_ModelFactory.reset(new RedisModelFactory(this));
-    return m_ModelFactory->GetRedisModel(type)->GetData(key, results);
+    m_pModelFactory.reset(new RedisModelFactory(this));
+    return m_pModelFactory->GetRedisModel(type)->GetData(key, results);
 }
 
 bool RedisClient::DelKey( const std::string& key )
@@ -327,6 +327,6 @@ bool RedisClient::UpdateData( const std::string& key,
     if (!Type(key, type)) return false;
 
     if (type == "none") return false;
-    m_ModelFactory.reset(new RedisModelFactory(this));
-    return m_ModelFactory->GetRedisModel(type)->UpdateData(key, oldValue, newValue, idx, field);
+    m_pModelFactory.reset(new RedisModelFactory(this));
+    return m_pModelFactory->GetRedisModel(type)->UpdateData(key, oldValue, newValue, idx, field);
 }

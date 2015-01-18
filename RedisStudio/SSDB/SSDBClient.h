@@ -66,15 +66,14 @@ public:
 private:
     ssdb::Client* m_Client;
 
-    std::map<std::string, std::string> m_Keys;
+    std::map<std::string, std::string> m_mapKeys;
     string        m_strIP;
     int           m_iPort;
     string        m_strAuth;
-    int           m_Databases;
-    bool          m_isConnected;
+    bool          m_bConnected;
     
-    Base::Mutex         m_mutex;
-    std::auto_ptr<SSDBModelFactory> m_ModelFactory; 
+    Base::Mutex         m_oMutex;
+    std::auto_ptr<SSDBModelFactory> m_pModelFactory; 
 };
 
 #endif

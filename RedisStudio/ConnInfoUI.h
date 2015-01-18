@@ -15,6 +15,8 @@ class ConnInfoUI : public AbstraceUI,public IListCallbackUI
 public:
     ConnInfoUI(const CDuiString& strXML, CPaintManagerUI* pm, Environment* env);
 
+    ~ConnInfoUI();
+
     void Initialize();
 
     int GetIndex();

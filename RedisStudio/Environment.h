@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "Base/Mutex.h"
+
 class DBClient;
 
 class Environment {
@@ -16,6 +18,8 @@ public:
 
     DBClient* GetDBClient();
 
+    int  GetDBIdx();
+
     CDuiString GetDBName();
 
     std::string GetDBIP();
@@ -26,8 +30,10 @@ public:
 
 private:
     CDuiString  m_DbName;
-    std::string m_sIP;
-    int         m_iPort;
-    std::string m_sAuth;
+    std::string m_IP;
+    int         m_Port;
+    std::string m_Auth;
     DBClient*   m_DbClient;
+    Base::Mutex m_Mutex;
+    int    m_ConnIdx;
 };
