@@ -94,7 +94,7 @@ bool ConnInfoUI::LoadConfig( const std::string& path )
     Document document;    /// Default template parameter uses UTF8 and MemoryPoolAllocator.
     if (document.ParseStream<0>(is).HasParseError())
     {
-        UserMessageBox(GetHWND(), 10014, Base::CharacterSet::ANSIToUnicode(document.GetParseError()).c_str(), MB_ICONERROR);
+        UserMessageBox(GetHWND(), 10014, _T("Parse config file failed."), MB_ICONERROR);
         fclose(fp);
         return false;
     }
