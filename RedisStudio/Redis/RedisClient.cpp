@@ -89,8 +89,31 @@ bool RedisClient::keys(const std::string& matchstr, TSeqArrayResults& results)
 
     if (!IsConnected()) return retVal;
 
-    redisReply* reply = Command("KEYS %s", matchstr.c_str());    
-    if (!reply) return retVal;
+    {
+        long long iternum = 0;
+        do 
+        {
+            ScopedRedisReply reply(Command("scan %d COUNT 1000", iternum));
+            if (reply.IsNull() || reply->type != REDIS_REPLY_ARRAY) 
+            {
+                break;
+            } 
+            iternum = atoi(reply->element[0]->str);
+            size_t idx = 0;
+
+            while (idx < reply->element[1]->elements)
+            {
+                results.push_back(reply->element[1]->element[idx]->str);
+                idx++;
+            }
+        } while (iternum);
+        results.sort();
+        results.unique();
+        return true;
+    }
+
+    ScopedRedisReply reply = Command("KEYS %s", matchstr.c_str());    
+    if (reply.IsNull()) return retVal;
 
     if (reply->type == REDIS_REPLY_ARRAY)
     {
@@ -105,7 +128,7 @@ bool RedisClient::keys(const std::string& matchstr, TSeqArrayResults& results)
         }
     }
     results.sort();
-    freeReplyObject(reply);
+    results.unique();
     return retVal;
 }
 

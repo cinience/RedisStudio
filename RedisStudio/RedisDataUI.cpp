@@ -11,6 +11,10 @@
 #include "rapidjson/prettywriter.h"    // for stringify JSON
 #include "rapidjson/stringbuffer.h"
 
+#include "rapidxml/rapidxml.hpp"
+#include <rapidxml/rapidxml_utils.hpp>  
+#include <rapidxml/rapidxml_print.hpp>  
+
 #include "DuiEx/UIMenu.h"
 
 using namespace rapidjson;
@@ -960,7 +964,7 @@ bool RedisDataUI::TryJsonFomat( std::string& text )
     StringBuffer buffer;
     PrettyWriter<StringBuffer> writer(buffer);
     Reader reader;
-    if (reader.Parse<0>(s, writer))
+    if (!reader.Parse<0>(s, writer).IsError())
     {
         styleText = buffer.GetString();
         return true;
@@ -970,6 +974,19 @@ bool RedisDataUI::TryJsonFomat( std::string& text )
 
 bool RedisDataUI::TryXMLFormat( std::string& text )
 {
+    std::string& styleText = text;
+    std::string newtext;
+    rapidxml::xml_document<> doc;        // character type defaults to char 
+    try
+    {
+        doc.parse<0>((char*)text.c_str());  // 0 means default parse flags    
+        rapidxml::print(std::back_inserter(newtext),doc,0);    
+    }
+    catch (...)
+    {
+        return false;
+    }
+    styleText = newtext;
     return true;
 }
 
@@ -1017,7 +1034,7 @@ CTreeNodeUI* RedisDataUI::NewNode(const string& text, bool isLeaf)
     else 
     {
         pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='tree_expand.png' source='0,0,16,16'\" normalimage=\"file='tree_expand.png' source='16,0,32,16'\""));
-        pNodeTmp->SetAttribute(_T("itemattr"), _T("bkimage=\"file='TreeStandard.png' source='112,0,128,16' dest='5,3,21,19'\" valign=\"left\" font=\"5\" textpadding=\"25,3,0,0\""));		
+        pNodeTmp->SetAttribute(_T("itemattr"), _T("bkimage=\"file='TreeStandard.png' source='112,0,128,16' dest='5,3,21,19'\" valign=\"left\" font=\"5\" textpadding=\"25,3,0,0\""));
     }    
     pNodeTmp->GetFolderButton()->SetEnabled(false);
     // if (isLeaf) pNodeTmp->SetAttribute(_T("folderattr"), _T("padding=\"0,3,0,0\" width=\"16\" height=\"16\" selectedimage=\"file='TreeStandard.png' source='112,32,128,48'\" normalimage=\"file='TreeStandard.png' source='112,32,128,48'\""));
