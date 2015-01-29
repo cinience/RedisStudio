@@ -13,7 +13,7 @@
         <HorizontalLayout height="24">
             <HorizontalLayout>
                 <Container width="22" height="22" visible="false" vibkimage="file=&apos;Redis_Logo.png&apos; source=&apos;0,0,16,16&apos; dest=&apos;5,4,21,20&apos; " />
-                <Text text="Redis Studio" float="true" pos="10,5,0,0" width="178" height="19" textpadding="2,0,2,0" textcolor="#FF447AA1" disabledtextcolor="#FFA7A6AA" font="0" align="wrap" />
+                <Text text="RedisStudio" float="true" pos="10,5,0,0" width="178" height="19" textpadding="2,0,2,0" textcolor="#FF447AA1" disabledtextcolor="#FFA7A6AA" font="0" align="wrap" />
             </HorizontalLayout>
             <HorizontalLayout width="232" height="20" inset="0,1,0,0">
                 <Button name="Star" text="{u}{a}Star{/a}{/u}" width="52" height="21" textcolor="#FF000000" disabledtextcolor="#FFA7A6AA" showhtml="true" align="center" />
