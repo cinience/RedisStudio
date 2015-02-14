@@ -1,6 +1,9 @@
 ﻿#include "stdafx.h"
-#include "UserMessage.h"
 #include "RedisDataUI.h"
+
+#include <algorithm>
+
+#include "UserMessage.h"
 #include "Base/String.h"
 #include "Base/Util.h"
 #include "Base/CharacterSet.h"
@@ -639,6 +642,11 @@ void RedisDataUI::BackgroudWorkForRenderLevel(void)
     ::PostMessage(GetHWND(), WM_USER_TREEVERBOSE, NULL, NULL);
 }
 
+int cmp(const std::pair<string, int>& x, const std::pair<string, int>& y)  
+{  
+	return x.second > y.second;  
+}
+
 void RedisDataUI::BackgroundWorkForRefreshKeys(void)
 {
     DBClient* cli = Env()->GetDBClient();
@@ -652,6 +660,15 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
     
     for (int nodeIdx=0; nodeIdx<pParentNode->GetCountChild(); ++nodeIdx)
     {
+        std::string sep = ":";
+        std::size_t sepIdx = 0;
+        std::map<std::string, int> sepMap;
+        sepMap[":"] = 1;
+        sepMap["/"] = 0;
+        sepMap["|"] = 0;
+        sepMap["."] = 0;
+        sepMap["-"] = 0;
+
         CTreeNodeUI *pKeyNode = (CTreeNodeUI*) pParentNode->GetChildNode(nodeIdx);
         
         if (m_setUpdateDbs.find(nodeIdx) == m_setUpdateDbs.end()) continue;
@@ -671,15 +688,37 @@ void RedisDataUI::BackgroundWorkForRefreshKeys(void)
  
         if (!cli->keys("*", results)) return;
 
+
+        /// 自动探测分割字符
         RedisClient::TSeqArrayResults::const_iterator it    = results.begin();
         RedisClient::TSeqArrayResults::const_iterator itend = results.end();
+
+        for (it = results.begin(); it != itend && sepIdx < 10; ++it, ++sepIdx) {
+            std::string theValue = *it;
+            std::map<std::string, int>::iterator sepit = sepMap.begin();
+            std::map<std::string, int>::iterator sepitend = sepMap.end();
+            for (; sepit != sepitend; ++sepit) {
+                if (theValue.find(sepit->first) != theValue.npos) {
+                    sepit->second++;
+                }
+            }
+        }
+        vector< std::pair<string, int> > vec;
+        std::map<std::string, int>::const_iterator sepit = sepMap.begin();
+        std::map<std::string, int>::const_iterator sepitend = sepMap.end();
+        for (; sepit != sepitend; ++sepit) {
+            vec.push_back(make_pair(sepit->first, sepit->second));  
+        }
+        std::sort(vec.begin(), vec.end(), cmp); 
+        sep = vec.begin()->first;
+
         m_oKeyRoot[nodeIdx].clear();
         ReleaseObject(nodeIdx);
-        for (; it != itend; ++it)
+        for (it = results.begin(); it != itend; ++it)
         {
             std::string theValue = *it;
             Base::String::TSeqStr seq;
-            Base::String::Split(theValue, ":", seq);
+            Base::String::Split(theValue, sep, seq);
             /// 叶子节点可能出现和目录节点同名，所以默认所有叶子节点加前缀@
             /*  eg:
              *   user 
