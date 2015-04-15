@@ -17,11 +17,12 @@ bool RedisListModel::GetData( const std::string& key, RedisResult& results )
     if (lenreply->type == REDIS_REPLY_INTEGER)
     {
          long long llen = lenreply->integer;
+		 results.NewColumn("Value");
          for (int idx=0; idx<llen; )
          {
              redisReply* reply = GetClient()->Command("LRANGE %s %d %d", key.c_str(), idx, idx+1000 > llen ? idx+1000 : llen - idx);
              if (!reply)  return retVal;
-             results.NewColumn("Value");
+            
              if (reply->type == REDIS_REPLY_ARRAY)
              {
                  std::size_t i = 0;
