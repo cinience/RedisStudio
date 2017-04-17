@@ -1,4 +1,4 @@
-#RedisStudio (Redis GUI Client)
+# RedisStudio (Redis GUI Client)
 
 ## Download
 [![GitHub release](https://img.shields.io/github/release/cinience/RedisStudio.svg?style=flat-square)](https://github.com/cinience/RedisStudio/releases) 
