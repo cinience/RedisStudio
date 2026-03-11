@@ -58,6 +58,12 @@ void zlibc_free(void *ptr) {
 #endif
 #endif
 
+#if PREFIX_SIZE > 0
+#define ASSERT_NO_SIZE_OVERFLOW(sz) assert((sz) + PREFIX_SIZE > (sz))
+#else
+#define ASSERT_NO_SIZE_OVERFLOW(sz)
+#endif
+
 /* Explicitly override malloc/free etc when using tcmalloc. */
 #if defined(USE_TCMALLOC)
 #define malloc(size) tc_malloc(size)
@@ -132,6 +138,7 @@ static void zmalloc_default_oom(size_t size) {
 static void (*zmalloc_oom_handler)(size_t) = zmalloc_default_oom;
 
 void *zmalloc(size_t size) {
+    ASSERT_NO_SIZE_OVERFLOW(size);
     void *ptr = malloc(size+PREFIX_SIZE);
 
     if (!ptr) zmalloc_oom_handler(size);
@@ -146,6 +153,7 @@ void *zmalloc(size_t size) {
 }
 
 void *zcalloc(size_t size) {
+    ASSERT_NO_SIZE_OVERFLOW(size);
     void *ptr = calloc(1, size+PREFIX_SIZE);
 
     if (!ptr) zmalloc_oom_handler(size);
@@ -160,6 +168,7 @@ void *zcalloc(size_t size) {
 }
 
 void *zrealloc(void *ptr, size_t size) {
+    ASSERT_NO_SIZE_OVERFLOW(size);
 #ifndef HAVE_MALLOC_SIZE
     void *realptr;
 #endif
